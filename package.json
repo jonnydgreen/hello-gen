@@ -1,0 +1,54 @@
+{
+  "name": "template-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/src/index.js",
+  "type": "module",
+  "types": "dist/src",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "lint": "ts-standard --verbose | snazzy",
+    "unit": "tap dist/test/**.test.js",
+    "test": "npm run lint && npm run unit",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonnydgreen/template-nodejs.git"
+  },
+  "keywords": [
+    "template"
+  ],
+  "author": "Jonny Green <hello@jonnydgreen.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jonnydgreen/template-nodejs/issues"
+  },
+  "homepage": "https://github.com/jonnydgreen/template-nodejs#readme",
+  "engines": {
+    "node": ">=14.17.0"
+  },
+  "devDependencies": {
+    "@istanbuljs/esm-loader-hook": "^0.1.2",
+    "@types/tap": "^15.0.2",
+    "pre-commit": "^1.2.2",
+    "snazzy": "^9.0.0",
+    "tap": "^15.0.9",
+    "ts-node": "^10.0.0",
+    "ts-standard": "^10.0.0",
+    "typescript": "^4.3.2"
+  },
+  "tap": {
+    "node-arg": [
+      "--no-warnings",
+      "--experimental-loader",
+      "@istanbuljs/esm-loader-hook",
+      "--experimental-specifier-resolution",
+      "node"
+    ]
+  }
+}
