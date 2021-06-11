@@ -1,36 +1,54 @@
 {
-  "name": "template-nodejs",
+  "name": "crackon",
+  "description": "Crackon CLI",
   "version": "1.0.0",
-  "description": "",
   "main": "dist/src/index.js",
-  "type": "module",
-  "types": "dist/src",
+  "types": "dist/src/index.d.ts",
+  "bin": {
+    "crackon": "./bin/run"
+  },
+  "files": [
+    "/bin",
+    "/dist",
+    "/docs"
+  ],
   "directories": {
     "doc": "docs",
     "test": "test"
   },
   "scripts": {
-    "build": "rimraf dist && tsc",
+    "build": "rimraf dist && tsc -b",
     "lint": "ts-standard --verbose | snazzy",
-    "unit": "tap dist/test/**.test.js",
+    "unit": "tap test/**.test.ts",
+    "unit:ci": "tap dist/test/**.test.js",
+    "test:ci": "npm run lint && npm run unit",
     "test": "npm run lint && npm run unit",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "prepack": "npm run build && oclif-dev readme",
+    "version": "oclif-dev readme && git add README.md"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jonnydgreen/template-nodejs.git"
+    "url": "git+https://github.com/jonnydgreen/crackon.git"
   },
-  "keywords": [
-    "template"
-  ],
   "author": "Jonny Green <hello@jonnydgreen.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jonnydgreen/template-nodejs/issues"
+    "url": "https://github.com/jonnydgreen/crackon/issues"
   },
-  "homepage": "https://github.com/jonnydgreen/template-nodejs#readme",
+  "homepage": "https://github.com/jonnydgreen/crackon",
+  "keywords": [
+    "oclif",
+    "crackon"
+  ],
   "engines": {
     "node": ">=14.17.0"
+  },
+  "dependencies": {
+    "@oclif/command": "^1.8.0",
+    "@oclif/config": "^1.17.0",
+    "@oclif/plugin-help": "^3.2.2",
+    "tslib": "^1.14.1"
   },
   "devDependencies": {
     "@istanbuljs/esm-loader-hook": "^0.1.2",
@@ -42,13 +60,10 @@
     "ts-standard": "^10.0.0",
     "typescript": "^4.3.2"
   },
+  "oclif": {
+    "bin": "crackon"
+  },
   "tap": {
-    "node-arg": [
-      "--no-warnings",
-      "--experimental-loader",
-      "@istanbuljs/esm-loader-hook",
-      "--experimental-specifier-resolution",
-      "node"
-    ]
+    "ts": true
   }
 }

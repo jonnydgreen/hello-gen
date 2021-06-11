@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"outDir": "dist",
 		"target": "es2020",
-    "module": "ES2020",
+    "module": "CommonJS",
 		"lib": [
 			"es2020"
 		],
@@ -24,7 +24,8 @@
 		"noPropertyAccessFromIndexSignature": true,
 		"noEmitOnError": true,
 		"useDefineForClassFields": true,
-		"forceConsistentCasingInFileNames": true
+		"forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
 	},
 	"include": [
 		"src",

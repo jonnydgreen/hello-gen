@@ -18,5 +18,9 @@
   "peacock.color": "#eb5424",
   "javascript.validate.enable": false,
   "standard.usePackageJson": true,
-  "standard.autoFixOnSave": true
+  "standard.autoFixOnSave": true,
+  "cSpell.words": [
+    "Crackon",
+    "oclif"
+  ]
 }
