@@ -1,3 +1,4 @@
+import * as os from 'os'
 import * as ts from 'typescript'
 import {
   GraphQLEnumType,
@@ -425,7 +426,7 @@ export class TypeScript {
     const nodesWithUtils = [...this.createUtilsTypeDefs(), ...nodes]
 
     for (const node of nodesWithUtils) {
-      result += `\n\n${this.printer.printNode(ts.EmitHint.Unspecified, node, sourceFile)}`
+      result += `${os.EOL}${os.EOL}${this.printer.printNode(ts.EmitHint.Unspecified, node, sourceFile)}`
     }
 
     return result
