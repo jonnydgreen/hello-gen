@@ -20,7 +20,7 @@
   "standard.usePackageJson": true,
   "standard.autoFixOnSave": true,
   "cSpell.words": [
-    "Crackon",
+    "crackon",
     "globby",
     "oclif"
   ]
