@@ -22,7 +22,7 @@
     "build": "rimraf dist && tsc -b",
     "lint": "ts-standard --verbose | snazzy",
     "unit": "tap test/**/*.test.ts",
-    "unit:ci": "tap dist/test/**.test.js",
+    "unit:ci": "tap dist/test/**/*.test.js",
     "test:ci": "npm run lint && npm run unit:ci",
     "test": "npm run lint && npm run unit",
     "prepare": "npm run build",
