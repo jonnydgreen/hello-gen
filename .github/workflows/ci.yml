@@ -7,10 +7,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        # node-version: [14.x, 16.x]
+        node-version: [14.x, 16.x]
+        # TODO: fix tests in windows
         # os: [ubuntu-latest, windows-latest, macOS-latest]
-        node-version: [16.x]
-        os: [windows-latest]
+        os: [ubuntu-latest]
 
     steps:
       - uses: actions/checkout@v2.3.4
