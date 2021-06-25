@@ -1,6 +1,6 @@
 import { DefinitionNode, extendSchema, GraphQLSchema, Kind, parse, isTypeExtensionNode, GraphQLNamedType, GraphQLScalarType, GraphQLObjectType, GraphQLNonNull, GraphQLField, GraphQLOutputType, GraphQLInterfaceType, GraphQLInputObjectType, GraphQLUnionType, GraphQLEnumType, GraphQLList, GraphQLInputType, GraphQLArgument, isRequiredArgument } from 'graphql'
 
-import { GraphQLParentType } from './graphql.type'
+import { GraphQLParentType, GraphQLSchemaTypes } from './graphql.type'
 import { EnumTypeDef, FieldArrayElementTypeDef, FieldArrayTypeDef, FieldEnumTypeDef, FieldObjectTypeDef, FieldScalarTypeDef, FieldTypeDef, FieldTypes, FieldUnionTypeDef, ObjectTypeDef, ScalarTypeDef, TypeDef, Types, TypeScriptService, UnionTypeDef } from '../typescript'
 import { assertNever, upperFirst, isGraphQLField, getGraphQLTypeName } from '../util'
 
@@ -305,6 +305,56 @@ export class GraphQLService {
   }
 
   /**
+   * Add type definition to registered Schema types.
+   */
+  private addTypeDefToSchemaTypes (schemaTypes: GraphQLSchemaTypes, type: GraphQLNamedType, typeDef: TypeDef): GraphQLSchemaTypes {
+    if (type instanceof GraphQLScalarType) {
+      return { ...schemaTypes, SCALAR: [...schemaTypes.SCALAR ?? [], typeDef as ScalarTypeDef] }
+    }
+
+    if (type instanceof GraphQLEnumType) {
+      return { ...schemaTypes, ENUM: [...schemaTypes.ENUM ?? [], typeDef as EnumTypeDef] }
+    }
+
+    if (type instanceof GraphQLInputObjectType) {
+      return { ...schemaTypes, INPUT_OBJECT: [...schemaTypes.INPUT_OBJECT ?? [], typeDef as ObjectTypeDef] }
+    }
+
+    if (type instanceof GraphQLInterfaceType) {
+      return { ...schemaTypes, INTERFACE: [...schemaTypes.INTERFACE ?? [], typeDef as ObjectTypeDef] }
+    }
+
+    if (type instanceof GraphQLObjectType) {
+      if (GraphQLService.rootTypeNames.includes(type.name)) {
+        return { ...schemaTypes, ROOT: [...schemaTypes.ROOT ?? [], typeDef as ObjectTypeDef] }
+      }
+      return { ...schemaTypes, OBJECT: [...schemaTypes.OBJECT ?? [], typeDef as ObjectTypeDef] }
+    }
+
+    // istanbul ignore else: handled by compilation
+    if (type instanceof GraphQLUnionType) {
+      return { ...schemaTypes, UNION: [...schemaTypes.UNION ?? [], typeDef as UnionTypeDef] }
+    } else {
+      assertNever(type)
+    }
+  }
+
+  /**
+   * Arrange and sort the schema type definitions.
+   */
+  private arrangeSchemaTypeDefs (schemaTypes: GraphQLSchemaTypes): TypeDef[] {
+    return [
+      ...schemaTypes.SCALAR ?? [],
+      ...schemaTypes.ENUM ?? [],
+      ...schemaTypes.INPUT_OBJECT ?? [],
+      ...schemaTypes.INTERFACE ?? [],
+      ...schemaTypes.OBJECT ?? [],
+      ...schemaTypes.UNION ?? [],
+      ...schemaTypes.ROOT ?? []
+    ]
+  }
+
+  /**
    * Get GraphQL schema from input schema string.
    */
   public getSchema (rawSchema: string): GraphQLSchema {
@@ -332,21 +382,28 @@ export class GraphQLService {
    * Generate TypeScript type definitions from GraphQL Schema.
    */
   public generateSchemaTypes (rawSchema: string): string {
+    // Get schema and set up
     const schema = this.getSchema(rawSchema)
-
     const utilityTypeDefs = this.createUtilityTypeDefs()
     const types = this.typeScriptService.createUtilityTypeDefs(utilityTypeDefs)
     const typesToIgnore = ['String', 'Int', 'Float', 'Boolean']
+    let schemaTypes: GraphQLSchemaTypes = {}
 
+    // Create type defs
     for (const type of Object.values(schema.getTypeMap())) {
       if (!type.name.startsWith('__') && !typesToIgnore.includes(type.name)) {
         const typeDefs = this.createTypeDefs(type)
         for (const typeDef of typeDefs) {
-          types.push(this.typeScriptService.createTypeDef(typeDef))
+          schemaTypes = this.addTypeDefToSchemaTypes(schemaTypes, type, typeDef)
         }
       }
     }
 
+    // Create types and print
+    const schemaTypeDefs = this.arrangeSchemaTypeDefs(schemaTypes)
+    for (const schemaTypeDef of schemaTypeDefs.flat()) {
+      types.push(this.typeScriptService.createTypeDef(schemaTypeDef))
+    }
     return this.typeScriptService.print(types)
   }
 }

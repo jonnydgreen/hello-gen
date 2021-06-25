@@ -64,7 +64,7 @@ test('GraphQLService', t => {
   })
 
   t.test('generateTypes', t => {
-    t.plan(7)
+    t.plan(8)
 
     const typePrefix = `/* eslint-disable */
 
@@ -79,6 +79,27 @@ export type Maybe<T> = T | undefined;
 export type ParentType<T> = {
     [TKey in keyof T]: T[TKey] extends (...args: any) => infer TReturn ? TReturn : T[TKey];
 };`
+
+    t.test('RootType', t => {
+      t.plan(1)
+
+      t.test('should handle when there no root type', t => {
+        t.plan(1)
+
+        const schema = `
+          type Hello {
+            hi: String
+          }
+        `
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateSchemaTypes(schema)
+        t.same(result, `${typePrefix}
+
+export interface Hello {
+    hi?: string;
+}`)
+      })
+    })
 
     t.test('GraphQLScalarType', t => {
       t.plan(8)
@@ -138,6 +159,11 @@ export interface Query {
         const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
+/** The \`ID\` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as \`"4"\`) or integer (such as \`4\`) input value will be accepted as an ID. */
+export type ID = (string | number) & {
+    __opaque: "ID";
+};
+
 /** Argument input type for QueryMeInput. */
 export interface QueryMeInput {
     id?: ID;
@@ -145,12 +171,7 @@ export interface QueryMeInput {
 
 export interface Query {
     me?(root: {}, args: QueryMeInput, context: Context, info: GraphQLResolveInfo): Maybe<ID>;
-}
-
-/** The \`ID\` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as \`"4"\`) or integer (such as \`4\`) input value will be accepted as an ID. */
-export type ID = (string | number) & {
-    __opaque: "ID";
-};`)
+}`)
       })
 
       t.test('should handle String types', async t => {
@@ -381,7 +402,7 @@ export interface Query {
     })
 
     t.test('GraphQLObjectType', t => {
-      t.plan(2)
+      t.plan(3)
 
       t.test('should handle object types', async t => {
         t.plan(1)
@@ -408,6 +429,53 @@ export interface HelloTellJokeInput {
 export interface Hello {
     message?: string;
     wave?: boolean;
+    tellJoke?(root: ParentType<Hello>, args: HelloTellJokeInput, context: Context, info: GraphQLResolveInfo): Maybe<string>;
+}
+
+/** Argument input type for QueryHelloInput. */
+export interface QueryHelloInput {
+    message?: string;
+}
+
+export interface Query {
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Hello>;
+}`)
+      })
+
+      t.test('should handle type extensions', async t => {
+        t.plan(1)
+
+        const schema = `
+          """
+          Hello type.
+          """
+          type Hello {
+            message: String
+            wave: Boolean
+          }
+
+          extend type Hello {
+            jump: Boolean!
+            tellJoke(input: String!): String
+          }
+
+          type Query {
+            hello(message: String): Hello
+          }`
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateSchemaTypes(schema)
+        t.same(result, `${typePrefix}
+
+/** Argument input type for HelloTellJokeInput. */
+export interface HelloTellJokeInput {
+    input: string;
+}
+
+/** Hello type. */
+export interface Hello {
+    message?: string;
+    wave?: boolean;
+    jump: boolean;
     tellJoke?(root: ParentType<Hello>, args: HelloTellJokeInput, context: Context, info: GraphQLResolveInfo): Maybe<string>;
 }
 
