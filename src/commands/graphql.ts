@@ -30,7 +30,7 @@ Generated GraphQL types at 'types.generated.ts'
     const schema = await fs.readFile(flags.input)
 
     // Generate types from schema string
-    const types = graphql.generateTypes(schema.toString())
+    const types = graphql.generateSchemaTypes(schema.toString())
 
     // Write output
     await fs.writeFile(flags.output, types)

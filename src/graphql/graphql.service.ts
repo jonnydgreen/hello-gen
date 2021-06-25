@@ -1,16 +1,22 @@
-import { DefinitionNode, extendSchema, GraphQLSchema, Kind, parse, isTypeExtensionNode, GraphQLNamedType, GraphQLScalarType, GraphQLObjectType, GraphQLNonNull, GraphQLField, GraphQLOutputType, GraphQLInterfaceType, GraphQLInputObjectType, GraphQLUnionType, GraphQLEnumType, GraphQLList, GraphQLInputType, GraphQLArgument, isOutputType, isRequiredArgument } from 'graphql'
+import { DefinitionNode, extendSchema, GraphQLSchema, Kind, parse, isTypeExtensionNode, GraphQLNamedType, GraphQLScalarType, GraphQLObjectType, GraphQLNonNull, GraphQLField, GraphQLOutputType, GraphQLInterfaceType, GraphQLInputObjectType, GraphQLUnionType, GraphQLEnumType, GraphQLList, GraphQLInputType, GraphQLArgument, isRequiredArgument } from 'graphql'
 
 import { GraphQLParentType } from './graphql.type'
 import { EnumTypeDef, FieldArrayElementTypeDef, FieldArrayTypeDef, FieldEnumTypeDef, FieldObjectTypeDef, FieldScalarTypeDef, FieldTypeDef, FieldTypes, FieldUnionTypeDef, ObjectTypeDef, ScalarTypeDef, TypeDef, Types, TypeScriptService, UnionTypeDef } from '../typescript'
-import { assertNever, upperFirst } from '../util'
+import { assertNever, upperFirst, isGraphQLField, getGraphQLTypeName } from '../util'
 
+/**
+ * GraphQL Service.
+ */
 export class GraphQLService {
-  private readonly ts: TypeScriptService
+  private readonly typeScriptService: TypeScriptService
 
   constructor () {
-    this.ts = new TypeScriptService()
+    this.typeScriptService = new TypeScriptService()
   }
 
+  /**
+   * Map GraphQL extension kind to GraphQL type definition kind.
+   */
   private static readonly extensionKindToDefinitionKind = {
     [Kind.SCALAR_TYPE_EXTENSION]: Kind.SCALAR_TYPE_DEFINITION,
     [Kind.OBJECT_TYPE_EXTENSION]: Kind.OBJECT_TYPE_DEFINITION,
@@ -20,6 +26,9 @@ export class GraphQLService {
     [Kind.INPUT_OBJECT_TYPE_EXTENSION]: Kind.INPUT_OBJECT_TYPE_DEFINITION
   }
 
+  /**
+   * GraphQL Root type names.
+   */
   public static readonly rootTypeNames = ['Query', 'Mutation', 'Subscription']
 
   /**
@@ -38,30 +47,14 @@ export class GraphQLService {
     return definitions
   }
 
-  private createScalarTypeDef (type: GraphQLScalarType): ScalarTypeDef {
-    return {
-      type: Types.SCALAR,
-      name: type.name,
-      comment: type.description ?? undefined
-    }
-  }
-
-  private getTypeName (type: GraphQLInputType | GraphQLOutputType): string {
-    if (type instanceof GraphQLNonNull || type instanceof GraphQLList) {
-      return this.getTypeName(type.ofType)
-    }
-    return type.toString()
-  }
-
-  private isGraphQLField (field: any): field is GraphQLField<any, any> {
-    return isOutputType(field.type)
-  }
-
+  /**
+   * Create shared GraphQL Field type definition.
+   */
   private createBaseFieldTypeDef (parent: GraphQLParentType, field: GraphQLField<any, any> | GraphQLArgument, nullable: boolean): Omit<FieldTypeDef, 'type'> {
-    const args = this.isGraphQLField(field) ? Object.values(field.args ?? []) : []
+    const args = isGraphQLField(field) ? Object.values(field.args ?? []) : []
     return {
       name: field.name,
-      typeName: this.getTypeName(field.type),
+      typeName: getGraphQLTypeName(field.type),
       comment: field.description ?? undefined,
       args: args.map<FieldTypeDef>(arg => this.createFieldTypeDef(parent, arg, arg.type, !isRequiredArgument(arg))),
       argsInputName: `${upperFirst(parent.name)}${upperFirst(field.name)}Input`,
@@ -70,7 +63,10 @@ export class GraphQLService {
     }
   }
 
-  private createFieldElementTypeDef (type: GraphQLInputType | GraphQLOutputType, nullable = true): FieldArrayElementTypeDef {
+  /**
+   * Create GraphQL Field Array Element type definition.
+   */
+  private createFieldArrayElementTypeDef (type: GraphQLInputType | GraphQLOutputType, nullable = true): FieldArrayElementTypeDef {
     if (type instanceof GraphQLScalarType) {
       return {
         type: FieldTypes.SCALAR,
@@ -104,25 +100,31 @@ export class GraphQLService {
     }
 
     if (type instanceof GraphQLList) {
-      return this.createFieldElementTypeDef(type.ofType)
+      return this.createFieldArrayElementTypeDef(type.ofType)
     }
 
     // istanbul ignore else: handled by compilation
     if (type instanceof GraphQLNonNull) {
-      return this.createFieldElementTypeDef(type.ofType, false)
+      return this.createFieldArrayElementTypeDef(type.ofType, false)
     } else {
       assertNever(type)
     }
   }
 
+  /**
+   * Create GraphQL Field Array type definition.
+   */
   private createFieldArrayTypeDef (parent: GraphQLParentType, field: GraphQLField<any, any> | GraphQLArgument, nullable: boolean): FieldArrayTypeDef {
     return {
       ...this.createBaseFieldTypeDef(parent, field, nullable),
       type: FieldTypes.ARRAY,
-      element: this.createFieldElementTypeDef(field.type)
+      element: this.createFieldArrayElementTypeDef(field.type)
     }
   }
 
+  /**
+   * Create GraphQL Field Scalar type definition.
+   */
   private createFieldScalarTypeDef (parent: GraphQLParentType, field: GraphQLField<any, any> | GraphQLArgument, nullable: boolean): FieldScalarTypeDef {
     return {
       ...this.createBaseFieldTypeDef(parent, field, nullable),
@@ -130,6 +132,9 @@ export class GraphQLService {
     }
   }
 
+  /**
+   * Create GraphQL Field Object type definition.
+   */
   private createFieldObjectTypeDef (parent: GraphQLParentType, field: GraphQLField<any, any> | GraphQLArgument, nullable: boolean): FieldObjectTypeDef {
     return {
       ...this.createBaseFieldTypeDef(parent, field, nullable),
@@ -137,6 +142,9 @@ export class GraphQLService {
     }
   }
 
+  /**
+   * Create GraphQL Field Union type definition.
+   */
   private createFieldUnionTypeDef (parent: GraphQLParentType, field: GraphQLField<any, any> | GraphQLArgument, nullable: boolean): FieldUnionTypeDef {
     return {
       ...this.createBaseFieldTypeDef(parent, field, nullable),
@@ -144,6 +152,9 @@ export class GraphQLService {
     }
   }
 
+  /**
+   * Create GraphQL Field Enum type definition.
+   */
   private createFieldEnumTypeDef (parent: GraphQLParentType, field: GraphQLField<any, any> | GraphQLArgument, nullable: boolean): FieldEnumTypeDef {
     return {
       ...this.createBaseFieldTypeDef(parent, field, nullable),
@@ -151,6 +162,9 @@ export class GraphQLService {
     }
   }
 
+  /**
+   * Create GraphQL Field type definition.
+   */
   private createFieldTypeDef (parent: GraphQLParentType, field: GraphQLField<any, any> | GraphQLArgument, type: GraphQLInputType | GraphQLOutputType, nullable = true): FieldTypeDef {
     if (type instanceof GraphQLScalarType) {
       return this.createFieldScalarTypeDef(parent, field, nullable)
@@ -184,6 +198,9 @@ export class GraphQLService {
     }
   }
 
+  /**
+   * Create GraphQL Object type definition.
+   */
   private createObjectTypeDef (type: GraphQLObjectType | GraphQLInterfaceType | GraphQLInputObjectType): ObjectTypeDef[] {
     const fields = Object.values(type.getFields()).map(field => this.createFieldTypeDef(type, field, field.type))
     const fieldResolvers: ObjectTypeDef[] = fields
@@ -207,6 +224,9 @@ export class GraphQLService {
     ]
   }
 
+  /**
+   * Create GraphQL Enum type definition.
+   */
   private createEnumTypeDef (type: GraphQLEnumType): EnumTypeDef[] {
     return [
       {
@@ -221,6 +241,9 @@ export class GraphQLService {
     ]
   }
 
+  /**
+   * Create GraphQL Union type definition.
+   */
   private createUnionTypeDef (type: GraphQLUnionType): UnionTypeDef[] {
     return [
       {
@@ -234,12 +257,29 @@ export class GraphQLService {
     ]
   }
 
+  /**
+   * Create Scalar Type Definition
+   */
+  private createScalarTypeDef (type: GraphQLScalarType): ScalarTypeDef {
+    return {
+      type: Types.SCALAR,
+      name: type.name,
+      comment: type.description ?? undefined
+    }
+  }
+
+  /**
+   * Create TypeScript utility type definitions to be used throughout the generated types.
+   */
   private createUtilityTypeDefs (): Array<[string, string, ...string[]]> {
     return [
       ['graphql', 'GraphQLResolveInfo']
     ]
   }
 
+  /**
+   * Create TypeScript type definitions from GraphQL named type.
+   */
   private createTypeDefs (type: GraphQLNamedType): TypeDef[] {
     if (type instanceof GraphQLScalarType) {
       return [this.createScalarTypeDef(type)]
@@ -265,7 +305,7 @@ export class GraphQLService {
   }
 
   /**
-   * Get schema.
+   * Get GraphQL schema from input schema string.
    */
   public getSchema (rawSchema: string): GraphQLSchema {
     let schema = new GraphQLSchema({
@@ -289,24 +329,24 @@ export class GraphQLService {
   }
 
   /**
-   * Generate TypeScript type string from GraphQL Schema.
+   * Generate TypeScript type definitions from GraphQL Schema.
    */
-  public generateTypes (rawSchema: string): string {
+  public generateSchemaTypes (rawSchema: string): string {
     const schema = this.getSchema(rawSchema)
 
     const utilityTypeDefs = this.createUtilityTypeDefs()
-    const types = this.ts.createUtilityTypeDefs(utilityTypeDefs)
+    const types = this.typeScriptService.createUtilityTypeDefs(utilityTypeDefs)
     const typesToIgnore = ['String', 'Int', 'Float', 'Boolean']
 
     for (const type of Object.values(schema.getTypeMap())) {
       if (!type.name.startsWith('__') && !typesToIgnore.includes(type.name)) {
         const typeDefs = this.createTypeDefs(type)
         for (const typeDef of typeDefs) {
-          types.push(this.ts.createTypeDef(typeDef))
+          types.push(this.typeScriptService.createTypeDef(typeDef))
         }
       }
     }
 
-    return this.ts.print(types)
+    return this.typeScriptService.print(types)
   }
 }

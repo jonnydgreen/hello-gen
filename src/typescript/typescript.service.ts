@@ -4,19 +4,24 @@ import * as ts from 'typescript'
 import { FieldScalarTypeDef, FieldArrayTypeDef, FieldTypeDef, FieldTypes, ObjectTypeDef, UnionTypeDef, EnumTypeDef, ScalarTypeDef, TypeDef, Types } from './typescript.type'
 import { assertNever, Maybe, MaybeNull } from '../util'
 
+/**
+ * TypeScript service.
+ */
 export class TypeScriptService {
   private readonly factory: ts.NodeFactory
   private readonly printer: ts.Printer
 
+  public readonly ts: typeof ts
+
   constructor () {
-    this.factory = ts.factory
-    this.printer = ts.createPrinter({ removeComments: false })
+    this.ts = ts
+    this.factory = this.ts.factory
+    this.printer = this.ts.createPrinter({ removeComments: false })
   }
 
-  private getNullableToken (nullable: boolean): Maybe<ts.PunctuationToken<ts.SyntaxKind.QuestionToken>> {
-    return nullable ? this.factory.createToken(ts.SyntaxKind.QuestionToken) : undefined
-  }
-
+  /**
+   * Create import type definitions.
+   */
   private createImportTypeDef (module: string, ...namedImports: string[]): ts.Node {
     return this.factory.createImportDeclaration(
       undefined,
@@ -33,10 +38,13 @@ export class TypeScriptService {
     )
   }
 
+  /**
+   * Create Maybe type definition.
+   */
   private createMaybeTypeDef (): ts.Node {
     return this.withComment('Marks a type as nullable.', this.factory.createTypeAliasDeclaration(
       undefined,
-      [this.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+      [this.factory.createModifier(this.ts.SyntaxKind.ExportKeyword)],
       this.factory.createIdentifier('Maybe'),
       [this.factory.createTypeParameterDeclaration(
         this.factory.createIdentifier('T'),
@@ -48,21 +56,14 @@ export class TypeScriptService {
           this.factory.createIdentifier('T'),
           undefined
         ),
-        this.factory.createKeywordTypeNode(ts.SyntaxKind.UndefinedKeyword)
+        this.factory.createKeywordTypeNode(this.ts.SyntaxKind.UndefinedKeyword)
       ])
     ))
   }
 
-  private withMaybe (node: ts.TypeNode, nullable: boolean): ts.TypeNode {
-    if (nullable) {
-      return this.factory.createTypeReferenceNode(
-        this.factory.createIdentifier('Maybe'),
-        [node]
-      )
-    }
-    return node
-  }
-
+  /**
+   * Create context type definition.
+   */
   private createContextTypeDef (): ts.Node {
     const moduleName = 'mercurius'
     const moduleContextName = 'MercuriusContext'
@@ -81,10 +82,13 @@ export class TypeScriptService {
     )
   }
 
-  private createParentTypeDef (): ts.Node {
+  /**
+   * Create root type definition.
+   */
+  private createRootTypeDef (): ts.Node {
     return this.withComment('Constructs a ParentType from an input type.', this.factory.createTypeAliasDeclaration(
       undefined,
-      [this.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+      [this.factory.createModifier(this.ts.SyntaxKind.ExportKeyword)],
       this.factory.createIdentifier('ParentType'),
       [this.factory.createTypeParameterDeclaration(
         this.factory.createIdentifier('T'),
@@ -96,7 +100,7 @@ export class TypeScriptService {
         this.factory.createTypeParameterDeclaration(
           this.factory.createIdentifier('TKey'),
           this.factory.createTypeOperatorNode(
-            ts.SyntaxKind.KeyOfKeyword,
+            this.ts.SyntaxKind.KeyOfKeyword,
             this.factory.createTypeReferenceNode(
               this.factory.createIdentifier('T'),
               undefined
@@ -122,10 +126,10 @@ export class TypeScriptService {
             [this.factory.createParameterDeclaration(
               undefined,
               undefined,
-              this.factory.createToken(ts.SyntaxKind.DotDotDotToken),
+              this.factory.createToken(this.ts.SyntaxKind.DotDotDotToken),
               this.factory.createIdentifier('args'),
               undefined,
-              this.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+              this.factory.createKeywordTypeNode(this.ts.SyntaxKind.AnyKeyword),
               undefined
             )],
             this.factory.createInferTypeNode(this.factory.createTypeParameterDeclaration(
@@ -153,10 +157,13 @@ export class TypeScriptService {
     ))
   }
 
+  /**
+   * Create an Opaque type definition,
+   */
   private createOpaqueTypeDef (name: string, typeNode: ts.TypeNode, comment: MaybeNull<string>): ts.TypeAliasDeclaration {
     return this.withComment(comment, this.factory.createTypeAliasDeclaration(
       undefined,
-      [this.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+      [this.factory.createModifier(this.ts.SyntaxKind.ExportKeyword)],
       this.factory.createIdentifier(name),
       undefined,
       this.factory.createIntersectionTypeNode([
@@ -171,26 +178,68 @@ export class TypeScriptService {
     ))
   }
 
+  /**
+   * Attach a comment to a node.
+   */
   private withComment <TNode extends ts.Node> (description: MaybeNull<string>, node: TNode): TNode {
     if (typeof description === 'string') {
       // We need to serialise this to a JSDoc comment
       const serialisedDescription = `* ${description.trim()} `
-      return ts.addSyntheticLeadingComment(node, ts.SyntaxKind.MultiLineCommentTrivia, serialisedDescription, true)
+      return this.ts.addSyntheticLeadingComment(node, this.ts.SyntaxKind.MultiLineCommentTrivia, serialisedDescription, true)
     }
     return node
   }
 
-  private getFieldScalarTypeNode (field: FieldScalarTypeDef): ts.TypeNode {
+  /**
+   * Create Maybe type node.
+   */
+  private createMaybeTypeNode (node: ts.TypeNode, nullable: boolean): ts.TypeNode {
+    if (nullable) {
+      return this.factory.createTypeReferenceNode(
+        this.factory.createIdentifier('Maybe'),
+        [node]
+      )
+    }
+    return node
+  }
+
+  /**
+   * Create Root type node.
+   */
+  private createRootTypeNode (root: Maybe<string>): ts.TypeNode {
+    if (typeof root === 'undefined') {
+      return this.factory.createTypeLiteralNode([])
+    }
+    return this.factory.createTypeReferenceNode(
+      this.factory.createIdentifier('ParentType'),
+      [this.factory.createTypeReferenceNode(
+        this.factory.createIdentifier(root),
+        undefined
+      )]
+    )
+  }
+
+  /**
+   * Create nullable token.
+   */
+  private createNullableToken (nullable: boolean): Maybe<ts.PunctuationToken<ts.SyntaxKind.QuestionToken>> {
+    return nullable ? this.factory.createToken(this.ts.SyntaxKind.QuestionToken) : undefined
+  }
+
+  /**
+   * Create Field Scalar node.
+   */
+  private createFieldScalarTypeNode (field: FieldScalarTypeDef): ts.TypeNode {
     switch (field.typeName) {
       case 'Int':
       case 'Float': {
-        return this.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)
+        return this.factory.createKeywordTypeNode(this.ts.SyntaxKind.NumberKeyword)
       }
       case 'String': {
-        return this.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword)
+        return this.factory.createKeywordTypeNode(this.ts.SyntaxKind.StringKeyword)
       }
       case 'Boolean': {
-        return this.factory.createKeywordTypeNode(ts.SyntaxKind.BooleanKeyword)
+        return this.factory.createKeywordTypeNode(this.ts.SyntaxKind.BooleanKeyword)
       }
       default: {
         return this.factory.createTypeReferenceNode(this.factory.createIdentifier(field.typeName))
@@ -198,11 +247,17 @@ export class TypeScriptService {
     }
   }
 
-  private getFieldArrayTypeNode ({ type, element, ...field }: FieldArrayTypeDef): ts.TypeNode {
-    return this.factory.createArrayTypeNode(this.getFieldTypeNode({ ...field, ...element }, true))
+  /**
+   * Create Field Array type node.
+   */
+  private createFieldArrayTypeNode ({ type, element, ...field }: FieldArrayTypeDef): ts.TypeNode {
+    return this.factory.createArrayTypeNode(this.createFieldTypeNode({ ...field, ...element }, true))
   }
 
-  private getFieldTypeNode (field: FieldTypeDef, useMaybe = false): ts.TypeNode {
+  /**
+   * Create Field type node.
+   */
+  private createFieldTypeNode (field: FieldTypeDef, useMaybe = false): ts.TypeNode {
     let type: ts.TypeNode
     switch (field.type) {
       case FieldTypes.UNION:
@@ -212,11 +267,11 @@ export class TypeScriptService {
         break
       }
       case FieldTypes.SCALAR: {
-        type = this.getFieldScalarTypeNode(field)
+        type = this.createFieldScalarTypeNode(field)
         break
       }
       case FieldTypes.ARRAY: {
-        type = this.getFieldArrayTypeNode(field)
+        type = this.createFieldArrayTypeNode(field)
         break
       }
       // istanbul ignore next: caught by compilation
@@ -225,29 +280,19 @@ export class TypeScriptService {
       }
     }
     if (useMaybe) {
-      type = this.withMaybe(type, field.nullable)
+      type = this.createMaybeTypeNode(type, field.nullable)
     }
     return type
   }
 
-  private getParentTypeDef (parent: Maybe<string>): ts.TypeNode {
-    if (typeof parent === 'undefined') {
-      return this.factory.createTypeLiteralNode([])
-    }
-    return this.factory.createTypeReferenceNode(
-      this.factory.createIdentifier('ParentType'),
-      [this.factory.createTypeReferenceNode(
-        this.factory.createIdentifier(parent),
-        undefined
-      )]
-    )
-  }
-
-  private createFieldResolver (field: FieldTypeDef): ts.TypeElement {
+  /**
+   * Create Field resolver type definition.
+   */
+  private createFieldResolverTypeElement (field: FieldTypeDef): ts.TypeElement {
     return this.factory.createMethodSignature(
       undefined,
       this.factory.createIdentifier(field.name),
-      this.getNullableToken(field.nullable),
+      this.createNullableToken(field.nullable),
       undefined,
       [
         this.factory.createParameterDeclaration(
@@ -256,7 +301,7 @@ export class TypeScriptService {
           undefined,
           this.factory.createIdentifier('root'),
           undefined,
-          this.getParentTypeDef(field.parent),
+          this.createRootTypeNode(field.parent),
           undefined
         ),
         this.factory.createParameterDeclaration(
@@ -296,38 +341,47 @@ export class TypeScriptService {
           undefined
         )
       ],
-      this.withMaybe(this.getFieldTypeNode(field), field.nullable)
+      this.createMaybeTypeNode(this.createFieldTypeNode(field), field.nullable)
     )
   }
 
-  private createFieldTypeDef (field: FieldTypeDef): ts.TypeElement {
+  /**
+   * Create Field type definition.
+   */
+  private createFieldTypeElement (field: FieldTypeDef): ts.TypeElement {
     if (field.args.length > 0) {
-      return this.withComment(field.comment, this.createFieldResolver(field))
+      return this.withComment(field.comment, this.createFieldResolverTypeElement(field))
     } else {
       return this.withComment(field.comment, this.factory.createPropertySignature(
         undefined,
         this.factory.createIdentifier(field.name),
-        this.getNullableToken(field.nullable),
-        this.getFieldTypeNode(field)
+        this.createNullableToken(field.nullable),
+        this.createFieldTypeNode(field)
       ))
     }
   }
 
+  /**
+   * Create Object type definition.
+   */
   private createObjectTypeDef (typeDef: ObjectTypeDef): ts.InterfaceDeclaration {
     return this.withComment(typeDef.comment, this.factory.createInterfaceDeclaration(
       undefined,
-      [this.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+      [this.factory.createModifier(this.ts.SyntaxKind.ExportKeyword)],
       this.factory.createIdentifier(typeDef.name),
       undefined,
       undefined,
-      typeDef.fields.map(field => this.createFieldTypeDef(field))
+      typeDef.fields.map(field => this.createFieldTypeElement(field))
     ))
   }
 
+  /**
+   * Create Union type definition.
+   */
   private createUnionTypeDef (typeDef: UnionTypeDef): ts.TypeAliasDeclaration {
     return this.withComment(typeDef.comment, this.factory.createTypeAliasDeclaration(
       undefined,
-      [this.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+      [this.factory.createModifier(this.ts.SyntaxKind.ExportKeyword)],
       this.factory.createIdentifier(typeDef.name),
       undefined,
       this.factory.createUnionTypeNode(typeDef.types.map(unionTypeDef => this.factory.createTypeReferenceNode(
@@ -337,10 +391,13 @@ export class TypeScriptService {
     ))
   }
 
+  /**
+   * Create Enum type definition.
+   */
   private createEnumTypeDef (typeDef: EnumTypeDef): ts.EnumDeclaration {
     return this.withComment(typeDef.comment, this.factory.createEnumDeclaration(
       undefined,
-      [this.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+      [this.factory.createModifier(this.ts.SyntaxKind.ExportKeyword)],
       this.factory.createIdentifier(typeDef.name),
       typeDef.values.map(enumValue =>
         this.withComment(enumValue.comment, this.factory.createEnumMember(
@@ -351,33 +408,42 @@ export class TypeScriptService {
     ))
   }
 
+  /**
+   * Create Scalar type definition.
+   */
   private createScalarTypeDef (typeDef: ScalarTypeDef): ts.TypeAliasDeclaration {
     if (typeDef.name === 'ID') {
       return this.createOpaqueTypeDef(
         typeDef.name,
         this.factory.createParenthesizedType(this.factory.createUnionTypeNode([
-          this.factory.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
-          this.factory.createKeywordTypeNode(ts.SyntaxKind.NumberKeyword)
+          this.factory.createKeywordTypeNode(this.ts.SyntaxKind.StringKeyword),
+          this.factory.createKeywordTypeNode(this.ts.SyntaxKind.NumberKeyword)
         ])),
         typeDef.comment
       )
     }
     return this.createOpaqueTypeDef(
       typeDef.name,
-      this.factory.createKeywordTypeNode(ts.SyntaxKind.AnyKeyword),
+      this.factory.createKeywordTypeNode(this.ts.SyntaxKind.AnyKeyword),
       typeDef.comment
     )
   }
 
+  /**
+   * Create utility type definitions to be shared throughout the generated typings.
+   */
   public createUtilityTypeDefs (importDefs: Array<[string, string, ...string[]]>): ts.Node[] {
     return [
       ...importDefs.map(importDef => this.createImportTypeDef(...importDef)),
       this.createContextTypeDef(),
       this.createMaybeTypeDef(),
-      this.createParentTypeDef()
+      this.createRootTypeDef()
     ]
   }
 
+  /**
+   * Create a type definition.
+   */
   public createTypeDef (typeDef: TypeDef): ts.Node {
     switch (typeDef.type) {
       case Types.OBJECT: {
@@ -399,12 +465,15 @@ export class TypeScriptService {
     }
   }
 
-  public print (nodes: ts.Node[]): string {
-    const sourceFile: ts.SourceFile = ts.createSourceFile('generated.ts', '', ts.ScriptTarget.ES2020, undefined, ts.ScriptKind.TS)
+  /**
+   * Print a list of node definitions.
+   */
+  public print (nodes: ts.Node[], filename = 'generated.ts'): string {
+    const sourceFile: ts.SourceFile = this.ts.createSourceFile(filename, '', this.ts.ScriptTarget.ES2020, undefined, this.ts.ScriptKind.TS)
     let result = '/* eslint-disable */'
 
     for (const node of nodes) {
-      result += `${os.EOL}${os.EOL}${this.printer.printNode(ts.EmitHint.Unspecified, node, sourceFile)}`
+      result += `${os.EOL}${os.EOL}${this.printer.printNode(this.ts.EmitHint.Unspecified, node, sourceFile)}`
     }
 
     return result

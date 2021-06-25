@@ -91,7 +91,7 @@ export type ParentType<T> = {
             add(x: Int y: Int): Int
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryAddInput. */
@@ -113,7 +113,7 @@ export interface Query {
             add(x: Float y: Float): Float
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryAddInput. */
@@ -135,7 +135,7 @@ export interface Query {
             me(id: ID): ID
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryMeInput. */
@@ -161,7 +161,7 @@ export type ID = (string | number) & {
             message(input: String): String
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryMessageInput. */
@@ -182,7 +182,7 @@ export interface Query {
             isTrue(input: Boolean): Boolean
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryIsTrueInput. */
@@ -205,7 +205,7 @@ export interface Query {
             add(x: Int y: Int): CustomInt
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 export type CustomInt = any & {
@@ -231,7 +231,7 @@ export interface Query {
             add(x: Int! y: Int): Int!
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryAddInput. */
@@ -258,7 +258,7 @@ export interface Query {
             add(x: Int y: Int): CustomInt
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** CustomInt scalar. */
@@ -298,7 +298,7 @@ export interface Query {
             hello(language: Language): Hello
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 export enum Language {
@@ -352,7 +352,7 @@ export interface Query {
             hello(language: Language): Hello
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Language enum. */
@@ -397,7 +397,7 @@ export interface Query {
             hello(message: String): Hello
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for HelloTellJokeInput. */
@@ -463,7 +463,7 @@ export interface Query {
             ): Hello
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for HelloTellJokeInput. */
@@ -512,7 +512,7 @@ export interface Query {
             hello(message: Message): String
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 export interface Message {
@@ -556,7 +556,7 @@ export interface Query {
               message: Message): String
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Message input. */
@@ -601,7 +601,7 @@ export interface Query {
             hello(message: String): Hello
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for MessageActionInput. */
@@ -657,7 +657,7 @@ export interface Query {
             hello(message: String): Hello
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 export interface Message {
@@ -707,7 +707,7 @@ export interface Query {
             hello(message: String): Hello
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Message interface. */
@@ -754,7 +754,7 @@ export interface Query {
             hello(input: String): Message
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 export interface Hello {
@@ -800,7 +800,7 @@ export interface Query {
             hello(input: String): Message
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 export interface Hello {
@@ -837,7 +837,7 @@ export interface Query {
             hello(input: String): [String!]
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryHelloInput. */
@@ -858,7 +858,7 @@ export interface Query {
             hello(input: String): [String!]!
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryHelloInput. */
@@ -879,7 +879,7 @@ export interface Query {
             hello(input: String): [String]!
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryHelloInput. */
@@ -900,7 +900,7 @@ export interface Query {
             hello(input: String): [String]
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryHelloInput. */
@@ -933,7 +933,7 @@ export interface Query {
             nonNullElementHello(input: String): [Message!]
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 export interface Hello {
@@ -977,7 +977,7 @@ export interface Query {
             nonNullElementHello(input: String): [Hello!]
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 export enum Hello {
@@ -1019,7 +1019,7 @@ export interface Query {
             nonNullElementHello(input: String!): [Hello!]
           }`
         const graphqlService = new GraphQLService()
-        const result = graphqlService.generateTypes(schema)
+        const result = graphqlService.generateSchemaTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Hello type. */
