@@ -2,9 +2,10 @@
 
 import { GraphQLError, GraphQLObjectType } from 'graphql'
 import { test } from 'tap'
-import { GraphQL } from '../../src/graphql/'
 
-test('GraphQL', t => {
+import { GraphQLService } from '../../src/graphql/'
+
+test('GraphQLService', t => {
   t.plan(3)
 
   t.test('constructor', t => {
@@ -13,8 +14,8 @@ test('GraphQL', t => {
     t.test('should instantiate the class', t => {
       t.plan(1)
 
-      const graphql = new GraphQL()
-      t.ok(graphql instanceof GraphQL)
+      const graphqlService = new GraphQLService()
+      t.ok(graphqlService instanceof GraphQLService)
     })
   })
 
@@ -27,8 +28,8 @@ test('GraphQL', t => {
       const rawSchema = `type Query {
         add(x: Int y: Int): Int
       }`
-      const graphql = new GraphQL()
-      const schema = graphql.getSchema(rawSchema)
+      const graphqlService = new GraphQLService()
+      const schema = graphqlService.getSchema(rawSchema)
       const fields = Object.keys((schema.getType('Query') as GraphQLObjectType).getFields())
       t.same(fields.length, 1)
       t.same(fields[0], 'add')
@@ -37,12 +38,12 @@ test('GraphQL', t => {
     t.test('should error if invalid schema with no error', async t => {
       t.plan(1)
 
-      const rawSchema = `type Query {
+      const schema = `type Query {
         wrong!
       }`
-      const graphql = new GraphQL()
+      const graphqlService = new GraphQLService()
       try {
-        graphql.getSchema(rawSchema)
+        graphqlService.getSchema(schema)
       } catch (error) {
         t.type(error, GraphQLError)
       }
@@ -54,8 +55,8 @@ test('GraphQL', t => {
       const rawSchema = `extend type Query {
         add(x: Int y: Int): Int
       }`
-      const graphql = new GraphQL()
-      const schema = graphql.getSchema(rawSchema)
+      const graphqlService = new GraphQLService()
+      const schema = graphqlService.getSchema(rawSchema)
       const fields = Object.keys((schema.getType('Query') as GraphQLObjectType).getFields())
       t.same(fields.length, 1)
       t.same(fields[0], 'add')
@@ -85,13 +86,12 @@ export type ParentType<T> = {
       t.test('should handle Int types', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           type Query {
             add(x: Int y: Int): Int
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryAddInput. */
@@ -108,13 +108,12 @@ export interface Query {
       t.test('should handle Float types', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           type Query {
             add(x: Float y: Float): Float
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryAddInput. */
@@ -131,13 +130,12 @@ export interface Query {
       t.test('should handle ID types', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           type Query {
             me(id: ID): ID
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryMeInput. */
@@ -158,13 +156,12 @@ export type ID = (string | number) & {
       t.test('should handle String types', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           type Query {
             message(input: String): String
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryMessageInput. */
@@ -180,13 +177,12 @@ export interface Query {
       t.test('should handle Boolean types', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           type Query {
             isTrue(input: Boolean): Boolean
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryIsTrueInput. */
@@ -202,15 +198,14 @@ export interface Query {
       t.test('should handle custom scalar types', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           scalar CustomInt
 
           type Query {
             add(x: Int y: Int): CustomInt
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 export type CustomInt = any & {
@@ -231,13 +226,12 @@ export interface Query {
       t.test('should handle non-null types', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           type Query {
             add(x: Int! y: Int): Int!
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryAddInput. */
@@ -254,7 +248,7 @@ export interface Query {
       t.test('should handle custom scalar type comments', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           """
           CustomInt scalar.
           """
@@ -263,9 +257,8 @@ export interface Query {
           type Query {
             add(x: Int y: Int): CustomInt
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** CustomInt scalar. */
@@ -291,7 +284,7 @@ export interface Query {
       t.test('should handle enum types', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           enum Language {
             EN
           }
@@ -304,9 +297,8 @@ export interface Query {
           type Query {
             hello(language: Language): Hello
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 export enum Language {
@@ -331,7 +323,7 @@ export interface Query {
       t.test('should handle enum type documentation', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           """
           Language enum.
           """
@@ -359,9 +351,8 @@ export interface Query {
           type Query {
             hello(language: Language): Hello
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Language enum. */
@@ -395,7 +386,7 @@ export interface Query {
       t.test('should handle object types', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           type Hello {
             message: String
             wave: Boolean
@@ -405,9 +396,8 @@ export interface Query {
           type Query {
             hello(message: String): Hello
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for HelloTellJokeInput. */
@@ -434,7 +424,7 @@ export interface Query {
       t.test('should handle object type documentation', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           """
           Hello type.
           """
@@ -472,9 +462,8 @@ export interface Query {
               message: String
             ): Hello
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for HelloTellJokeInput. */
@@ -513,7 +502,7 @@ export interface Query {
       t.test('should handle input object types', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           input Message {
             text: String!
             encoded: Boolean
@@ -522,9 +511,8 @@ export interface Query {
           type Query {
             hello(message: Message): String
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 export interface Message {
@@ -545,7 +533,7 @@ export interface Query {
       t.test('should handle input object type documentation', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           """
           Message input.
           """
@@ -567,9 +555,8 @@ export interface Query {
               """
               message: Message): String
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Message input. */
@@ -595,11 +582,10 @@ export interface Query {
     t.test('GraphQLIInterfaceType', t => {
       t.plan(3)
 
-      // TODO: look at the return type of functions
       t.test('should handle interfaces types', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           interface Message {
             message: String
             action(command: String): String
@@ -614,9 +600,8 @@ export interface Query {
           type Query {
             hello(message: String): Hello
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for MessageActionInput. */
@@ -653,7 +638,7 @@ export interface Query {
       t.test('should handle multiple implementations interfaces types', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           interface Message {
             message: String
           }
@@ -671,9 +656,8 @@ export interface Query {
           type Query {
             hello(message: String): Hello
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 export interface Message {
@@ -703,7 +687,7 @@ export interface Query {
       t.test('should handle interfaces type documentation', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           """
           Message interface.
           """
@@ -722,9 +706,8 @@ export interface Query {
           type Query {
             hello(message: String): Hello
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Message interface. */
@@ -755,7 +738,7 @@ export interface Query {
       t.test('should handle union types', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           type Hello {
             message: String
             wave: Boolean
@@ -770,9 +753,8 @@ export interface Query {
           type Query {
             hello(input: String): Message
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 export interface Hello {
@@ -799,7 +781,7 @@ export interface Query {
       t.test('should handle documentation', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           type Hello {
             message: String
             wave: Boolean
@@ -817,9 +799,8 @@ export interface Query {
           type Query {
             hello(input: String): Message
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 export interface Hello {
@@ -851,13 +832,12 @@ export interface Query {
       t.test('should handle nullable list, non-null entry types', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           type Query {
             hello(input: String): [String!]
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryHelloInput. */
@@ -873,13 +853,12 @@ export interface Query {
       t.test('should handle mandatory list and entry types', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           type Query {
             hello(input: String): [String!]!
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryHelloInput. */
@@ -895,13 +874,12 @@ export interface Query {
       t.test('should handle mandatory list and nullable entry types', t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           type Query {
             hello(input: String): [String]!
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryHelloInput. */
@@ -917,13 +895,12 @@ export interface Query {
       t.test('should handle nullable list and nullable entry types', t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           type Query {
             hello(input: String): [String]
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Argument input type for QueryHelloInput. */
@@ -939,7 +916,7 @@ export interface Query {
       t.test('should handle union elements in lists', t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           type Hello {
             message: String
           }
@@ -955,9 +932,8 @@ export interface Query {
             hello(input: String): [Message]
             nonNullElementHello(input: String): [Message!]
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 export interface Hello {
@@ -990,7 +966,7 @@ export interface Query {
       t.test('should handle enum elements in lists', t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           enum Hello {
             HI
             HOWDY
@@ -1000,9 +976,8 @@ export interface Query {
             hello(input: String): [Hello]
             nonNullElementHello(input: String): [Hello!]
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 export enum Hello {
@@ -1029,7 +1004,7 @@ export interface Query {
       t.test('should handle list documentation', async t => {
         t.plan(1)
 
-        const rawSchema = `
+        const schema = `
           """
           Hello type.
           """
@@ -1043,9 +1018,8 @@ export interface Query {
             hello(input: String): [Hello]
             nonNullElementHello(input: String!): [Hello!]
           }`
-        const graphql = new GraphQL()
-        const schema = graphql.getSchema(rawSchema)
-        const result = graphql.generateTypes(schema)
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateTypes(schema)
         t.same(result, `${typePrefix}
 
 /** Hello type. */

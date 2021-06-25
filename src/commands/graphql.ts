@@ -2,7 +2,7 @@ import { Command, flags } from '@oclif/command'
 import cli from 'cli-ux'
 import { promises as fs } from 'fs'
 
-import { GraphQL } from '../graphql'
+import { GraphQLService } from '../graphql'
 
 export default class GraphQLCommand extends Command {
   static override description = 'describe the command here'
@@ -24,17 +24,17 @@ Generated GraphQL types at 'types.generated.ts'
     const { flags } = this.parse(GraphQLCommand)
 
     cli.action.start('Generating types')
-    const graphql = new GraphQL()
+    const graphql = new GraphQLService()
 
     // Read input
-    const rawSchema = await fs.readFile(flags.input)
+    const schema = await fs.readFile(flags.input)
 
-    // Generate types from schema
-    const schema = graphql.getSchema(rawSchema.toString())
-    const types = graphql.generateTypes(schema)
+    // Generate types from schema string
+    const types = graphql.generateTypes(schema.toString())
 
     // Write output
     await fs.writeFile(flags.output, types)
+
     cli.action.stop('done')
     this.log(`Generated GraphQL types at '${flags.output}'`)
   }

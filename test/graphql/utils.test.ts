@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
 import { test } from 'tap'
-import { assertNever, upperFirst } from '../../src/graphql'
+
+import { assertNever, upperFirst } from '../../src/util'
 
 test('Utils', t => {
   t.plan(2)

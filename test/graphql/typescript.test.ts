@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
 import { test } from 'tap'
-import { TypeScript } from '../../src/graphql/'
+import { TypeScriptService } from '../../src/typescript/'
 
-test('TypeScript', t => {
+test('TypeScriptService', t => {
   t.plan(1)
 
   t.test('constructor', t => {
@@ -12,8 +12,8 @@ test('TypeScript', t => {
     t.test('should instantiate the class', t => {
       t.plan(1)
 
-      const typescript = new TypeScript()
-      t.ok(typescript instanceof TypeScript)
+      const typescriptService = new TypeScriptService()
+      t.ok(typescriptService instanceof TypeScriptService)
     })
   })
 })

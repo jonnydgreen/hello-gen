@@ -1,3 +1,2 @@
-export * from './graphql'
-export * from './typescript'
-export * from './utils'
+export * from './graphql.service'
+export * from './graphql.type'

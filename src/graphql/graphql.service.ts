@@ -1,14 +1,14 @@
 import { DefinitionNode, extendSchema, GraphQLSchema, Kind, parse, isTypeExtensionNode, GraphQLNamedType, GraphQLScalarType, GraphQLObjectType, GraphQLNonNull, GraphQLField, GraphQLOutputType, GraphQLInterfaceType, GraphQLInputObjectType, GraphQLUnionType, GraphQLEnumType, GraphQLList, GraphQLInputType, GraphQLArgument, isOutputType, isRequiredArgument } from 'graphql'
-import { EnumTypeDef, FieldArrayElementTypeDef, FieldArrayTypeDef, FieldEnumTypeDef, FieldObjectTypeDef, FieldScalarTypeDef, FieldTypeDef, FieldTypes, FieldUnionTypeDef, ObjectTypeDef, ScalarTypeDef, TypeDef, Types, TypeScript, UnionTypeDef } from './typescript'
-import { assertNever, upperFirst } from './utils'
 
-export type GraphQLParentType = GraphQLObjectType | GraphQLInputObjectType | GraphQLInterfaceType
+import { GraphQLParentType } from './graphql.type'
+import { EnumTypeDef, FieldArrayElementTypeDef, FieldArrayTypeDef, FieldEnumTypeDef, FieldObjectTypeDef, FieldScalarTypeDef, FieldTypeDef, FieldTypes, FieldUnionTypeDef, ObjectTypeDef, ScalarTypeDef, TypeDef, Types, TypeScriptService, UnionTypeDef } from '../typescript'
+import { assertNever, upperFirst } from '../util'
 
-export class GraphQL {
-  private readonly ts: TypeScript
+export class GraphQLService {
+  private readonly ts: TypeScriptService
 
   constructor () {
-    this.ts = new TypeScript()
+    this.ts = new TypeScriptService()
   }
 
   private static readonly extensionKindToDefinitionKind = {
@@ -30,7 +30,7 @@ export class GraphQL {
     for (const definition of schemaDefinitions) {
       if (isTypeExtensionNode(definition)) {
         definitions.push({
-          kind: GraphQL.extensionKindToDefinitionKind[definition.kind],
+          kind: GraphQLService.extensionKindToDefinitionKind[definition.kind],
           name: definition.name
         })
       }
@@ -65,7 +65,7 @@ export class GraphQL {
       comment: field.description ?? undefined,
       args: args.map<FieldTypeDef>(arg => this.createFieldTypeDef(parent, arg, arg.type, !isRequiredArgument(arg))),
       argsInputName: `${upperFirst(parent.name)}${upperFirst(field.name)}Input`,
-      parent: GraphQL.rootTypeNames.includes(parent.name) ? undefined : parent.name,
+      parent: GraphQLService.rootTypeNames.includes(parent.name) ? undefined : parent.name,
       nullable
     }
   }
@@ -234,6 +234,12 @@ export class GraphQL {
     ]
   }
 
+  private createUtilityTypeDefs (): Array<[string, string, ...string[]]> {
+    return [
+      ['graphql', 'GraphQLResolveInfo']
+    ]
+  }
+
   private createTypeDefs (type: GraphQLNamedType): TypeDef[] {
     if (type instanceof GraphQLScalarType) {
       return [this.createScalarTypeDef(type)]
@@ -259,25 +265,6 @@ export class GraphQL {
   }
 
   /**
-   * Generate TypeScript type string from GraphQL Schema.
-   */
-  public generateTypes (schema: GraphQLSchema): string {
-    const types = []
-    const typesToIgnore = ['String', 'Int', 'Float', 'Boolean']
-
-    for (const type of Object.values(schema.getTypeMap())) {
-      if (!type.name.startsWith('__') && !typesToIgnore.includes(type.name)) {
-        const typeDefs = this.createTypeDefs(type)
-        for (const typeDef of typeDefs) {
-          types.push(this.ts.createTypeDef(typeDef))
-        }
-      }
-    }
-
-    return this.ts.print(types)
-  }
-
-  /**
    * Get schema.
    */
   public getSchema (rawSchema: string): GraphQLSchema {
@@ -299,5 +286,27 @@ export class GraphQL {
     )
 
     return schema
+  }
+
+  /**
+   * Generate TypeScript type string from GraphQL Schema.
+   */
+  public generateTypes (rawSchema: string): string {
+    const schema = this.getSchema(rawSchema)
+
+    const utilityTypeDefs = this.createUtilityTypeDefs()
+    const types = this.ts.createUtilityTypeDefs(utilityTypeDefs)
+    const typesToIgnore = ['String', 'Int', 'Float', 'Boolean']
+
+    for (const type of Object.values(schema.getTypeMap())) {
+      if (!type.name.startsWith('__') && !typesToIgnore.includes(type.name)) {
+        const typeDefs = this.createTypeDefs(type)
+        for (const typeDef of typeDefs) {
+          types.push(this.ts.createTypeDef(typeDef))
+        }
+      }
+    }
+
+    return this.ts.print(types)
   }
 }

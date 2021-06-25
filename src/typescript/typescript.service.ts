@@ -1,91 +1,10 @@
 import * as os from 'os'
 import * as ts from 'typescript'
 
-import { assertNever } from './utils'
+import { FieldScalarTypeDef, FieldArrayTypeDef, FieldTypeDef, FieldTypes, ObjectTypeDef, UnionTypeDef, EnumTypeDef, ScalarTypeDef, TypeDef, Types } from './typescript.type'
+import { assertNever, Maybe, MaybeNull } from '../util'
 
-export type Maybe<T> = T | undefined
-export type MaybeNull<T> = T | undefined | null
-
-export interface BaseTypeDef {
-  name: string
-  comment: Maybe<string>
-}
-
-export enum Types {
-  SCALAR = 'SCALAR',
-  UNION = 'UNION',
-  OBJECT = 'OBJECT',
-  ENUM = 'ENUM',
-}
-
-export enum FieldTypes {
-  SCALAR = 'SCALAR',
-  UNION = 'UNION',
-  OBJECT = 'OBJECT',
-  ENUM = 'ENUM',
-  ARRAY = 'ARRAY',
-}
-
-export interface BaseFieldTypeDef extends BaseTypeDef {
-  typeName: string
-  args: FieldTypeDef[]
-  nullable: boolean
-  argsInputName: string
-  parent?: string
-}
-
-export type FieldArrayElementTypeDef = Pick<Exclude<FieldTypeDef, FieldArrayTypeDef>, 'type'| 'nullable'>
-
-export interface FieldArrayTypeDef extends BaseFieldTypeDef {
-  type: FieldTypes.ARRAY
-  element: FieldArrayElementTypeDef
-  nullable: boolean
-}
-
-export interface FieldScalarTypeDef extends BaseFieldTypeDef {
-  type: FieldTypes.SCALAR
-}
-
-export interface FieldUnionTypeDef extends BaseFieldTypeDef {
-  type: FieldTypes.UNION
-}
-
-export interface FieldObjectTypeDef extends BaseFieldTypeDef {
-  type: FieldTypes.OBJECT
-}
-
-export interface FieldEnumTypeDef extends BaseFieldTypeDef {
-  type: FieldTypes.ENUM
-}
-
-export type FieldTypeDef = FieldScalarTypeDef | FieldUnionTypeDef | FieldObjectTypeDef | FieldArrayTypeDef | FieldEnumTypeDef
-
-export interface ObjectTypeDef extends BaseTypeDef {
-  type: Types.OBJECT
-  fields: FieldTypeDef[]
-}
-
-export interface ScalarTypeDef extends BaseTypeDef {
-  type: Types.SCALAR
-}
-
-export type UnionTypeTypeDef = Pick<BaseTypeDef, 'name'>
-
-export interface UnionTypeDef extends BaseTypeDef {
-  type: Types.UNION
-  types: UnionTypeTypeDef[]
-}
-
-export type EnumValueTypeDef = BaseTypeDef
-
-export interface EnumTypeDef extends BaseTypeDef {
-  type: Types.ENUM
-  values: EnumValueTypeDef[]
-}
-
-export type TypeDef = ObjectTypeDef | ScalarTypeDef | UnionTypeDef | EnumTypeDef
-
-export class TypeScript {
+export class TypeScriptService {
   private readonly factory: ts.NodeFactory
   private readonly printer: ts.Printer
 
@@ -261,16 +180,6 @@ export class TypeScript {
     return node
   }
 
-  private createUtilsTypeDefs (): ts.Node[] {
-    return [
-      // TODO: remove GraphQL
-      this.createImportTypeDef('graphql', 'GraphQLResolveInfo'),
-      this.createContextTypeDef(),
-      this.createMaybeTypeDef(),
-      this.createParentTypeDef()
-    ]
-  }
-
   private getFieldScalarTypeNode (field: FieldScalarTypeDef): ts.TypeNode {
     switch (field.typeName) {
       case 'Int':
@@ -340,8 +249,6 @@ export class TypeScript {
       this.factory.createIdentifier(field.name),
       this.getNullableToken(field.nullable),
       undefined,
-      // TODO: maybe improve this even further by removing custom refs
-      // e.g. field.args.map(...)
       [
         this.factory.createParameterDeclaration(
           undefined,
@@ -462,10 +369,18 @@ export class TypeScript {
     )
   }
 
+  public createUtilityTypeDefs (importDefs: Array<[string, string, ...string[]]>): ts.Node[] {
+    return [
+      ...importDefs.map(importDef => this.createImportTypeDef(...importDef)),
+      this.createContextTypeDef(),
+      this.createMaybeTypeDef(),
+      this.createParentTypeDef()
+    ]
+  }
+
   public createTypeDef (typeDef: TypeDef): ts.Node {
     switch (typeDef.type) {
       case Types.OBJECT: {
-        // TODO: handle arguments
         return this.createObjectTypeDef(typeDef)
       }
       case Types.SCALAR: {
@@ -488,10 +403,7 @@ export class TypeScript {
     const sourceFile: ts.SourceFile = ts.createSourceFile('generated.ts', '', ts.ScriptTarget.ES2020, undefined, ts.ScriptKind.TS)
     let result = '/* eslint-disable */'
 
-    // Add util types
-    const nodesWithUtils = [...this.createUtilsTypeDefs(), ...nodes]
-
-    for (const node of nodesWithUtils) {
+    for (const node of nodes) {
       result += `${os.EOL}${os.EOL}${this.printer.printNode(ts.EmitHint.Unspecified, node, sourceFile)}`
     }
 
