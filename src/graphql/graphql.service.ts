@@ -326,6 +326,9 @@ export class GraphQLService {
 
     if (type instanceof GraphQLObjectType) {
       if (GraphQLService.rootTypeNames.includes(type.name)) {
+        if (GraphQLService.rootTypeNames.some(rootTypeName => typeDef.name.startsWith(rootTypeName) && typeDef.name.endsWith('Input'))) {
+          return { ...schemaTypes, ROOT_INPUT_OBJECT: [...schemaTypes.ROOT_INPUT_OBJECT ?? [], typeDef as ObjectTypeDef] }
+        }
         return { ...schemaTypes, ROOT: [...schemaTypes.ROOT ?? [], typeDef as ObjectTypeDef] }
       }
       return { ...schemaTypes, OBJECT: [...schemaTypes.OBJECT ?? [], typeDef as ObjectTypeDef] }
@@ -350,6 +353,7 @@ export class GraphQLService {
       ...schemaTypes.INTERFACE ?? [],
       ...schemaTypes.OBJECT ?? [],
       ...schemaTypes.UNION ?? [],
+      ...schemaTypes.ROOT_INPUT_OBJECT ?? [],
       ...schemaTypes.ROOT ?? []
     ]
   }

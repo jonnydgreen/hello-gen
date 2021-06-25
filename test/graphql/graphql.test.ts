@@ -81,7 +81,7 @@ export type ParentType<T> = {
 };`
 
     t.test('RootType', t => {
-      t.plan(1)
+      t.plan(2)
 
       t.test('should handle when there no root type', t => {
         t.plan(1)
@@ -97,6 +97,41 @@ export type ParentType<T> = {
 
 export interface Hello {
     hi?: string;
+}`)
+      })
+
+      t.test('should correctly order root type inputs', t => {
+        t.plan(1)
+
+        const schema = `
+          type Query {
+            hi(input: String): String
+          }
+
+          type Mutation {
+            hello(wave: Boolean): String
+          }
+        `
+        const graphqlService = new GraphQLService()
+        const result = graphqlService.generateSchemaTypes(schema)
+        t.same(result, `${typePrefix}
+
+/** Argument input type for QueryHiInput. */
+export interface QueryHiInput {
+    input?: string;
+}
+
+/** Argument input type for MutationHelloInput. */
+export interface MutationHelloInput {
+    wave?: boolean;
+}
+
+export interface Query {
+    hi?(root: {}, args: QueryHiInput, context: Context, info: GraphQLResolveInfo): Maybe<string>;
+}
+
+export interface Mutation {
+    hello?(root: {}, args: MutationHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<string>;
 }`)
       })
     })

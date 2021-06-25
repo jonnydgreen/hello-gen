@@ -10,5 +10,6 @@ export interface GraphQLSchemaTypes {
   INTERFACE?: ObjectTypeDef[]
   OBJECT?: ObjectTypeDef[]
   UNION?: UnionTypeDef[]
+  ROOT_INPUT_OBJECT?: ObjectTypeDef[]
   ROOT?: ObjectTypeDef[]
 }
