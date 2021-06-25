@@ -6,7 +6,7 @@ crackon
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/crackon.svg)](https://npmjs.org/package/crackon)
 [![Downloads/week](https://img.shields.io/npm/dw/crackon.svg)](https://npmjs.org/package/crackon)
-[![License](https://img.shields.io/npm/l/crackon.svg)](https://github.com/jonnydgreen/crackon/blob/master/package.json)
+[![License](https://img.shields.io/npm/l/crackon.svg)](https://github.com/jonnydgreen/crackon/blob/main/package.json)
 
 <!-- toc -->
 * [Usage](#usage)
@@ -30,7 +30,7 @@ USAGE
 <!-- commands -->
 * [`crackon autocomplete [SHELL]`](#crackon-autocomplete-shell)
 * [`crackon commands`](#crackon-commands)
-* [`crackon graphql [FILE]`](#crackon-graphql-file)
+* [`crackon graphql`](#crackon-graphql)
 * [`crackon help [COMMAND]`](#crackon-help-command)
 * [`crackon plugins`](#crackon-plugins)
 * [`crackon plugins:inspect PLUGIN...`](#crackon-pluginsinspect-plugin)
@@ -88,13 +88,13 @@ OPTIONS
 
 _See code: [@oclif/plugin-commands](https://github.com/oclif/plugin-commands/blob/v1.3.0/src/commands/commands.ts)_
 
-## `crackon graphql [FILE]`
+## `crackon graphql`
 
 describe the command here
 
 ```
 USAGE
-  $ crackon graphql [FILE]
+  $ crackon graphql
 
 OPTIONS
   -h, --help           show CLI help

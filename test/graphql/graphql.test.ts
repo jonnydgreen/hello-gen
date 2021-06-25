@@ -101,7 +101,7 @@ export interface QueryAddInput {
 }
 
 export interface Query {
-    add?(root: {}, args: QueryAddInput, context: Context, info: GraphQLResolveInfo): number;
+    add?(root: {}, args: QueryAddInput, context: Context, info: GraphQLResolveInfo): Maybe<number>;
 }`)
       })
 
@@ -124,7 +124,7 @@ export interface QueryAddInput {
 }
 
 export interface Query {
-    add?(root: {}, args: QueryAddInput, context: Context, info: GraphQLResolveInfo): number;
+    add?(root: {}, args: QueryAddInput, context: Context, info: GraphQLResolveInfo): Maybe<number>;
 }`)
       })
 
@@ -146,7 +146,7 @@ export interface QueryMeInput {
 }
 
 export interface Query {
-    me?(root: {}, args: QueryMeInput, context: Context, info: GraphQLResolveInfo): ID;
+    me?(root: {}, args: QueryMeInput, context: Context, info: GraphQLResolveInfo): Maybe<ID>;
 }
 
 /** The \`ID\` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as \`"4"\`) or integer (such as \`4\`) input value will be accepted as an ID. */
@@ -173,7 +173,7 @@ export interface QueryMessageInput {
 }
 
 export interface Query {
-    message?(root: {}, args: QueryMessageInput, context: Context, info: GraphQLResolveInfo): string;
+    message?(root: {}, args: QueryMessageInput, context: Context, info: GraphQLResolveInfo): Maybe<string>;
 }`)
       })
 
@@ -195,7 +195,7 @@ export interface QueryIsTrueInput {
 }
 
 export interface Query {
-    isTrue?(root: {}, args: QueryIsTrueInput, context: Context, info: GraphQLResolveInfo): boolean;
+    isTrue?(root: {}, args: QueryIsTrueInput, context: Context, info: GraphQLResolveInfo): Maybe<boolean>;
 }`)
       })
 
@@ -224,7 +224,7 @@ export interface QueryAddInput {
 }
 
 export interface Query {
-    add?(root: {}, args: QueryAddInput, context: Context, info: GraphQLResolveInfo): CustomInt;
+    add?(root: {}, args: QueryAddInput, context: Context, info: GraphQLResolveInfo): Maybe<CustomInt>;
 }`)
       })
 
@@ -280,7 +280,7 @@ export interface QueryAddInput {
 }
 
 export interface Query {
-    add?(root: {}, args: QueryAddInput, context: Context, info: GraphQLResolveInfo): CustomInt;
+    add?(root: {}, args: QueryAddInput, context: Context, info: GraphQLResolveInfo): Maybe<CustomInt>;
 }`)
       })
     })
@@ -324,7 +324,7 @@ export interface QueryHelloInput {
 }
 
 export interface Query {
-    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Hello;
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Hello>;
 }`)
       })
 
@@ -384,7 +384,7 @@ export interface QueryHelloInput {
 }
 
 export interface Query {
-    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Hello;
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Hello>;
 }`)
       })
     })
@@ -418,7 +418,7 @@ export interface HelloTellJokeInput {
 export interface Hello {
     message?: string;
     wave?: boolean;
-    tellJoke?(root: ParentType<Hello>, args: HelloTellJokeInput, context: Context, info: GraphQLResolveInfo): string;
+    tellJoke?(root: ParentType<Hello>, args: HelloTellJokeInput, context: Context, info: GraphQLResolveInfo): Maybe<string>;
 }
 
 /** Argument input type for QueryHelloInput. */
@@ -427,7 +427,7 @@ export interface QueryHelloInput {
 }
 
 export interface Query {
-    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Hello;
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Hello>;
 }`)
       })
 
@@ -490,7 +490,7 @@ export interface Hello {
     /** wave field. */
     wave?: boolean;
     /** tellJoke field resolver. */
-    tellJoke?(root: ParentType<Hello>, args: HelloTellJokeInput, context: Context, info: GraphQLResolveInfo): string;
+    tellJoke?(root: ParentType<Hello>, args: HelloTellJokeInput, context: Context, info: GraphQLResolveInfo): Maybe<string>;
 }
 
 /** Argument input type for QueryHelloInput. */
@@ -502,7 +502,7 @@ export interface QueryHelloInput {
 /** Query type. */
 export interface Query {
     /** hello query field. */
-    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Hello;
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Hello>;
 }`)
       })
     })
@@ -538,7 +538,7 @@ export interface QueryHelloInput {
 }
 
 export interface Query {
-    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): string;
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<string>;
 }`)
       })
 
@@ -587,7 +587,7 @@ export interface QueryHelloInput {
 }
 
 export interface Query {
-    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): string;
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<string>;
 }`)
       })
     })
@@ -626,7 +626,7 @@ export interface MessageActionInput {
 
 export interface Message {
     message?: string;
-    action?(root: ParentType<Message>, args: MessageActionInput, context: Context, info: GraphQLResolveInfo): string;
+    action?(root: ParentType<Message>, args: MessageActionInput, context: Context, info: GraphQLResolveInfo): Maybe<string>;
 }
 
 /** Argument input type for HelloActionInput. */
@@ -637,7 +637,7 @@ export interface HelloActionInput {
 export interface Hello {
     message?: string;
     wave?: boolean;
-    action?(root: ParentType<Hello>, args: HelloActionInput, context: Context, info: GraphQLResolveInfo): string;
+    action?(root: ParentType<Hello>, args: HelloActionInput, context: Context, info: GraphQLResolveInfo): Maybe<string>;
 }
 
 /** Argument input type for QueryHelloInput. */
@@ -646,7 +646,7 @@ export interface QueryHelloInput {
 }
 
 export interface Query {
-    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Hello;
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Hello>;
 }`)
       })
 
@@ -696,7 +696,7 @@ export interface QueryHelloInput {
 }
 
 export interface Query {
-    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Hello;
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Hello>;
 }`)
       })
 
@@ -744,7 +744,7 @@ export interface QueryHelloInput {
 }
 
 export interface Query {
-    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Hello;
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Hello>;
 }`)
       })
     })
@@ -792,7 +792,7 @@ export interface QueryHelloInput {
 }
 
 export interface Query {
-    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Message;
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Message>;
 }`)
       })
 
@@ -840,13 +840,13 @@ export interface QueryHelloInput {
 }
 
 export interface Query {
-    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Message;
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Message>;
 }`)
       })
     })
 
     t.test('GraphQLList', t => {
-      t.plan(5)
+      t.plan(7)
 
       t.test('should handle nullable list, non-null entry types', async t => {
         t.plan(1)
@@ -866,7 +866,7 @@ export interface QueryHelloInput {
 }
 
 export interface Query {
-    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): string[];
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<string[]>;
 }`)
       })
 
@@ -932,7 +932,97 @@ export interface QueryHelloInput {
 }
 
 export interface Query {
-    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<string>[];
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Maybe<string>[]>;
+}`)
+      })
+
+      t.test('should handle union elements in lists', t => {
+        t.plan(1)
+
+        const rawSchema = `
+          type Hello {
+            message: String
+          }
+
+          type Goodbye {
+            message: String
+            wave: Boolean
+          }
+
+          union Message = Hello | Goodbye
+
+          type Query {
+            hello(input: String): [Message]
+            nonNullElementHello(input: String): [Message!]
+          }`
+        const graphql = new GraphQL()
+        const schema = graphql.getSchema(rawSchema)
+        const result = graphql.generateTypes(schema)
+        t.same(result, `${typePrefix}
+
+export interface Hello {
+    message?: string;
+}
+
+export interface Goodbye {
+    message?: string;
+    wave?: boolean;
+}
+
+export type Message = Hello | Goodbye;
+
+/** Argument input type for QueryHelloInput. */
+export interface QueryHelloInput {
+    input?: string;
+}
+
+/** Argument input type for QueryNonNullElementHelloInput. */
+export interface QueryNonNullElementHelloInput {
+    input?: string;
+}
+
+export interface Query {
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Maybe<Message>[]>;
+    nonNullElementHello?(root: {}, args: QueryNonNullElementHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Message[]>;
+}`)
+      })
+
+      t.test('should handle enum elements in lists', t => {
+        t.plan(1)
+
+        const rawSchema = `
+          enum Hello {
+            HI
+            HOWDY
+          }
+
+          type Query {
+            hello(input: String): [Hello]
+            nonNullElementHello(input: String): [Hello!]
+          }`
+        const graphql = new GraphQL()
+        const schema = graphql.getSchema(rawSchema)
+        const result = graphql.generateTypes(schema)
+        t.same(result, `${typePrefix}
+
+export enum Hello {
+    HI = "HI",
+    HOWDY = "HOWDY"
+}
+
+/** Argument input type for QueryHelloInput. */
+export interface QueryHelloInput {
+    input?: string;
+}
+
+/** Argument input type for QueryNonNullElementHelloInput. */
+export interface QueryNonNullElementHelloInput {
+    input?: string;
+}
+
+export interface Query {
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Maybe<Hello>[]>;
+    nonNullElementHello?(root: {}, args: QueryNonNullElementHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Hello[]>;
 }`)
       })
 
@@ -951,7 +1041,7 @@ export interface Query {
           }
           type Query {
             hello(input: String): [Hello]
-            nonNullHello(input: String!): [Hello!]
+            nonNullElementHello(input: String!): [Hello!]
           }`
         const graphql = new GraphQL()
         const schema = graphql.getSchema(rawSchema)
@@ -969,14 +1059,14 @@ export interface QueryHelloInput {
     input?: string;
 }
 
-/** Argument input type for QueryNonNullHelloInput. */
-export interface QueryNonNullHelloInput {
+/** Argument input type for QueryNonNullElementHelloInput. */
+export interface QueryNonNullElementHelloInput {
     input: string;
 }
 
 export interface Query {
-    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Hello>[];
-    nonNullHello?(root: {}, args: QueryNonNullHelloInput, context: Context, info: GraphQLResolveInfo): Hello[];
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Maybe<Hello>[]>;
+    nonNullElementHello?(root: {}, args: QueryNonNullElementHelloInput, context: Context, info: GraphQLResolveInfo): Maybe<Hello[]>;
 }`)
       })
     })

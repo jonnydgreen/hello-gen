@@ -20,10 +20,8 @@ Generated GraphQL types at 'types.generated.ts'
     output: flags.string({ char: 'o', description: 'Output file path to write GraphQL schema to.', required: true })
   }
 
-  static override args = [{ name: 'file' }]
-
   async run (): Promise<void> {
-    const { args, flags } = this.parse(GraphQLCommand)
+    const { flags } = this.parse(GraphQLCommand)
 
     cli.action.start('Generating types')
     const graphql = new GraphQL()
@@ -39,10 +37,5 @@ Generated GraphQL types at 'types.generated.ts'
     await fs.writeFile(flags.output, types)
     cli.action.stop('done')
     this.log(`Generated GraphQL types at '${flags.output}'`)
-
-    // istanbul ignore next
-    if (typeof args['file'] === 'string' && args['file'] !== '') {
-      this.log(`you input --file: ${args['file']}`)
-    }
   }
 }
