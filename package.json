@@ -64,7 +64,7 @@
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1.26.0",
-    "@types/node": "^15.12.4",
+    "@types/node": "^16.0.0",
     "@types/tap": "^15.0.3",
     "@types/ws": "^7.4.5",
     "fastify": "^3.18.0",
