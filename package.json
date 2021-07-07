@@ -68,7 +68,7 @@
     "@types/tap": "^15.0.3",
     "@types/ws": "^7.4.5",
     "fastify": "^3.18.0",
-    "mercurius": "^7.9.1",
+    "mercurius": "^8.0.0",
     "pre-commit": "^1.2.2",
     "snazzy": "^9.0.0",
     "tap": "^15.0.9",
