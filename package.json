@@ -1,11 +1,11 @@
 {
-  "name": "crackon",
-  "description": "Crackon CLI",
+  "name": "hello-gen",
+  "description": "Hello Gen CLI",
   "version": "1.0.0",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "bin": {
-    "crackon": "./bin/run"
+    "hello-gen": "./bin/run"
   },
   "files": [
     "/bin",
@@ -31,17 +31,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jonnydgreen/crackon.git"
+    "url": "git+https://github.com/jonnydgreen/hello-gen.git"
   },
   "author": "Jonny Green <hello@jonnydgreen.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jonnydgreen/crackon/issues"
+    "url": "https://github.com/jonnydgreen/hello-gen/issues"
   },
-  "homepage": "https://github.com/jonnydgreen/crackon",
+  "homepage": "https://github.com/jonnydgreen/hello-gen",
   "keywords": [
     "oclif",
-    "crackon"
+    "hello-gen"
   ],
   "engines": {
     "node": ">=14.17.0"
@@ -77,7 +77,7 @@
   },
   "oclif": {
     "commands": "./dist/src/commands",
-    "bin": "crackon",
+    "bin": "hello-gen",
     "plugins": [
       "@oclif/plugin-help",
       "@oclif/plugin-not-found",

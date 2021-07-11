@@ -1,10 +1,10 @@
-export class CrackonError extends Error {
+export class HelloGenError extends Error {
   public code: string
 
   constructor (message: string) {
     super(message)
-    this.name = 'CrackonError'
-    this.code = 'CRACKON_ERR'
+    this.name = 'HelloGenError'
+    this.code = 'HELLO_GEN_ERR'
   }
 }
 
@@ -13,7 +13,7 @@ export interface FileWriteErrorDetails {
   message: string | Error
 }
 
-export class FileWriteError extends CrackonError {
+export class FileWriteError extends HelloGenError {
   public details: FileWriteErrorDetails[]
 
   constructor (message: string, details: FileWriteErrorDetails[]) {
@@ -21,7 +21,7 @@ export class FileWriteError extends CrackonError {
     Error.captureStackTrace(this, FileWriteError)
     this.name = 'FileWriteError'
     this.message = message
-    this.code = 'CRACKON_ERR_FILE_WRITE'
+    this.code = 'HELLO_GEN_ERR_FILE_WRITE'
     this.details = details
   }
 }

@@ -17,7 +17,7 @@ export default class GraphQLTypesCommand extends Command {
   static override description = 'Generates GraphQL resolvers from an input schema'
 
   static override examples = [
-    `$ crackon graphql:resolvers
+    `$ hello-gen graphql:resolvers
 Generating resolvers... done
 Generated GraphQL resolvers
 `

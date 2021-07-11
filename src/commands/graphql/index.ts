@@ -17,7 +17,7 @@ export default class GraphQLTypesCommand extends Command {
   static override description = 'Generates GraphQL server files from an input schema'
 
   static override examples = [
-    `$ crackon graphql
+    `$ hello-gen graphql
 Generating GraphQL server... done
 Generated GraphQL server
 `
