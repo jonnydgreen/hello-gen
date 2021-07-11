@@ -37,7 +37,7 @@ test('Utils', t => {
     t.test('Should read files from input path', async t => {
       t.plan(1)
 
-      const utilFs: { readFile: typeof readFile } = t.mock('../../src/util/util.fs.ts', {
+      const utilFs: { readFile: typeof readFile } = t.mock('../../src/util/util.fs', {
         fs: {
           promises: {
             readFile: () => Buffer.from('text')
@@ -56,7 +56,7 @@ test('Utils', t => {
     t.test('Should write files to output path', t => {
       t.plan(1)
 
-      const utilFs: { writeFiles: typeof writeFiles } = t.mock('../../src/util/util.fs.ts', {
+      const utilFs: { writeFiles: typeof writeFiles } = t.mock('../../src/util/util.fs', {
         fs: {
           promises: {
             writeFile: () => {}
@@ -74,7 +74,7 @@ test('Utils', t => {
     t.test('Should handle multiple errors', async t => {
       t.plan(2)
 
-      const utilFs: { writeFiles: typeof writeFiles } = t.mock('../../src/util/util.fs.ts', {
+      const utilFs: { writeFiles: typeof writeFiles } = t.mock('../../src/util/util.fs', {
         fs: {
           promises: {
             writeFile: (path: string) => {
