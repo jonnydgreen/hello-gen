@@ -410,4 +410,8 @@ export class GraphQLService {
     }
     return this.typeScriptService.print(types)
   }
+
+  // Loop over types
+  // For each type, identify resolvers and construct a Resolver type class for each if necessary
+  // Write out these files
 }

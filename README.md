@@ -9,9 +9,15 @@ crackon
 [![License](https://img.shields.io/npm/l/crackon.svg)](https://github.com/jonnydgreen/crackon/blob/main/package.json)
 
 <!-- toc -->
+* [Description](#description)
 * [Usage](#usage)
 * [Commands](#commands)
+* [Contributing](#contributing)
 <!-- tocstop -->
+# Description
+
+Crackon provides a set of CLI commands to make the backend life a dream so you can "crack on" with the important things.
+
 # Usage
 <!-- usage -->
 ```sh-session
@@ -31,6 +37,8 @@ USAGE
 * [`crackon autocomplete [SHELL]`](#crackon-autocomplete-shell)
 * [`crackon commands`](#crackon-commands)
 * [`crackon graphql`](#crackon-graphql)
+* [`crackon graphql:resolvers`](#crackon-graphqlresolvers)
+* [`crackon graphql:types`](#crackon-graphqltypes)
 * [`crackon help [COMMAND]`](#crackon-help-command)
 * [`crackon plugins`](#crackon-plugins)
 * [`crackon plugins:inspect PLUGIN...`](#crackon-pluginsinspect-plugin)
@@ -90,7 +98,7 @@ _See code: [@oclif/plugin-commands](https://github.com/oclif/plugin-commands/blo
 
 ## `crackon graphql`
 
-describe the command here
+Generates GraphQL server files from an input schema
 
 ```
 USAGE
@@ -98,16 +106,58 @@ USAGE
 
 OPTIONS
   -h, --help           show CLI help
-  -i, --input=input    (required) File path to GraphQL schema.
-  -o, --output=output  (required) Output file path to write GraphQL schema to.
+  -i, --input=input    [default: schema.graphql] File path to GraphQL schema.
+  -o, --output=output  [default: types.generated.ts] Output file path to write to.
 
 EXAMPLE
-  $ crackon graphql -i schema.graphql -o types.generated.ts
+  $ crackon graphql
+  Generating GraphQL server... done
+  Generated GraphQL server
+```
+
+_See code: [dist/src/commands/graphql/index.js](https://github.com/jonnydgreen/crackon/blob/v1.0.0/dist/src/commands/graphql/index.js)_
+
+## `crackon graphql:resolvers`
+
+Generates GraphQL resolvers from an input schema
+
+```
+USAGE
+  $ crackon graphql:resolvers
+
+OPTIONS
+  -h, --help           show CLI help
+  -i, --input=input    [default: schema.graphql] File path to GraphQL schema.
+  -o, --output=output  [default: .] Output directory to write GraphQL resolvers to.
+
+EXAMPLE
+  $ crackon graphql:resolvers
+  Generating resolvers... done
+  Generated GraphQL resolvers
+```
+
+_See code: [dist/src/commands/graphql/resolvers.js](https://github.com/jonnydgreen/crackon/blob/v1.0.0/dist/src/commands/graphql/resolvers.js)_
+
+## `crackon graphql:types`
+
+Generates GraphQL Types from an input schema
+
+```
+USAGE
+  $ crackon graphql:types
+
+OPTIONS
+  -h, --help           show CLI help
+  -i, --input=input    [default: schema.graphql] File path to GraphQL schema.
+  -o, --output=output  [default: types.generated.ts] Output file path to write to.
+
+EXAMPLE
+  $ crackon graphql:types
   Generating types... done
   Generated GraphQL types at 'types.generated.ts'
 ```
 
-_See code: [dist/src/commands/graphql.js](https://github.com/jonnydgreen/crackon/blob/v1.0.0/dist/src/commands/graphql.js)_
+_See code: [dist/src/commands/graphql/types.js](https://github.com/jonnydgreen/crackon/blob/v1.0.0/dist/src/commands/graphql/types.js)_
 
 ## `crackon help [COMMAND]`
 
@@ -286,3 +336,33 @@ USAGE
 
 _See code: [@oclif/plugin-which](https://github.com/oclif/plugin-which/blob/v1.0.3/src/commands/which.ts)_
 <!-- commandsstop -->
+
+# Contributing
+
+All PRs are welcome! :)
+
+To get setup and compile TypeScript, run the following:
+
+```sh
+npm install
+```
+
+To run tests:
+
+```sh
+npm run test
+```
+
+## In watch mode
+
+To compile:
+
+```sh
+npm run build -- -w
+```
+
+To test:
+
+```sh
+npm run unit -- -w
+```
