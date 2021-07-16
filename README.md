@@ -16,6 +16,8 @@ hello-gen
 <!-- tocstop -->
 # Description
 
+WIP - first release coming soon! :)
+
 HelloGen provides a set of CLI commands to make the backend life a dream so you can "crack on" with the important things.
 
 # Usage
