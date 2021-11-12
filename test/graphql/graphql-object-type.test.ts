@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
-import t from 'tap'
+import t from "tap";
 
-import { GraphQLService } from '../../src/graphql'
-import { typePrefix } from './setup'
+import { GraphQLService } from "../../src/graphql";
+import { typePrefix } from "./setup";
 
-t.test('GraphQLObjectType', t => {
-  t.plan(3)
+t.test("GraphQLObjectType", (t) => {
+  t.plan(3);
 
-  t.test('should handle object types', async t => {
-    t.plan(1)
+  t.test("should handle object types", async (t) => {
+    t.plan(1);
 
     const schema = `
       type Hello {
@@ -20,10 +20,12 @@ t.test('GraphQLObjectType', t => {
 
       type Query {
         hello(message: String): Hello
-      }`
-    const graphqlService = new GraphQLService()
-    const result = graphqlService.generateSchema(schema)
-    t.same(result, `${typePrefix}
+      }`;
+    const graphqlService = new GraphQLService();
+    const result = graphqlService.generateSchema(schema);
+    t.same(
+      result,
+      `${typePrefix}
 
 /** Argument input type for HelloTellJokeInput. */
 export interface HelloTellJokeInput {
@@ -43,11 +45,12 @@ export interface QueryHelloInput {
 
 export interface Query {
     hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Hello>>;
-}`)
-  })
+}`,
+    );
+  });
 
-  t.test('should handle type extensions', async t => {
-    t.plan(1)
+  t.test("should handle type extensions", async (t) => {
+    t.plan(1);
 
     const schema = `
       """
@@ -65,10 +68,12 @@ export interface Query {
 
       type Query {
         hello(message: String): Hello
-      }`
-    const graphqlService = new GraphQLService()
-    const result = graphqlService.generateSchema(schema)
-    t.same(result, `${typePrefix}
+      }`;
+    const graphqlService = new GraphQLService();
+    const result = graphqlService.generateSchema(schema);
+    t.same(
+      result,
+      `${typePrefix}
 
 /** Argument input type for HelloTellJokeInput. */
 export interface HelloTellJokeInput {
@@ -90,11 +95,12 @@ export interface QueryHelloInput {
 
 export interface Query {
     hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Hello>>;
-}`)
-  })
+}`,
+    );
+  });
 
-  t.test('should handle object type documentation', async t => {
-    t.plan(1)
+  t.test("should handle object type documentation", async (t) => {
+    t.plan(1);
 
     const schema = `
       """
@@ -133,10 +139,12 @@ export interface Query {
           """
           message: String
         ): Hello
-      }`
-    const graphqlService = new GraphQLService()
-    const result = graphqlService.generateSchema(schema)
-    t.same(result, `${typePrefix}
+      }`;
+    const graphqlService = new GraphQLService();
+    const result = graphqlService.generateSchema(schema);
+    t.same(
+      result,
+      `${typePrefix}
 
 /** Argument input type for HelloTellJokeInput. */
 export interface HelloTellJokeInput {
@@ -164,6 +172,7 @@ export interface QueryHelloInput {
 export interface Query {
     /** hello query field. */
     hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Hello>>;
-}`)
-  })
-})
+}`,
+    );
+  });
+});

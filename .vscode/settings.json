@@ -13,14 +13,24 @@
     "titleBar.activeBackground": "#eb5424",
     "titleBar.activeForeground": "#e7e7e7",
     "titleBar.inactiveBackground": "#eb542499",
-    "titleBar.inactiveForeground": "#e7e7e799"
+    "titleBar.inactiveForeground": "#e7e7e799",
+    "editorGroup.border": "#ef7853",
+    "panel.border": "#ef7853",
+    "sash.hoverBorder": "#ef7853",
+    "sideBar.border": "#ef7853",
+    "statusBarItem.remoteBackground": "#eb5424",
+    "statusBarItem.remoteForeground": "#e7e7e7"
   },
   "peacock.color": "#eb5424",
-  "javascript.validate.enable": false,
-  "standard.usePackageJson": true,
-  "standard.autoFixOnSave": true,
+  "standard.enable": false,
+  "deno.enable": true,
+  "deno.lint": true,
+  "deno.unstable": false,
+  "deno.suggest.imports.hosts": {
+    "https://deno.land": true
+  },
+  "editor.defaultFormatter": "denoland.vscode-deno",
   "cSpell.words": [
-    "globby",
-    "oclif"
+    "Skypack"
   ]
 }

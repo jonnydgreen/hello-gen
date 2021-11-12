@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
-import t from 'tap'
+import t from "tap";
 
-import { GraphQLService } from '../../src/graphql'
-import { typePrefix } from './setup'
+import { GraphQLService } from "../../src/graphql";
+import { typePrefix } from "./setup";
 
-t.test('GraphQLIInterfaceType', t => {
-  t.plan(3)
+t.test("GraphQLIInterfaceType", (t) => {
+  t.plan(3);
 
-  t.test('should handle interfaces types', async t => {
-    t.plan(1)
+  t.test("should handle interfaces types", async (t) => {
+    t.plan(1);
 
     const schema = `
       interface Message {
@@ -25,10 +25,12 @@ t.test('GraphQLIInterfaceType', t => {
 
       type Query {
         hello(message: String): Hello
-      }`
-    const graphqlService = new GraphQLService()
-    const result = graphqlService.generateSchema(schema)
-    t.same(result, `${typePrefix}
+      }`;
+    const graphqlService = new GraphQLService();
+    const result = graphqlService.generateSchema(schema);
+    t.same(
+      result,
+      `${typePrefix}
 
 /** Argument input type for MessageActionInput. */
 export interface MessageActionInput {
@@ -58,11 +60,12 @@ export interface QueryHelloInput {
 
 export interface Query {
     hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Hello>>;
-}`)
-  })
+}`,
+    );
+  });
 
-  t.test('should handle multiple implementations interfaces types', async t => {
-    t.plan(1)
+  t.test("should handle multiple implementations interfaces types", async (t) => {
+    t.plan(1);
 
     const schema = `
       interface Message {
@@ -81,10 +84,12 @@ export interface Query {
 
       type Query {
         hello(message: String): Hello
-      }`
-    const graphqlService = new GraphQLService()
-    const result = graphqlService.generateSchema(schema)
-    t.same(result, `${typePrefix}
+      }`;
+    const graphqlService = new GraphQLService();
+    const result = graphqlService.generateSchema(schema);
+    t.same(
+      result,
+      `${typePrefix}
 
 export interface Message {
     message?: string;
@@ -107,11 +112,12 @@ export interface QueryHelloInput {
 
 export interface Query {
     hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Hello>>;
-}`)
-  })
+}`,
+    );
+  });
 
-  t.test('should handle interfaces type documentation', async t => {
-    t.plan(1)
+  t.test("should handle interfaces type documentation", async (t) => {
+    t.plan(1);
 
     const schema = `
       """
@@ -131,10 +137,12 @@ export interface Query {
 
       type Query {
         hello(message: String): Hello
-      }`
-    const graphqlService = new GraphQLService()
-    const result = graphqlService.generateSchema(schema)
-    t.same(result, `${typePrefix}
+      }`;
+    const graphqlService = new GraphQLService();
+    const result = graphqlService.generateSchema(schema);
+    t.same(
+      result,
+      `${typePrefix}
 
 /** Message interface. */
 export interface Message {
@@ -154,6 +162,7 @@ export interface QueryHelloInput {
 
 export interface Query {
     hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Hello>>;
-}`)
-  })
-})
+}`,
+    );
+  });
+});

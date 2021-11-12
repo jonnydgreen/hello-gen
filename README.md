@@ -1,7 +1,4 @@
-hello-gen
-=======
-
-
+# hello-gen
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/hello-gen.svg)](https://npmjs.org/package/hello-gen)
@@ -9,19 +6,25 @@ hello-gen
 [![License](https://img.shields.io/npm/l/hello-gen.svg)](https://github.com/jonnydgreen/hello-gen/blob/main/package.json)
 
 <!-- toc -->
-* [Description](#description)
-* [Usage](#usage)
-* [Commands](#commands)
-* [Contributing](#contributing)
+
+- [Description](#description)
+- [Usage](#usage)
+- [Commands](#commands)
+- [Contributing](#contributing)
+
 <!-- tocstop -->
+
 # Description
 
 WIP - first release coming soon! :)
 
-HelloGen provides a set of CLI commands to make the backend life a dream so you can "crack on" with the important things.
+HelloGen provides a set of CLI commands to make the backend life a dream so you
+can "crack on" with the important things.
 
 # Usage
+
 <!-- usage -->
+
 ```sh-session
 $ npm install -g hello-gen
 $ hello-gen COMMAND
@@ -33,23 +36,27 @@ USAGE
   $ hello-gen COMMAND
 ...
 ```
+
 <!-- usagestop -->
+
 # Commands
+
 <!-- commands -->
-* [`hello-gen autocomplete [SHELL]`](#hello-gen-autocomplete-shell)
-* [`hello-gen commands`](#hello-gen-commands)
-* [`hello-gen graphql`](#hello-gen-graphql)
-* [`hello-gen graphql:resolvers`](#hello-gen-graphqlresolvers)
-* [`hello-gen graphql:types`](#hello-gen-graphqltypes)
-* [`hello-gen help [COMMAND]`](#hello-gen-help-command)
-* [`hello-gen plugins`](#hello-gen-plugins)
-* [`hello-gen plugins:inspect PLUGIN...`](#hello-gen-pluginsinspect-plugin)
-* [`hello-gen plugins:install PLUGIN...`](#hello-gen-pluginsinstall-plugin)
-* [`hello-gen plugins:link PLUGIN`](#hello-gen-pluginslink-plugin)
-* [`hello-gen plugins:uninstall PLUGIN...`](#hello-gen-pluginsuninstall-plugin)
-* [`hello-gen plugins:update`](#hello-gen-pluginsupdate)
-* [`hello-gen update [CHANNEL]`](#hello-gen-update-channel)
-* [`hello-gen which COMMAND`](#hello-gen-which-command)
+
+- [`hello-gen autocomplete [SHELL]`](#hello-gen-autocomplete-shell)
+- [`hello-gen commands`](#hello-gen-commands)
+- [`hello-gen graphql`](#hello-gen-graphql)
+- [`hello-gen graphql:resolvers`](#hello-gen-graphqlresolvers)
+- [`hello-gen graphql:types`](#hello-gen-graphqltypes)
+- [`hello-gen help [COMMAND]`](#hello-gen-help-command)
+- [`hello-gen plugins`](#hello-gen-plugins)
+- [`hello-gen plugins:inspect PLUGIN...`](#hello-gen-pluginsinspect-plugin)
+- [`hello-gen plugins:install PLUGIN...`](#hello-gen-pluginsinstall-plugin)
+- [`hello-gen plugins:link PLUGIN`](#hello-gen-pluginslink-plugin)
+- [`hello-gen plugins:uninstall PLUGIN...`](#hello-gen-pluginsuninstall-plugin)
+- [`hello-gen plugins:update`](#hello-gen-pluginsupdate)
+- [`hello-gen update [CHANNEL]`](#hello-gen-update-channel)
+- [`hello-gen which COMMAND`](#hello-gen-which-command)
 
 ## `hello-gen autocomplete [SHELL]`
 
@@ -72,7 +79,8 @@ EXAMPLES
   $ hello-gen autocomplete --refresh-cache
 ```
 
-_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.3.0/src/commands/autocomplete/index.ts)_
+_See code:
+[@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.3.0/src/commands/autocomplete/index.ts)_
 
 ## `hello-gen commands`
 
@@ -96,7 +104,8 @@ OPTIONS
   --sort=sort             property to sort by (prepend '-' for descending)
 ```
 
-_See code: [@oclif/plugin-commands](https://github.com/oclif/plugin-commands/blob/v1.3.0/src/commands/commands.ts)_
+_See code:
+[@oclif/plugin-commands](https://github.com/oclif/plugin-commands/blob/v1.3.0/src/commands/commands.ts)_
 
 ## `hello-gen graphql`
 
@@ -117,7 +126,8 @@ EXAMPLE
   Generated GraphQL server
 ```
 
-_See code: [dist/src/commands/graphql/index.js](https://github.com/jonnydgreen/hello-gen/blob/v1.0.0/dist/src/commands/graphql/index.js)_
+_See code:
+[dist/src/commands/graphql/index.js](https://github.com/jonnydgreen/hello-gen/blob/v1.0.0/dist/src/commands/graphql/index.js)_
 
 ## `hello-gen graphql:resolvers`
 
@@ -138,7 +148,8 @@ EXAMPLE
   Generated GraphQL resolvers
 ```
 
-_See code: [dist/src/commands/graphql/resolvers.js](https://github.com/jonnydgreen/hello-gen/blob/v1.0.0/dist/src/commands/graphql/resolvers.js)_
+_See code:
+[dist/src/commands/graphql/resolvers.js](https://github.com/jonnydgreen/hello-gen/blob/v1.0.0/dist/src/commands/graphql/resolvers.js)_
 
 ## `hello-gen graphql:types`
 
@@ -159,7 +170,8 @@ EXAMPLE
   Generated GraphQL types at 'types.generated.ts'
 ```
 
-_See code: [dist/src/commands/graphql/types.js](https://github.com/jonnydgreen/hello-gen/blob/v1.0.0/dist/src/commands/graphql/types.js)_
+_See code:
+[dist/src/commands/graphql/types.js](https://github.com/jonnydgreen/hello-gen/blob/v1.0.0/dist/src/commands/graphql/types.js)_
 
 ## `hello-gen help [COMMAND]`
 
@@ -176,7 +188,8 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
+_See code:
+[@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
 
 ## `hello-gen plugins`
 
@@ -193,7 +206,8 @@ EXAMPLE
   $ hello-gen plugins
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.10.0/src/commands/plugins/index.ts)_
+_See code:
+[@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.10.0/src/commands/plugins/index.ts)_
 
 ## `hello-gen plugins:inspect PLUGIN...`
 
@@ -214,7 +228,8 @@ EXAMPLE
   $ hello-gen plugins:inspect myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.10.0/src/commands/plugins/inspect.ts)_
+_See code:
+[@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.10.0/src/commands/plugins/inspect.ts)_
 
 ## `hello-gen plugins:install PLUGIN...`
 
@@ -250,7 +265,8 @@ EXAMPLES
   $ hello-gen plugins:install someuser/someplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.10.0/src/commands/plugins/install.ts)_
+_See code:
+[@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.10.0/src/commands/plugins/install.ts)_
 
 ## `hello-gen plugins:link PLUGIN`
 
@@ -277,7 +293,8 @@ EXAMPLE
   $ hello-gen plugins:link myplugin
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.10.0/src/commands/plugins/link.ts)_
+_See code:
+[@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.10.0/src/commands/plugins/link.ts)_
 
 ## `hello-gen plugins:uninstall PLUGIN...`
 
@@ -299,7 +316,8 @@ ALIASES
   $ hello-gen plugins:remove
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.10.0/src/commands/plugins/uninstall.ts)_
+_See code:
+[@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.10.0/src/commands/plugins/uninstall.ts)_
 
 ## `hello-gen plugins:update`
 
@@ -314,7 +332,8 @@ OPTIONS
   -v, --verbose
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.10.0/src/commands/plugins/update.ts)_
+_See code:
+[@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v1.10.0/src/commands/plugins/update.ts)_
 
 ## `hello-gen update [CHANNEL]`
 
@@ -325,7 +344,8 @@ USAGE
   $ hello-gen update [CHANNEL]
 ```
 
-_See code: [@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v1.3.10/src/commands/update.ts)_
+_See code:
+[@oclif/plugin-update](https://github.com/oclif/plugin-update/blob/v1.3.10/src/commands/update.ts)_
 
 ## `hello-gen which COMMAND`
 
@@ -336,7 +356,9 @@ USAGE
   $ hello-gen which COMMAND
 ```
 
-_See code: [@oclif/plugin-which](https://github.com/oclif/plugin-which/blob/v1.0.3/src/commands/which.ts)_
+_See code:
+[@oclif/plugin-which](https://github.com/oclif/plugin-which/blob/v1.0.3/src/commands/which.ts)_
+
 <!-- commandsstop -->
 
 # Contributing

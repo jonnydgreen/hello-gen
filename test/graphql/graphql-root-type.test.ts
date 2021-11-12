@@ -1,33 +1,36 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
-import t from 'tap'
+import t from "tap";
 
-import { GraphQLService } from '../../src/graphql'
-import { typePrefix } from './setup'
+import { GraphQLService } from "../../src/graphql";
+import { typePrefix } from "./setup";
 
-t.test('GraphQLRootType', t => {
-  t.plan(2)
+t.test("GraphQLRootType", (t) => {
+  t.plan(2);
 
-  t.test('should handle when there no root type', t => {
-    t.plan(1)
+  t.test("should handle when there no root type", (t) => {
+    t.plan(1);
 
     const schema = `
         type Hello {
           hi: String
         }
-      `
-    const graphqlService = new GraphQLService()
-    const result = graphqlService.generateSchema(schema)
+      `;
+    const graphqlService = new GraphQLService();
+    const result = graphqlService.generateSchema(schema);
 
-    t.same(result, `${typePrefix}
+    t.same(
+      result,
+      `${typePrefix}
 
 export interface Hello {
     hi?: string;
-}`)
-  })
+}`,
+    );
+  });
 
-  t.test('should correctly order root type inputs', t => {
-    t.plan(1)
+  t.test("should correctly order root type inputs", (t) => {
+    t.plan(1);
 
     const schema = `
         type Query {
@@ -37,11 +40,13 @@ export interface Hello {
         type Mutation {
           hello(wave: Boolean): String
         }
-      `
-    const graphqlService = new GraphQLService()
-    const result = graphqlService.generateSchema(schema)
+      `;
+    const graphqlService = new GraphQLService();
+    const result = graphqlService.generateSchema(schema);
 
-    t.same(result, `${typePrefix}
+    t.same(
+      result,
+      `${typePrefix}
 
 /** Argument input type for QueryHiInput. */
 export interface QueryHiInput {
@@ -59,6 +64,7 @@ export interface Query {
 
 export interface Mutation {
     hello?(root: {}, args: MutationHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<string>>;
-}`)
-  })
-})
+}`,
+    );
+  });
+});
