@@ -13,3 +13,8 @@ export interface GraphQLSchemaTypes {
   ROOT_INPUT_OBJECT?: ObjectTypeDef[]
   ROOT?: ObjectTypeDef[]
 }
+
+export interface GenerateResult {
+  schema: string
+  resolvers: Record<string, string>
+}

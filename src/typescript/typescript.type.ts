@@ -24,6 +24,9 @@ export interface BaseFieldTypeDef extends BaseTypeDef {
   typeName: string
   args: FieldTypeDef[]
   nullable: boolean
+  // TODO: do we need this?
+  promise: boolean
+  resolver?: boolean
   argsInputName: string
   parent?: string
 }

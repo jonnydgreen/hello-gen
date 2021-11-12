@@ -107,5 +107,5 @@ dist
 package-lock.json
 
 # Repo
-types.generated.ts
-schema.gh.graphql
+test/_input
+test/_output

@@ -1,4 +1,11 @@
-import { GraphQLField, GraphQLInputType, GraphQLList, GraphQLNonNull, GraphQLOutputType, isOutputType } from 'graphql'
+import { GraphQLInputField, GraphQLField, GraphQLInputType, GraphQLList, GraphQLNonNull, GraphQLOutputType, isOutputType } from 'graphql'
+
+/**
+ * Infer if a type is a GraphQL Field.
+ */
+export function isGraphQLInputField (field: any): field is GraphQLInputField {
+  return field?.astNode?.kind === 'InputValueDefinition'
+}
 
 /**
  * Infer if a type is a GraphQL Field.
