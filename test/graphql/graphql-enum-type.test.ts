@@ -1,4 +1,4 @@
-import { assertStrictEquals } from "../dev-deps.ts";
+import { assertStrictEquals } from "../../src/deps.ts";
 import { typePrefix } from "./setup.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
 

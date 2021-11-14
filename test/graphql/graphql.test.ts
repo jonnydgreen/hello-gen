@@ -1,4 +1,4 @@
-import { assert, assertEquals, assertThrows } from "../dev-deps.ts";
+import { assert, assertEquals, assertThrows } from "../../src/deps.ts";
 import { GraphQLError, GraphQLObjectType } from "../../src/deps.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
 

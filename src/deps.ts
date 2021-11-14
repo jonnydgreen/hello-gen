@@ -36,3 +36,12 @@ export type {
   GraphQLOutputType,
 } from "https://cdn.skypack.dev/graphql@v16.0.1?dts";
 export { default as Handlebars } from "https://cdn.skypack.dev/handlebars@4.7.7?dts";
+
+// Dev Deps
+export {
+  assert,
+  assertEquals,
+  assertRejects,
+  assertStrictEquals,
+  assertThrows,
+} from "https://deno.land/std@0.114.0/testing/asserts.ts";

@@ -1,4 +1,4 @@
-import { assertStrictEquals } from "../dev-deps.ts";
+import { assertStrictEquals } from "../../src/deps.ts";
 import {
   Types,
   TypeScriptService,

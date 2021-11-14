@@ -1,4 +1,4 @@
-import { assertStrictEquals } from "../dev-deps.ts";
+import { assertStrictEquals } from "../../src/deps.ts";
 import { TypeScriptService } from "../../src/services/typescript/index.ts";
 
 Deno.test("TypeScriptService::createClassDef: should render class type def", async () => {

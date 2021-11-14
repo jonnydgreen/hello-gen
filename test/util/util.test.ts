@@ -3,7 +3,7 @@ import {
   assertRejects,
   assertStrictEquals,
   assertThrows,
-} from "../dev-deps.ts";
+} from "../../src/deps.ts";
 import {
   assertNever,
   readFile,
