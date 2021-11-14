@@ -1,4 +1,4 @@
-import { Command } from "../deps.ts";
+import { Command } from "../../deps.ts";
 import type { CLICommand } from "./types.ts";
 import { GraphQLTypesCommand } from "./graphql/types.command.ts";
 

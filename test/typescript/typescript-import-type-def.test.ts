@@ -1,15 +1,13 @@
-import { assertStrictEquals } from "../../src/deps.ts";
+import { assertStrictEquals } from "../../deps.ts";
 import { TypeScriptService } from "../../src/services/typescript/index.ts";
 
-Deno.test("TypeScriptService::createOpaqueTypeDef: should render import type def", async () => {
+Deno.test("TypeScriptService::createOpaqueTypeDef: should render import type def", () => {
   // Arrange
   const service = new TypeScriptService();
-  const node = service.createImportTypeDef("some-module", { name: "hello" }, {
-    name: "there",
-  });
+  const node = service.createImportTypeDef("some-module", "hello", "there");
 
   // Act
-  const result = await service.print([node]);
+  const result = service.print([node]);
 
   // Assert
   assertStrictEquals(

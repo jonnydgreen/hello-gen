@@ -1,20 +1,20 @@
-import { assertStrictEquals } from "../../src/deps.ts";
+import { assertStrictEquals } from "../../deps.ts";
 import {
   Types,
   TypeScriptService,
 } from "../../src/services/typescript/index.ts";
 
-Deno.test("TypeScriptService::createScalarTypeDef: should render scalar type def", async () => {
+Deno.test("TypeScriptService::createScalarTypeDef: should render scalar type def", () => {
   // Arrange
   const service = new TypeScriptService();
-  const node = await service.createTypeDef({
+  const node = service.createTypeDef({
     type: Types.SCALAR,
     name: "Date",
     comment: undefined,
   });
 
   // Act
-  const result = await service.print([node!]);
+  const result = service.print([node!]);
 
   // Assert
   assertStrictEquals(
@@ -27,17 +27,17 @@ export type Date = any & {
   );
 });
 
-Deno.test("TypeScriptService::createScalarTypeDef: should render ID scalar type def", async () => {
+Deno.test("TypeScriptService::createScalarTypeDef: should render ID scalar type def", () => {
   // Arrange
   const service = new TypeScriptService();
-  const node = await service.createTypeDef({
+  const node = service.createTypeDef({
     type: Types.SCALAR,
     name: "ID",
     comment: undefined,
   });
 
   // Act
-  const result = await service.print([node!]);
+  const result = service.print([node!]);
 
   // Assert
   assertStrictEquals(

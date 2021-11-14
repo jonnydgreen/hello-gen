@@ -1,1 +1,0 @@
-import { {{#each namedImports}}{{this.name}}{{#if this.specifier}} as {{this.specifier}}{{/if}}{{#unless @last}}, {{/unless}}{{/each}} } from "{{@root.module}}";

@@ -1,8 +1,8 @@
-import { assertStrictEquals } from "../../src/deps.ts";
+import { assertStrictEquals } from "../../deps.ts";
 import { typePrefix } from "./setup.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
 
-Deno.test("GraphQLScalarType::generateSchema: should handle Int types", async () => {
+Deno.test("GraphQLScalarType::generateSchema: should handle Int types", () => {
   // Arrange
   const schema = `
     type Query {
@@ -11,7 +11,7 @@ Deno.test("GraphQLScalarType::generateSchema: should handle Int types", async ()
   const graphqlService = new GraphQLService();
 
   // Act
-  const result = await graphqlService.generateSchema(schema);
+  const result = graphqlService.generateSchema(schema);
 
   // Assert
   assertStrictEquals(
@@ -32,7 +32,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLScalarType::generateSchema: should handle Float types",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       type Query {
@@ -41,7 +41,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(
@@ -61,7 +61,7 @@ export interface Query {
   },
 );
 
-Deno.test("GraphQLScalarType::generateSchema: should handle ID types", async () => {
+Deno.test("GraphQLScalarType::generateSchema: should handle ID types", () => {
   // Arrange
   const schema = `
     type Query {
@@ -70,7 +70,7 @@ Deno.test("GraphQLScalarType::generateSchema: should handle ID types", async () 
   const graphqlService = new GraphQLService();
 
   // Act
-  const result = await graphqlService.generateSchema(schema);
+  const result = graphqlService.generateSchema(schema);
 
   // Assert
   assertStrictEquals(
@@ -95,7 +95,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLScalarType::generateSchema: should handle String types",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       type Query {
@@ -104,7 +104,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(
@@ -125,7 +125,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLScalarType::generateSchema: should handle Boolean types",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       type Query {
@@ -134,7 +134,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(
@@ -155,7 +155,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLScalarType::generateSchema: should handle custom scalar types",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       scalar CustomInt
@@ -166,7 +166,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(
@@ -192,7 +192,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLScalarType::generateSchema: should handle non-null types",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       type Query {
@@ -201,7 +201,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(
@@ -223,7 +223,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLScalarType::generateSchema: should handle custom scalar type comments",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       """
@@ -237,7 +237,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(

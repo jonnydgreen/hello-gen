@@ -1,13 +1,13 @@
-import { assertStrictEquals } from "../../src/deps.ts";
+import { assertStrictEquals } from "../../deps.ts";
 import {
   Types,
   TypeScriptService,
 } from "../../src/services/typescript/index.ts";
 
-Deno.test("TypeScriptService::createEnumTypeDef: should render enum type def", async () => {
+Deno.test("TypeScriptService::createEnumTypeDef: should render enum type def", () => {
   // Arrange
   const service = new TypeScriptService();
-  const node = await service.createTypeDef({
+  const node = service.createTypeDef({
     type: Types.ENUM,
     name: "HelloEnum",
     values: [
@@ -18,7 +18,7 @@ Deno.test("TypeScriptService::createEnumTypeDef: should render enum type def", a
   });
 
   // Act
-  const result = await service.print([node!]);
+  const result = service.print([node!]);
 
   // Assert
   assertStrictEquals(

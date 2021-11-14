@@ -31,7 +31,7 @@ jobs:
         run: deno lint -c deno.json
 
       - name: Run unit and integration tests
-        run: deno test --lock=lock.json --unstable --allow-read --allow-write -A --coverage=cov --doc
+        run: deno test --lock=lock.json --allow-read --allow-write -A --coverage=cov --doc
 
       - name: Generate coverage report
         # Only want to generate this once
@@ -39,4 +39,7 @@ jobs:
         run: deno coverage --lcov cov > cov.lcov
 
       - name: Compile executable for target ${{ matrix.os.target }}
-        run: deno compile --lock=lock.json --unstable --allow-read --allow-write src/hello-gen.ts --target ${{ matrix.os.target }}
+        run: deno compile --lock=lock.json --allow-read --allow-write src/hello-gen.ts --target ${{ matrix.os.target }}
+
+      - name: Smoke test executable for target ${{ matrix.os.target }}
+        run: ./hello-gen -h

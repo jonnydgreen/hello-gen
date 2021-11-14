@@ -1,18 +1,18 @@
-import { assertStrictEquals } from "../../src/deps.ts";
+import { assertStrictEquals } from "../../deps.ts";
 import { TypeScriptService } from "../../src/services/typescript/index.ts";
 
-Deno.test("TypeScriptService::createClassDef: should render class type def", async () => {
+Deno.test("TypeScriptService::createClassDef: should render class type def", () => {
   // Arrange
   const service = new TypeScriptService();
   const nodes = service.createClassDef({
-    imports: [["some-module", { name: "hello" }, { name: "there" }]],
+    imports: [["some-module", "hello", "there"]],
     name: "QueryResolver",
     implementation: "Resolver",
     methods: [],
   });
 
   // Act
-  const result = await service.print(nodes);
+  const result = service.print(nodes);
 
   // Assert
   assertStrictEquals(

@@ -1,4 +1,4 @@
-import { EOL } from "../../deps.ts";
+import { EOL } from "../../../deps.ts";
 
 /**
  * Read file to UTF-8 string from input path.

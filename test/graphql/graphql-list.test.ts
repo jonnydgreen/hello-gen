@@ -1,10 +1,10 @@
-import { assertStrictEquals } from "../../src/deps.ts";
+import { assertStrictEquals } from "../../deps.ts";
 import { typePrefix } from "./setup.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
 
 Deno.test(
   "GraphQLList::generateSchema: should handle nullable list, non-null entry types",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       type Query {
@@ -13,7 +13,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(
@@ -34,7 +34,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLList::generateSchema: should handle mandatory list and entry types",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       type Query {
@@ -43,7 +43,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(
@@ -64,7 +64,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLList::generateSchema: should handle mandatory list and nullable entry types",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       type Query {
@@ -73,7 +73,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(
@@ -94,7 +94,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLList::generateSchema: should handle nullable list and nullable entry types",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       type Query {
@@ -103,7 +103,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(
@@ -124,7 +124,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLList::generateSchema: should handle union elements in lists",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       type Hello {
@@ -145,7 +145,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(
@@ -183,7 +183,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLList::generateSchema: should handle enum elements in lists",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       enum Hello {
@@ -198,7 +198,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(
@@ -230,7 +230,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLList::generateSchema: should handle list documentation",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       """
@@ -249,7 +249,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(

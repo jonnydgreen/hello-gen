@@ -1,10 +1,10 @@
-import { assertStrictEquals } from "../../src/deps.ts";
+import { assertStrictEquals } from "../../deps.ts";
 import { typePrefix } from "./setup.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
 
 Deno.test(
   "GraphQLIInterfaceType::generateSchema: should handle interfaces types",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       interface Message {
@@ -24,7 +24,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(
@@ -66,7 +66,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLIInterfaceType::generateSchema: should handle multiple implementations interfaces types",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       interface Message {
@@ -89,7 +89,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(
@@ -122,7 +122,7 @@ export interface Query {
   },
 );
 
-Deno.test("GraphQLIInterfaceType::generateSchema: should handle interfaces type documentation", async () => {
+Deno.test("GraphQLIInterfaceType::generateSchema: should handle interfaces type documentation", () => {
   // Arrange
   const schema = `
     """
@@ -146,7 +146,7 @@ Deno.test("GraphQLIInterfaceType::generateSchema: should handle interfaces type 
   const graphqlService = new GraphQLService();
 
   // Act
-  const result = await graphqlService.generateSchema(schema);
+  const result = graphqlService.generateSchema(schema);
 
   // Assert
   assertStrictEquals(

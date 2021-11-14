@@ -2,7 +2,7 @@ import {
   GraphQLInputObjectType,
   GraphQLInterfaceType,
   GraphQLObjectType,
-} from "../../deps.ts";
+} from "../../../deps.ts";
 import {
   EnumTypeDef,
   ObjectTypeDef,

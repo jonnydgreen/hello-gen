@@ -6,7 +6,7 @@ import {
   GraphQLNonNull,
   GraphQLOutputType,
   isOutputType,
-} from "../../deps.ts";
+} from "../../../deps.ts";
 
 /**
  * Infer if a type is a GraphQL Field.

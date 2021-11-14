@@ -6,7 +6,7 @@
   },
   "fmt": {
     "files": {
-      "exclude": ["test/_output"]
+      "exclude": ["test/_output", "lock.json"]
     }
   }
 }

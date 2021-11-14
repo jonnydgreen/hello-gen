@@ -1,4 +1,4 @@
-import { assert } from "../../src/deps.ts";
+import { assert } from "../../deps.ts";
 import { TypeScriptService } from "../../src/services/typescript/index.ts";
 
 Deno.test(

@@ -88,30 +88,6 @@ export interface EnumTypeDef extends BaseTypeDef, Record<string, unknown> {
   values: EnumValueTypeDef[];
 }
 
-export interface Node<TData = Record<string, unknown>> {
-  template: string;
-  data: TData;
-}
-
-export interface ImportTypeDefSpecifier {
-  name: string;
-  specifier?: string;
-}
-export interface ImportTypeDefNodeData extends Record<string, unknown> {
-  module: string;
-  namedImports: ImportTypeDefSpecifier[];
-}
-
-export interface FieldTypedefNodeData {
-  value: string;
-  comment?: string;
-}
-
-export interface ObjectTypeDefNodeData
-  extends Omit<ObjectTypeDef, "fields">, Record<string, unknown> {
-  fields: FieldTypedefNodeData[];
-}
-
 export interface OpaqueTypeDef extends Record<string, unknown> {
   name: string;
   type: string;
@@ -131,7 +107,7 @@ export interface ClassDefMethod {
 export interface ClassDef extends Record<string, unknown> {
   name: string;
   implementation: string;
-  imports: Array<[string, ...ImportTypeDefSpecifier[]]>;
+  imports: Array<[string, ...string[]]>;
   methods: ClassDefMethod[];
 }
 

@@ -1,10 +1,10 @@
-import { assertStrictEquals } from "../../src/deps.ts";
+import { assertStrictEquals } from "../../deps.ts";
 import { typePrefix } from "./setup.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
 
 Deno.test(
   "GraphQLInputObjectType::generateSchema: should handle input object types",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       input Message {
@@ -18,7 +18,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(
@@ -44,7 +44,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLInputObjectType::generateSchema: should handle input object type documentation",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       """
@@ -71,7 +71,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(

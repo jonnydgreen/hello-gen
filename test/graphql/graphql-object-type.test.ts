@@ -1,10 +1,10 @@
-import { assertStrictEquals } from "../../src/deps.ts";
+import { assertStrictEquals } from "../../deps.ts";
 import { typePrefix } from "./setup.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
 
 Deno.test(
   "GraphQLObjectType::generateSchema: should handle object types",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       type Hello {
@@ -19,7 +19,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(
@@ -51,7 +51,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLObjectType::generateSchema: should handle type extensions",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       """
@@ -73,7 +73,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(
@@ -107,7 +107,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLObjectType::generateSchema: should handle object type documentation",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       """
@@ -150,7 +150,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(

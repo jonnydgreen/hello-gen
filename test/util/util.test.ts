@@ -3,14 +3,14 @@ import {
   assertRejects,
   assertStrictEquals,
   assertThrows,
-} from "../../src/deps.ts";
+} from "../../deps.ts";
 import {
   assertNever,
   readFile,
   upperFirst,
   writeFiles,
 } from "../../src/lib/util/index.ts";
-import { dirname, fromFileUrl, join } from "../../src/deps.ts";
+import { dirname, fromFileUrl, join } from "../../src/../deps.ts";
 
 const __dirname = dirname(fromFileUrl(import.meta.url));
 

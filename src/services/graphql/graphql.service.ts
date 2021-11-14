@@ -19,7 +19,7 @@ import {
   isTypeExtensionNode,
   Kind,
   parse,
-} from "../../deps.ts";
+} from "../../../deps.ts";
 import {
   GenerateResult,
   GraphQLParentType,
@@ -37,7 +37,6 @@ import {
   FieldTypeDef,
   FieldTypes,
   FieldUnionTypeDef,
-  ImportTypeDefSpecifier,
   ObjectTypeDef,
   ScalarTypeDef,
   TypeDef,
@@ -412,10 +411,10 @@ export class GraphQLService {
    * Create TypeScript utility type definitions to be used throughout the generated types.
    */
   private _createUtilityTypeDefs(): Array<
-    [string, ImportTypeDefSpecifier, ...ImportTypeDefSpecifier[]]
+    [string, string, ...string[]]
   > {
     return [
-      ["graphql", { name: "GraphQLResolveInfo" }],
+      ["graphql", "GraphQLResolveInfo"],
     ];
   }
 
@@ -602,13 +601,13 @@ export class GraphQLService {
           name: `${typeDef.name}Resolver`,
           implementation: typeDef.name,
           imports: [
-            ["graphql", { name: "GraphQLResolveInfo" }],
+            ["graphql", "GraphQLResolveInfo"],
             [
               "../types",
-              { name: "Maybe" },
-              { name: "MaybePromise" },
-              { name: typeDef.name },
-              ...typeDef.fields.map((field) => ({ name: field.argsInputName })),
+              "Maybe",
+              "MaybePromise",
+              typeDef.name,
+              ...typeDef.fields.map((field) => field.argsInputName),
             ],
           ],
           methods: typeDef.fields.map<ClassDefMethod>((field) => ({
@@ -628,7 +627,7 @@ export class GraphQLService {
     return classDefs;
   }
 
-  public async generateSchema(rawSchema: string): Promise<string> {
+  public generateSchema(rawSchema: string): string {
     const typeDefs = this.generateSchemaTypeDefs(rawSchema);
 
     const utilityTypeDefs = this._createUtilityTypeDefs();
@@ -636,25 +635,26 @@ export class GraphQLService {
       utilityTypeDefs,
     );
     for (const typeDef of typeDefs) {
-      typeNodes.push(await this.typeScriptService.createTypeDef(typeDef));
+      typeNodes.push(this.typeScriptService.createTypeDef(typeDef));
     }
 
     return this.typeScriptService.print(typeNodes);
   }
 
-  public async generate(rawSchema: string): Promise<GenerateResult> {
+  public generate(rawSchema: string): GenerateResult {
     // Create TypeScript types
-    const schema = await this.generateSchema(rawSchema);
+    const schema = this.generateSchema(rawSchema);
 
     // Create TypeScript resolvers
     const resolvers: Record<string, string> = {};
-    const resolverDefs = this.generateResolverDefs(rawSchema);
-    for (const resolverDef of resolverDefs) {
-      const resolverNodes = this.typeScriptService.createClassDef(resolverDef);
-      resolvers[resolverDef.name] = await this.typeScriptService.print(
-        resolverNodes,
-      );
-    }
+    // TODO: resolvers
+    // const resolverDefs = this.generateResolverDefs(rawSchema);
+    // for (const resolverDef of resolverDefs) {
+    //   const resolverNodes = this.typeScriptService.createClassDef(resolverDef);
+    //   resolvers[resolverDef.name] = this.typeScriptService.print(
+    //     resolverNodes,
+    //   );
+    // }
 
     return { schema, resolvers };
   }

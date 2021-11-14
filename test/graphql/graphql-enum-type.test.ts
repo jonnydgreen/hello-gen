@@ -1,8 +1,8 @@
-import { assertStrictEquals } from "../../src/deps.ts";
+import { assertStrictEquals } from "../../deps.ts";
 import { typePrefix } from "./setup.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
 
-Deno.test("GraphQLEnumType::generate: should generate a schema", async () => {
+Deno.test("GraphQLEnumType::generate: should generate a schema", () => {
   // Assert
   const schema = `
     enum Language {
@@ -20,7 +20,7 @@ Deno.test("GraphQLEnumType::generate: should generate a schema", async () => {
   const graphqlService = new GraphQLService();
 
   // Act
-  const result = await graphqlService.generate(schema);
+  const result = graphqlService.generate(schema);
 
   // Assert
   assertStrictEquals(
@@ -47,7 +47,7 @@ export interface Query {
   );
 });
 
-Deno.test("GraphQLEnumType::generate: should generate a schema", async () => {
+Deno.test("GraphQLEnumType::generate: should generate a schema", () => {
   // Assert
   const schema = `
     enum Language {
@@ -65,7 +65,7 @@ Deno.test("GraphQLEnumType::generate: should generate a schema", async () => {
   const graphqlService = new GraphQLService();
 
   // Act
-  const result = await graphqlService.generateSchema(schema);
+  const result = graphqlService.generateSchema(schema);
 
   // Assert
   assertStrictEquals(
@@ -94,7 +94,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLEnumType::generate: should handle enum type documentation",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       """
@@ -127,7 +127,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Assert
     assertStrictEquals(

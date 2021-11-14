@@ -35,7 +35,10 @@ export type {
   GraphQLNamedType,
   GraphQLOutputType,
 } from "https://cdn.skypack.dev/graphql@v16.0.1?dts";
-export { default as Handlebars } from "https://cdn.skypack.dev/handlebars@4.7.7?dts";
+
+// JSPM
+// @deno-types=https://dev.jspm.io/typescript/lib/typescript.d.ts
+export { default as ts } from "https://dev.jspm.io/typescript";
 
 // Dev Deps
 export {

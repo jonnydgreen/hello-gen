@@ -1,5 +1,5 @@
-import { assert, assertEquals, assertThrows } from "../../src/deps.ts";
-import { GraphQLError, GraphQLObjectType } from "../../src/deps.ts";
+import { assert, assertEquals, assertThrows } from "../../deps.ts";
+import { GraphQLError, GraphQLObjectType } from "../../src/../deps.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
 
 Deno.test("GraphQLService::constructor: should instantiate the class", () => {

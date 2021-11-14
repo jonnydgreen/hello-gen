@@ -1,13 +1,13 @@
-import { assertStrictEquals } from "../../src/deps.ts";
+import { assertStrictEquals } from "../../deps.ts";
 import {
   Types,
   TypeScriptService,
 } from "../../src/services/typescript/index.ts";
 
-Deno.test("TypeScriptService::createUnionTypeDef: should render union type def", async () => {
+Deno.test("TypeScriptService::createUnionTypeDef: should render union type def", () => {
   // Arrange
   const service = new TypeScriptService();
-  const node = await service.createTypeDef({
+  const node = service.createTypeDef({
     type: Types.UNION,
     name: "TypeUnion",
     comment: undefined,
@@ -19,7 +19,7 @@ Deno.test("TypeScriptService::createUnionTypeDef: should render union type def",
   });
 
   // Act
-  const result = await service.print([node!]);
+  const result = service.print([node!]);
 
   // Assert
   assertStrictEquals(

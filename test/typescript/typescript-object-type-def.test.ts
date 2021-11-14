@@ -1,14 +1,14 @@
-import { assertStrictEquals } from "../../src/deps.ts";
+import { assertStrictEquals } from "../../deps.ts";
 import {
   FieldTypes,
   Types,
   TypeScriptService,
 } from "../../src/services/typescript/index.ts";
 
-Deno.test("TypeScriptService::createObjectTypeDef: should render object type with Object type fields", async () => {
+Deno.test("TypeScriptService::createObjectTypeDef: should render object type with Object type fields", () => {
   // Arrange
   const service = new TypeScriptService();
-  const node = await service.createTypeDef({
+  const node = service.createTypeDef({
     type: Types.OBJECT,
     name: "Hello",
     comment: undefined,
@@ -47,7 +47,7 @@ Deno.test("TypeScriptService::createObjectTypeDef: should render object type wit
   });
 
   // Act
-  const result = await service.print([node!]);
+  const result = service.print([node!]);
 
   // Assert
   assertStrictEquals(

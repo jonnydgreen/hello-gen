@@ -1,8 +1,8 @@
-import { assertStrictEquals } from "../../src/deps.ts";
+import { assertStrictEquals } from "../../deps.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
 import { typePrefix } from "./setup.ts";
 
-Deno.test("GraphQLUnionType::generateSchema: should handle union types", async () => {
+Deno.test("GraphQLUnionType::generateSchema: should handle union types", () => {
   // Arrange
   const schema = `
     type Hello {
@@ -22,7 +22,7 @@ Deno.test("GraphQLUnionType::generateSchema: should handle union types", async (
   const graphqlService = new GraphQLService();
 
   // Act
-  const result = await graphqlService.generateSchema(schema);
+  const result = graphqlService.generateSchema(schema);
 
   // Assert
   assertStrictEquals(
@@ -53,7 +53,7 @@ export interface Query {
 
 Deno.test(
   "GraphQLUnionType::generateSchema: should handle documentation",
-  async () => {
+  () => {
     // Arrange
     const schema = `
       type Hello {
@@ -76,7 +76,7 @@ Deno.test(
     const graphqlService = new GraphQLService();
 
     // Act
-    const result = await graphqlService.generateSchema(schema);
+    const result = graphqlService.generateSchema(schema);
 
     // Arrange
     assertStrictEquals(
