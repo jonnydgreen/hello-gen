@@ -1,36 +1,33 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+import { assertStrictEquals } from "../dev-deps.ts";
+import { GraphQLService } from "../../src/services/graphql/index.ts";
+import { typePrefix } from "./setup.ts";
 
-import t from "tap";
+Deno.test("GraphQLUnionType::generateSchema: should handle union types", async () => {
+  // Arrange
+  const schema = `
+    type Hello {
+      message: String
+      wave: Boolean
+    }
 
-import { GraphQLService } from "../../src/graphql";
-import { typePrefix } from "./setup";
+    type Goodbye {
+      wave: Boolean
+    }
 
-t.test("GraphQLUnionType", (t) => {
-  t.plan(2);
+    union Message = Hello | Goodbye
 
-  t.test("should handle union types", async (t) => {
-    t.plan(1);
+    type Query {
+      hello(input: String): Message
+    }`;
+  const graphqlService = new GraphQLService();
 
-    const schema = `
-      type Hello {
-        message: String
-        wave: Boolean
-      }
+  // Act
+  const result = await graphqlService.generateSchema(schema);
 
-      type Goodbye {
-        wave: Boolean
-      }
-
-      union Message = Hello | Goodbye
-
-      type Query {
-        hello(input: String): Message
-      }`;
-    const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
-      result,
-      `${typePrefix}
+  // Assert
+  assertStrictEquals(
+    result,
+    `${typePrefix}
 
 export interface Hello {
     message?: string;
@@ -51,12 +48,13 @@ export interface QueryHelloInput {
 export interface Query {
     hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Message>>;
 }`,
-    );
-  });
+  );
+});
 
-  t.test("should handle documentation", async (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLUnionType::generateSchema: should handle documentation",
+  async () => {
+    // Arrange
     const schema = `
       type Hello {
         message: String
@@ -76,8 +74,12 @@ export interface Query {
         hello(input: String): Message
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Arrange
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -102,5 +104,5 @@ export interface Query {
     hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Message>>;
 }`,
     );
-  });
-});
+  },
+);

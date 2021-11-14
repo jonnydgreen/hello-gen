@@ -1,19 +1,13 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+import { assert } from "../dev-deps.ts";
+import { TypeScriptService } from "../../src/services/typescript/index.ts";
 
-import { test } from "tap";
-import { TypeScriptService } from "../../src/typescript/";
+Deno.test(
+  "TypeScriptService::constructor: should instantiate the class",
+  () => {
+    // Arrange and Act
+    const typescriptService = new TypeScriptService();
 
-test("TypeScriptService", (t) => {
-  t.plan(1);
-
-  t.test("constructor", (t) => {
-    t.plan(1);
-
-    t.test("should instantiate the class", (t) => {
-      t.plan(1);
-
-      const typescriptService = new TypeScriptService();
-      t.ok(typescriptService instanceof TypeScriptService);
-    });
-  });
-});
+    // Assert
+    assert(typescriptService instanceof TypeScriptService);
+  },
+);

@@ -1,16 +1,11 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+import { assertStrictEquals } from "../dev-deps.ts";
+import { typePrefix } from "./setup.ts";
+import { GraphQLService } from "../../src/services/graphql/index.ts";
 
-import t from "tap";
-
-import { GraphQLService } from "../../src/graphql";
-import { typePrefix } from "./setup";
-
-t.test("GraphQLObjectType", (t) => {
-  t.plan(3);
-
-  t.test("should handle object types", async (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLObjectType::generateSchema: should handle object types",
+  async () => {
+    // Arrange
     const schema = `
       type Hello {
         message: String
@@ -22,8 +17,12 @@ t.test("GraphQLObjectType", (t) => {
         hello(message: String): Hello
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -47,11 +46,13 @@ export interface Query {
     hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Hello>>;
 }`,
     );
-  });
+  },
+);
 
-  t.test("should handle type extensions", async (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLObjectType::generateSchema: should handle type extensions",
+  async () => {
+    // Arrange
     const schema = `
       """
       Hello type.
@@ -70,8 +71,12 @@ export interface Query {
         hello(message: String): Hello
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -97,11 +102,13 @@ export interface Query {
     hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Hello>>;
 }`,
     );
-  });
+  },
+);
 
-  t.test("should handle object type documentation", async (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLObjectType::generateSchema: should handle object type documentation",
+  async () => {
+    // Arrange
     const schema = `
       """
       Hello type.
@@ -141,8 +148,12 @@ export interface Query {
         ): Hello
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -174,5 +185,5 @@ export interface Query {
     hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Hello>>;
 }`,
     );
-  });
-});
+  },
+);

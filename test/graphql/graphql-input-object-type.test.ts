@@ -1,16 +1,11 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+import { assertStrictEquals } from "../dev-deps.ts";
+import { typePrefix } from "./setup.ts";
+import { GraphQLService } from "../../src/services/graphql/index.ts";
 
-import t from "tap";
-
-import { GraphQLService } from "../../src/graphql";
-import { typePrefix } from "./setup";
-
-t.test("GraphQLInputObjectType", (t) => {
-  t.plan(2);
-
-  t.test("should handle input object types", async (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLInputObjectType::generateSchema: should handle input object types",
+  async () => {
+    // Arrange
     const schema = `
       input Message {
         text: String!
@@ -21,8 +16,12 @@ t.test("GraphQLInputObjectType", (t) => {
         hello(message: Message): String
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -40,11 +39,13 @@ export interface Query {
     hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<string>>;
 }`,
     );
-  });
+  },
+);
 
-  t.test("should handle input object type documentation", async (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLInputObjectType::generateSchema: should handle input object type documentation",
+  async () => {
+    // Arrange
     const schema = `
       """
       Message input.
@@ -68,8 +69,12 @@ export interface Query {
           message: Message): String
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -91,5 +96,5 @@ export interface Query {
     hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<string>>;
 }`,
     );
-  });
-});
+  },
+);

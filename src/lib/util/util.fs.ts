@@ -1,4 +1,4 @@
-import { EOL } from "../../../deps.ts";
+import { EOL } from "../../deps.ts";
 
 /**
  * Read file to UTF-8 string from input path.
@@ -22,10 +22,10 @@ export async function writeFiles(input: Record<string, string>): Promise<void> {
     }),
   );
 
+  // deno-lint-ignore no-explicit-any
   const failureResultDetails: any[] = [];
   for (const [index, result] of results.entries()) {
     if (result.status === "rejected") {
-      //  istanbul ignore next: should never reach the unhappy path
       failureResultDetails.push({
         message: result.reason,
         path: inputs[index]?.[0] ?? "Unknown path",
@@ -36,7 +36,7 @@ export async function writeFiles(input: Record<string, string>): Promise<void> {
   if (failureResultDetails.length > 0) {
     const formattedDetails = failureResultDetails.map((result) =>
       `- ${JSON.stringify(result)}`
-    ).join(`${EOL.CRLF}  `);
+    ).join(`${EOL.LF}  `);
     // TODO: fix
     throw new Error(
       `Got ${failureResultDetails.length} errors while writing file contents:\n  ${formattedDetails}`,

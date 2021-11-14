@@ -1,25 +1,23 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+import { assertStrictEquals } from "../dev-deps.ts";
+import { typePrefix } from "./setup.ts";
+import { GraphQLService } from "../../src/services/graphql/index.ts";
 
-import t from "tap";
-
-import { GraphQLService } from "../../src/graphql";
-import { typePrefix } from "./setup";
-
-t.test("GraphQLRootType", (t) => {
-  t.plan(2);
-
-  t.test("should handle when there no root type", (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLRootType::generateSchema: should handle when there no root type",
+  async () => {
+    // Arrange
     const schema = `
-        type Hello {
-          hi: String
-        }
-      `;
+      type Hello {
+        hi: String
+      }
+    `;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
 
-    t.same(
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Arrange
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -27,24 +25,29 @@ export interface Hello {
     hi?: string;
 }`,
     );
-  });
+  },
+);
 
-  t.test("should correctly order root type inputs", (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLRootType::generateSchema: should correctly order root type inputs",
+  async () => {
+    // Arrange
     const schema = `
-        type Query {
-          hi(input: String): String
-        }
+      type Query {
+        hi(input: String): String
+      }
 
-        type Mutation {
-          hello(wave: Boolean): String
-        }
-      `;
+      type Mutation {
+        hello(wave: Boolean): String
+      }
+    `;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
 
-    t.same(
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Arrange
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -66,5 +69,5 @@ export interface Mutation {
     hello?(root: {}, args: MutationHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<string>>;
 }`,
     );
-  });
-});
+  },
+);

@@ -19,7 +19,7 @@ import {
   isTypeExtensionNode,
   Kind,
   parse,
-} from "../../../deps.ts";
+} from "../../deps.ts";
 import {
   GenerateResult,
   GraphQLParentType,
@@ -37,6 +37,7 @@ import {
   FieldTypeDef,
   FieldTypes,
   FieldUnionTypeDef,
+  ImportTypeDefSpecifier,
   ObjectTypeDef,
   ScalarTypeDef,
   TypeDef,
@@ -207,7 +208,6 @@ export class GraphQLService {
       return this._createFieldArrayElementTypeDef(type.ofType);
     }
 
-    // istanbul ignore else: handled by compilation
     if (type instanceof GraphQLNonNull) {
       return this._createFieldArrayElementTypeDef(type.ofType, false);
     } else {
@@ -325,7 +325,6 @@ export class GraphQLService {
       return this._createFieldArrayTypeDef(parent, field, nullable);
     }
 
-    // istanbul ignore else: handled by compilation
     if (type instanceof GraphQLNonNull) {
       return this._createFieldTypeDef(parent, field, type.ofType, false);
     } else {
@@ -412,9 +411,11 @@ export class GraphQLService {
   /**
    * Create TypeScript utility type definitions to be used throughout the generated types.
    */
-  private _createUtilityTypeDefs(): Array<[string, string, ...string[]]> {
+  private _createUtilityTypeDefs(): Array<
+    [string, ImportTypeDefSpecifier, ...ImportTypeDefSpecifier[]]
+  > {
     return [
-      ["graphql", "GraphQLResolveInfo"],
+      ["graphql", { name: "GraphQLResolveInfo" }],
     ];
   }
 
@@ -438,7 +439,6 @@ export class GraphQLService {
       return this._createEnumTypeDef(type);
     }
 
-    // istanbul ignore else: handled by compilation
     if (type instanceof GraphQLUnionType) {
       return this._createUnionTypeDef(type);
     } else {
@@ -512,7 +512,6 @@ export class GraphQLService {
       };
     }
 
-    // istanbul ignore else: handled by compilation
     if (type instanceof GraphQLUnionType) {
       return {
         ...schemaTypes,
@@ -603,14 +602,13 @@ export class GraphQLService {
           name: `${typeDef.name}Resolver`,
           implementation: typeDef.name,
           imports: [
-            ["graphql", "GraphQLResolveInfo"],
-            // TODO: make this better
+            ["graphql", { name: "GraphQLResolveInfo" }],
             [
               "../types",
-              "Maybe",
-              "MaybePromise",
-              typeDef.name,
-              ...typeDef.fields.map((field) => field.argsInputName),
+              { name: "Maybe" },
+              { name: "MaybePromise" },
+              { name: typeDef.name },
+              ...typeDef.fields.map((field) => ({ name: field.argsInputName })),
             ],
           ],
           methods: typeDef.fields.map<ClassDefMethod>((field) => ({
@@ -630,7 +628,7 @@ export class GraphQLService {
     return classDefs;
   }
 
-  public generateSchema(rawSchema: string): string {
+  public async generateSchema(rawSchema: string): Promise<string> {
     const typeDefs = this.generateSchemaTypeDefs(rawSchema);
 
     const utilityTypeDefs = this._createUtilityTypeDefs();
@@ -638,37 +636,24 @@ export class GraphQLService {
       utilityTypeDefs,
     );
     for (const typeDef of typeDefs) {
-      typeNodes.push(this.typeScriptService.createTypeDef(typeDef));
+      typeNodes.push(await this.typeScriptService.createTypeDef(typeDef));
     }
 
     return this.typeScriptService.print(typeNodes);
   }
 
-  // private _createResolveImportDefs (resolverDef: ClassDef): ts.Node[] {
-  //   // TODO: make this inference way better
-  //   const shouldImportMaybe = resolverDef.methods.some(method => method.returnType.includes('Maybe<') || method.args.some(arg => arg.typeName.includes('Maybe<')))
-
-  //   const schemaImportTypeNames: string[] = [
-  //     'MaybePromise',
-  //     ...shouldImportMaybe ? ['Maybe'] : []
-  //   ]
-
-  //   return [
-  //     this.typeScriptService.createImportTypeDef('graphql', 'GraphQLResolveInfo'),
-  //     this.typeScriptService.createImportTypeDef('../types', ...schemaImportTypeNames)
-  //   ]
-  // }
-
-  public generate(rawSchema: string): GenerateResult {
+  public async generate(rawSchema: string): Promise<GenerateResult> {
     // Create TypeScript types
-    const schema = this.generateSchema(rawSchema);
+    const schema = await this.generateSchema(rawSchema);
 
     // Create TypeScript resolvers
     const resolvers: Record<string, string> = {};
     const resolverDefs = this.generateResolverDefs(rawSchema);
     for (const resolverDef of resolverDefs) {
       const resolverNodes = this.typeScriptService.createClassDef(resolverDef);
-      resolvers[resolverDef.name] = this.typeScriptService.print(resolverNodes);
+      resolvers[resolverDef.name] = await this.typeScriptService.print(
+        resolverNodes,
+      );
     }
 
     return { schema, resolvers };

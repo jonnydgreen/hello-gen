@@ -1,23 +1,22 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+import { assertStrictEquals } from "../dev-deps.ts";
+import { typePrefix } from "./setup.ts";
+import { GraphQLService } from "../../src/services/graphql/index.ts";
 
-import t from "tap";
-
-import { GraphQLService } from "../../src/graphql";
-import { typePrefix } from "./setup";
-
-t.test("GraphQLList", (t) => {
-  t.plan(7);
-
-  t.test("should handle nullable list, non-null entry types", async (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLList::generateSchema: should handle nullable list, non-null entry types",
+  async () => {
+    // Arrange
     const schema = `
       type Query {
         hello(input: String): [String!]
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -30,18 +29,24 @@ export interface Query {
     hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<string[]>>;
 }`,
     );
-  });
+  },
+);
 
-  t.test("should handle mandatory list and entry types", async (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLList::generateSchema: should handle mandatory list and entry types",
+  async () => {
+    // Arrange
     const schema = `
       type Query {
         hello(input: String): [String!]!
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -54,18 +59,24 @@ export interface Query {
     hello(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<string[]>;
 }`,
     );
-  });
+  },
+);
 
-  t.test("should handle mandatory list and nullable entry types", (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLList::generateSchema: should handle mandatory list and nullable entry types",
+  async () => {
+    // Arrange
     const schema = `
       type Query {
         hello(input: String): [String]!
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -78,18 +89,24 @@ export interface Query {
     hello(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<string>[]>;
 }`,
     );
-  });
+  },
+);
 
-  t.test("should handle nullable list and nullable entry types", (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLList::generateSchema: should handle nullable list and nullable entry types",
+  async () => {
+    // Arrange
     const schema = `
       type Query {
         hello(input: String): [String]
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -102,11 +119,13 @@ export interface Query {
     hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Maybe<string>[]>>;
 }`,
     );
-  });
+  },
+);
 
-  t.test("should handle union elements in lists", (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLList::generateSchema: should handle union elements in lists",
+  async () => {
+    // Arrange
     const schema = `
       type Hello {
         message: String
@@ -124,8 +143,12 @@ export interface Query {
         nonNullElementHello(input: String): [Message!]
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -155,11 +178,13 @@ export interface Query {
     nonNullElementHello?(root: {}, args: QueryNonNullElementHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Message[]>>;
 }`,
     );
-  });
+  },
+);
 
-  t.test("should handle enum elements in lists", (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLList::generateSchema: should handle enum elements in lists",
+  async () => {
+    // Arrange
     const schema = `
       enum Hello {
         HI
@@ -171,8 +196,12 @@ export interface Query {
         nonNullElementHello(input: String): [Hello!]
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -196,11 +225,13 @@ export interface Query {
     nonNullElementHello?(root: {}, args: QueryNonNullElementHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Hello[]>>;
 }`,
     );
-  });
+  },
+);
 
-  t.test("should handle list documentation", async (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLList::generateSchema: should handle list documentation",
+  async () => {
+    // Arrange
     const schema = `
       """
       Hello type.
@@ -216,8 +247,12 @@ export interface Query {
         nonNullElementHello(input: String!): [Hello!]
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -242,5 +277,5 @@ export interface Query {
     nonNullElementHello?(root: {}, args: QueryNonNullElementHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Hello[]>>;
 }`,
     );
-  });
-});
+  },
+);

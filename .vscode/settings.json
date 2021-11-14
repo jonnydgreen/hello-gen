@@ -23,14 +23,20 @@
   },
   "peacock.color": "#eb5424",
   "standard.enable": false,
+  "editor.defaultFormatter": "denoland.vscode-deno",
+  "cSpell.words": [
+    "deno",
+    "denoland",
+    "lcov",
+    "Skypack"
+  ],
   "deno.enable": true,
   "deno.lint": true,
-  "deno.unstable": false,
+  "deno.unstable": true,
   "deno.suggest.imports.hosts": {
     "https://deno.land": true
   },
-  "editor.defaultFormatter": "denoland.vscode-deno",
-  "cSpell.words": [
-    "Skypack"
-  ]
+  "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  }
 }

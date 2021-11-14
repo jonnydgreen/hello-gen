@@ -1,12 +1,12 @@
 import {
   GraphQLField,
+  GraphQLInputField,
   GraphQLInputType,
   GraphQLList,
   GraphQLNonNull,
   GraphQLOutputType,
-  GraphQLInputField,
   isOutputType,
-} from "../../../deps.ts";
+} from "../../deps.ts";
 
 /**
  * Infer if a type is a GraphQL Field.

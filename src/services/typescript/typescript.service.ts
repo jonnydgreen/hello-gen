@@ -1,193 +1,40 @@
-import { EOL, ts } from "../../../deps.ts";
+import { dirname, EOL, fromFileUrl, Handlebars, join } from "../../deps.ts";
+import { assertNever, MaybeNull, readFile } from "../../lib/index.ts";
 import {
+  ClassDef,
   EnumTypeDef,
   FieldArrayTypeDef,
   FieldScalarTypeDef,
   FieldTypeDef,
+  FieldTypedefNodeData,
   FieldTypes,
+  ImportTypeDefNodeData,
+  ImportTypeDefSpecifier,
+  Node,
   ObjectTypeDef,
+  ObjectTypeDefNodeData,
+  OpaqueTypeDef,
   ScalarTypeDef,
   TypeDef,
   Types,
   UnionTypeDef,
 } from "./typescript.type.ts";
-import { assertNever, Maybe, MaybeNull } from "../../lib/index.ts";
 
 /**
  * TypeScript service.
  */
 export class TypeScriptService {
-  private readonly factory: ts.NodeFactory;
-  private readonly printer: ts.Printer;
-
-  public readonly ts: typeof ts;
+  private readonly printer: Handlebars;
 
   constructor() {
-    this.ts = ts;
-    this.factory = this.ts.factory;
-    this.printer = this.ts.createPrinter({ removeComments: false });
+    this.printer = Handlebars;
   }
 
-  /**
-   * Create Maybe type definition.
-   */
-  private _createMaybeTypeDef(): ts.Node {
-    return this._withComment(
-      "Marks a type as nullable.",
-      this.factory.createTypeAliasDeclaration(
-        undefined,
-        [this.factory.createModifier(this.ts.SyntaxKind.ExportKeyword)],
-        this.factory.createIdentifier("Maybe"),
-        [this.factory.createTypeParameterDeclaration(
-          this.factory.createIdentifier("T"),
-          undefined,
-          undefined,
-        )],
-        this.factory.createUnionTypeNode([
-          this.factory.createTypeReferenceNode(
-            this.factory.createIdentifier("T"),
-            undefined,
-          ),
-          this.factory.createKeywordTypeNode(
-            this.ts.SyntaxKind.UndefinedKeyword,
-          ),
-        ]),
-      ),
-    );
-  }
-
-  /**
-   * Create MaybePromise type definition.
-   */
-  private _createMaybePromiseTypeDef(): ts.Node {
-    return this._withComment(
-      "Marks a type as a nullable Promise.",
-      this.factory.createTypeAliasDeclaration(
-        undefined,
-        [this.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
-        this.factory.createIdentifier("MaybePromise"),
-        [this.factory.createTypeParameterDeclaration(
-          this.factory.createIdentifier("T"),
-          undefined,
-          undefined,
-        )],
-        this.factory.createUnionTypeNode([
-          this.factory.createTypeReferenceNode(
-            this.factory.createIdentifier("Promise"),
-            [this.factory.createTypeReferenceNode(
-              this.factory.createIdentifier("T"),
-              undefined,
-            )],
-          ),
-          this.factory.createTypeReferenceNode(
-            this.factory.createIdentifier("T"),
-            undefined,
-          ),
-        ]),
-      ),
-    );
-  }
-
-  /**
-   * Create context type definition.
-   */
-  private _createContextTypeDef(): ts.Node {
-    const moduleName = "mercurius";
-    const moduleContextName = "MercuriusContext";
-    return this.factory.createImportDeclaration(
-      undefined,
-      undefined,
-      this.factory.createImportClause(
-        false,
-        undefined,
-        this.factory.createNamedImports([this.factory.createImportSpecifier(
-          this.factory.createIdentifier(moduleContextName),
-          this.factory.createIdentifier("Context"),
-        )]),
-      ),
-      this.factory.createStringLiteral(moduleName),
-    );
-  }
-
-  /**
-   * Create root type definition.
-   */
-  private _createRootTypeDef(): ts.Node {
-    return this._withComment(
-      "Constructs a ParentType from an input type.",
-      this.factory.createTypeAliasDeclaration(
-        undefined,
-        [this.factory.createModifier(this.ts.SyntaxKind.ExportKeyword)],
-        this.factory.createIdentifier("ParentType"),
-        [this.factory.createTypeParameterDeclaration(
-          this.factory.createIdentifier("T"),
-          undefined,
-          undefined,
-        )],
-        this.factory.createMappedTypeNode(
-          undefined,
-          this.factory.createTypeParameterDeclaration(
-            this.factory.createIdentifier("TKey"),
-            this.factory.createTypeOperatorNode(
-              this.ts.SyntaxKind.KeyOfKeyword,
-              this.factory.createTypeReferenceNode(
-                this.factory.createIdentifier("T"),
-                undefined,
-              ),
-            ),
-            undefined,
-          ),
-          undefined,
-          undefined,
-          this.factory.createConditionalTypeNode(
-            this.factory.createIndexedAccessTypeNode(
-              this.factory.createTypeReferenceNode(
-                this.factory.createIdentifier("T"),
-                undefined,
-              ),
-              this.factory.createTypeReferenceNode(
-                this.factory.createIdentifier("TKey"),
-                undefined,
-              ),
-            ),
-            this.factory.createFunctionTypeNode(
-              undefined,
-              [this.factory.createParameterDeclaration(
-                undefined,
-                undefined,
-                this.factory.createToken(this.ts.SyntaxKind.DotDotDotToken),
-                this.factory.createIdentifier("args"),
-                undefined,
-                this.factory.createKeywordTypeNode(
-                  this.ts.SyntaxKind.AnyKeyword,
-                ),
-                undefined,
-              )],
-              this.factory.createInferTypeNode(
-                this.factory.createTypeParameterDeclaration(
-                  this.factory.createIdentifier("TReturn"),
-                  undefined,
-                  undefined,
-                ),
-              ),
-            ),
-            this.factory.createTypeReferenceNode(
-              this.factory.createIdentifier("TReturn"),
-              undefined,
-            ),
-            this.factory.createIndexedAccessTypeNode(
-              this.factory.createTypeReferenceNode(
-                this.factory.createIdentifier("T"),
-                undefined,
-              ),
-              this.factory.createTypeReferenceNode(
-                this.factory.createIdentifier("TKey"),
-                undefined,
-              ),
-            ),
-          ),
-        ),
-      ),
+  private static _template(templateName: string): string {
+    return join(
+      dirname(fromFileUrl(import.meta.url)),
+      "templates",
+      `${templateName}.ts.tpl`,
     );
   }
 
@@ -195,138 +42,61 @@ export class TypeScriptService {
    * Create an Opaque type definition,
    */
   private _createOpaqueTypeDef(
-    name: string,
-    typeNode: ts.TypeNode,
+    data: OpaqueTypeDef,
     comment: MaybeNull<string>,
-  ): ts.TypeAliasDeclaration {
-    return this._withComment(
-      comment,
-      this.factory.createTypeAliasDeclaration(
-        undefined,
-        [this.factory.createModifier(this.ts.SyntaxKind.ExportKeyword)],
-        this.factory.createIdentifier(name),
-        undefined,
-        this.factory.createIntersectionTypeNode([
-          typeNode,
-          this.factory.createTypeLiteralNode([
-            this.factory.createPropertySignature(
-              undefined,
-              this.factory.createIdentifier("__opaque"),
-              undefined,
-              this.factory.createLiteralTypeNode(
-                this.factory.createStringLiteral(name),
-              ),
-            ),
-          ]),
-        ]),
-      ),
-    );
-  }
-
-  /**
-   * Attach a comment to a node.
-   */
-  private _withComment<TNode extends ts.Node>(
-    description: MaybeNull<string>,
-    node: TNode,
-  ): TNode {
-    if (typeof description === "string") {
-      // We need to serialise this to a JSDoc comment
-      const serialisedDescription = `* ${description.trim()} `;
-      return this.ts.addSyntheticLeadingComment(
-        node,
-        this.ts.SyntaxKind.MultiLineCommentTrivia,
-        serialisedDescription,
-        true,
-      );
-    }
-    return node;
+  ): Node<OpaqueTypeDef> {
+    return {
+      template: TypeScriptService._template("opaque-type-def"),
+      data: {
+        ...data,
+        comment,
+      },
+    };
   }
 
   /**
    * Create Maybe type node.
    */
   private _createMaybeTypeNode(
-    node: ts.TypeNode,
+    renderedNode: string,
     nullable: boolean,
-  ): ts.TypeNode {
+  ): string {
     if (nullable) {
-      return this.factory.createTypeReferenceNode(
-        this.factory.createIdentifier("Maybe"),
-        [node],
-      );
+      return `Maybe<${renderedNode}>`;
     }
-    return node;
+    return renderedNode;
   }
 
   /**
    * Create MaybePromise type node.
    */
   private _createMaybePromiseTypeNode(
-    node: ts.TypeNode,
+    renderedNode: string,
     promise: boolean,
-  ): ts.TypeNode {
+  ): string {
     if (promise) {
-      return this.factory.createTypeReferenceNode(
-        this.factory.createIdentifier("MaybePromise"),
-        [node],
-      );
+      return `MaybePromise<${renderedNode}>`;
     }
-    return node;
-  }
-
-  /**
-   * Create Root type node.
-   */
-  private _createRootTypeNode(root: Maybe<string>): ts.TypeNode {
-    if (typeof root === "undefined") {
-      return this.factory.createTypeLiteralNode([]);
-    }
-    return this.factory.createTypeReferenceNode(
-      this.factory.createIdentifier("ParentType"),
-      [this.factory.createTypeReferenceNode(
-        this.factory.createIdentifier(root),
-        undefined,
-      )],
-    );
-  }
-
-  /**
-   * Create nullable token.
-   */
-  private _createNullableToken(
-    nullable: boolean,
-  ): Maybe<ts.PunctuationToken<ts.SyntaxKind.QuestionToken>> {
-    return nullable
-      ? this.factory.createToken(this.ts.SyntaxKind.QuestionToken)
-      : undefined;
+    return renderedNode;
   }
 
   /**
    * Create Field Scalar node.
    */
-  private _createFieldScalarTypeNode(field: FieldScalarTypeDef): ts.TypeNode {
+  private _createFieldScalarTypeNode(field: FieldScalarTypeDef): string {
     switch (field.typeName) {
       case "Int":
       case "Float": {
-        return this.factory.createKeywordTypeNode(
-          this.ts.SyntaxKind.NumberKeyword,
-        );
+        return "number";
       }
       case "String": {
-        return this.factory.createKeywordTypeNode(
-          this.ts.SyntaxKind.StringKeyword,
-        );
+        return "string";
       }
       case "Boolean": {
-        return this.factory.createKeywordTypeNode(
-          this.ts.SyntaxKind.BooleanKeyword,
-        );
+        return "boolean";
       }
       default: {
-        return this.factory.createTypeReferenceNode(
-          this.factory.createIdentifier(field.typeName),
-        );
+        return field.typeName;
       }
     }
   }
@@ -334,29 +104,26 @@ export class TypeScriptService {
   /**
    * Create Field Array type node.
    */
-  private _createFieldArrayTypeNode(
-    { element, ...field }: FieldArrayTypeDef,
-  ): ts.TypeNode {
-    return this.factory.createArrayTypeNode(
-      this._createFieldTypeNode({ ...field, ...element }, true),
-    );
+  private _createFieldArrayTypeNode({
+    element,
+    ...field
+  }: FieldArrayTypeDef): string {
+    return `${this._renderFieldType({ ...field, ...element }, true)}[]`;
   }
 
   /**
    * Create Field type node.
    */
-  private _createFieldTypeNode(
+  private _renderFieldType(
     field: FieldTypeDef,
     useMaybe = false,
-  ): ts.TypeNode {
-    let type: ts.TypeNode;
+  ): string {
+    let type: string;
     switch (field.type) {
       case FieldTypes.UNION:
       case FieldTypes.ENUM:
       case FieldTypes.OBJECT: {
-        type = this.factory.createTypeReferenceNode(
-          this.factory.createIdentifier(field.typeName),
-        );
+        type = field.typeName;
         break;
       }
       case FieldTypes.SCALAR: {
@@ -367,7 +134,6 @@ export class TypeScriptService {
         type = this._createFieldArrayTypeNode(field);
         break;
       }
-      // istanbul ignore next: caught by compilation
       default: {
         assertNever(field);
       }
@@ -379,155 +145,79 @@ export class TypeScriptService {
   }
 
   /**
-   * Create Field resolver type definition.
-   */
-  private _createFieldResolverTypeElement(field: FieldTypeDef): ts.TypeElement {
-    return this.factory.createMethodSignature(
-      undefined,
-      this.factory.createIdentifier(field.name),
-      this._createNullableToken(field.nullable),
-      undefined,
-      [
-        this.factory.createParameterDeclaration(
-          undefined,
-          undefined,
-          undefined,
-          this.factory.createIdentifier("root"),
-          undefined,
-          this._createRootTypeNode(field.parent),
-          undefined,
-        ),
-        this.factory.createParameterDeclaration(
-          undefined,
-          undefined,
-          undefined,
-          this.factory.createIdentifier("args"),
-          undefined,
-          this.factory.createTypeReferenceNode(
-            this.factory.createIdentifier(field.argsInputName),
-            undefined,
-          ),
-          undefined,
-        ),
-        this.factory.createParameterDeclaration(
-          undefined,
-          undefined,
-          undefined,
-          this.factory.createIdentifier("context"),
-          undefined,
-          this.factory.createTypeReferenceNode(
-            this.factory.createIdentifier("Context"),
-            undefined,
-          ),
-          undefined,
-        ),
-        this.factory.createParameterDeclaration(
-          undefined,
-          undefined,
-          undefined,
-          this.factory.createIdentifier("info"),
-          undefined,
-          this.factory.createTypeReferenceNode(
-            this.factory.createIdentifier("GraphQLResolveInfo"),
-            undefined,
-          ),
-          undefined,
-        ),
-      ],
-      this._createMaybePromiseTypeNode(
-        this._createMaybeTypeNode(
-          this._createFieldTypeNode(field),
-          field.nullable,
-        ),
-        field.promise,
-      ),
-    );
-  }
-
-  /**
    * Create Field type definition.
    */
-  private _createFieldTypeElement(field: FieldTypeDef): ts.TypeElement {
-    let typeElement: ts.TypeElement;
+  private async _createFieldTypeElement(
+    field: FieldTypeDef,
+  ): Promise<FieldTypedefNodeData> {
+    let typeElement: Node;
     if (field.resolver === true) {
-      typeElement = this._createFieldResolverTypeElement(field);
+      typeElement = {
+        template: TypeScriptService._template("field-resolver-type-def"),
+        data: {
+          ...field,
+          type: this._createMaybePromiseTypeNode(
+            this._createMaybeTypeNode(
+              this._renderFieldType(field),
+              field.nullable,
+            ),
+            field.promise,
+          ),
+        },
+      };
     } else {
-      typeElement = this.factory.createPropertySignature(
-        undefined,
-        this.factory.createIdentifier(field.name),
-        this._createNullableToken(field.nullable),
-        this._createMaybePromiseTypeNode(
-          this._createFieldTypeNode(field),
-          field.promise,
-        ),
-      );
+      typeElement = {
+        template: TypeScriptService._template("field-type-def"),
+        data: {
+          ...field,
+          type: this._createMaybePromiseTypeNode(
+            this._renderFieldType(field),
+            field.promise,
+          ),
+        },
+      };
     }
-    return this._withComment(field.comment, typeElement);
+    return {
+      comment: field.comment,
+      value: await this._renderNode(typeElement),
+    };
   }
 
   /**
    * Create Object type definition.
    */
-  private _createObjectTypeDef(
+  private async _createObjectTypeDef(
     typeDef: ObjectTypeDef,
-  ): ts.InterfaceDeclaration {
-    return this._withComment(
-      typeDef.comment,
-      this.factory.createInterfaceDeclaration(
-        undefined,
-        [this.factory.createModifier(this.ts.SyntaxKind.ExportKeyword)],
-        this.factory.createIdentifier(typeDef.name),
-        undefined,
-        undefined,
-        typeDef.fields.map((field) => this._createFieldTypeElement(field)),
-      ),
-    );
+  ): Promise<Node<ObjectTypeDefNodeData>> {
+    return {
+      template: TypeScriptService._template("object-type-def"),
+      data: {
+        ...typeDef,
+        fields: await Promise.all(
+          typeDef.fields.map(this._createFieldTypeElement.bind(this)),
+        ),
+      },
+    };
   }
 
   /**
    * Create Union type definition.
    */
-  private _createUnionTypeDef(typeDef: UnionTypeDef): ts.TypeAliasDeclaration {
-    return this._withComment(
-      typeDef.comment,
-      this.factory.createTypeAliasDeclaration(
-        undefined,
-        [this.factory.createModifier(this.ts.SyntaxKind.ExportKeyword)],
-        this.factory.createIdentifier(typeDef.name),
-        undefined,
-        this.factory.createUnionTypeNode(
-          typeDef.types.map((unionTypeDef) =>
-            this.factory.createTypeReferenceNode(
-              this.factory.createIdentifier(unionTypeDef.name),
-              undefined,
-            )
-          ),
-        ),
-      ),
-    );
+  private _createUnionTypeDef(data: UnionTypeDef): Node<UnionTypeDef> {
+    return {
+      template: TypeScriptService._template("union-type-def"),
+      data,
+    };
   }
 
   /**
    * Create Enum type definition.
    */
-  private _createEnumTypeDef(typeDef: EnumTypeDef): ts.EnumDeclaration {
-    return this._withComment(
-      typeDef.comment,
-      this.factory.createEnumDeclaration(
-        undefined,
-        [this.factory.createModifier(this.ts.SyntaxKind.ExportKeyword)],
-        this.factory.createIdentifier(typeDef.name),
-        typeDef.values.map((enumValue) =>
-          this._withComment(
-            enumValue.comment,
-            this.factory.createEnumMember(
-              this.factory.createIdentifier(enumValue.name),
-              this.factory.createStringLiteral(enumValue.name),
-            ),
-          )
-        ),
-      ),
-    );
+  private _createEnumTypeDef(data: EnumTypeDef): Node<EnumTypeDef> {
+    return {
+      template: TypeScriptService._template("enum-type-def"),
+      data,
+    };
   }
 
   /**
@@ -535,20 +225,15 @@ export class TypeScriptService {
    */
   private _createScalarTypeDef(
     typeDef: ScalarTypeDef,
-  ): ts.TypeAliasDeclaration {
+  ): Node<OpaqueTypeDef> {
     if (typeDef.name === "ID") {
       return this._createOpaqueTypeDef(
-        typeDef.name,
-        this.factory.createParenthesizedType(this.factory.createUnionTypeNode([
-          this.factory.createKeywordTypeNode(this.ts.SyntaxKind.StringKeyword),
-          this.factory.createKeywordTypeNode(this.ts.SyntaxKind.NumberKeyword),
-        ])),
+        { name: typeDef.name, type: "(string | number)" },
         typeDef.comment,
       );
     }
     return this._createOpaqueTypeDef(
-      typeDef.name,
-      this.factory.createKeywordTypeNode(this.ts.SyntaxKind.AnyKeyword),
+      { name: typeDef.name, type: "any" },
       typeDef.comment,
     );
   }
@@ -557,24 +242,33 @@ export class TypeScriptService {
    * Create utility type definitions to be shared throughout the generated typings.
    */
   public createUtilityTypeDefs(
-    importDefs: Array<[string, string, ...string[]]>,
-  ): ts.Node[] {
+    importDefs: Array<
+      [string, ImportTypeDefSpecifier, ...ImportTypeDefSpecifier[]]
+    >,
+  ): Node[] {
     return [
       ...importDefs.map((importDef) => this.createImportTypeDef(...importDef)),
-      this._createContextTypeDef(),
-      this._createMaybeTypeDef(),
-      this._createMaybePromiseTypeDef(),
-      this._createRootTypeDef(),
+      this.createImportTypeDef("mercurius", {
+        name: "MercuriusContext",
+        specifier: "Context",
+      }),
+      { template: TypeScriptService._template("maybe-type-def"), data: {} },
+      {
+        template: TypeScriptService._template("maybe-promise-type-def"),
+        data: {},
+      },
+      { template: TypeScriptService._template("parent-type-def"), data: {} },
     ];
   }
 
   /**
    * Create a type definition.
    */
-  public createTypeDef(typeDef: TypeDef): ts.Node {
+  // TODO: add assertNever and remove undefined
+  public async createTypeDef(typeDef: TypeDef): Promise<Node> {
     switch (typeDef.type) {
       case Types.OBJECT: {
-        return this._createObjectTypeDef(typeDef);
+        return await this._createObjectTypeDef(typeDef);
       }
       case Types.SCALAR: {
         return this._createScalarTypeDef(typeDef);
@@ -585,82 +279,21 @@ export class TypeScriptService {
       case Types.UNION: {
         return this._createUnionTypeDef(typeDef);
       }
-      // istanbul ignore next: caught by compilation
       default: {
         assertNever(typeDef);
       }
     }
   }
 
-  public createClassDef(classDef: ClassDef): ts.Node[] {
+  public createClassDef(classDef: ClassDef): Node[] {
     return [
       ...classDef.imports.map(([moduleName, ...moduleImports]) =>
-        this.factory.createImportDeclaration(
-          undefined,
-          undefined,
-          this.factory.createImportClause(
-            false,
-            undefined,
-            this.factory.createNamedImports(
-              moduleImports.map((moduleImport) =>
-                this.factory.createImportSpecifier(
-                  undefined,
-                  this.factory.createIdentifier(moduleImport),
-                )
-              ),
-            ),
-          ),
-          this.factory.createStringLiteral(moduleName),
-        )
+        this.createImportTypeDef(moduleName, ...moduleImports)
       ),
-      this.factory.createClassDeclaration(
-        undefined,
-        [this.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
-        this.factory.createIdentifier(classDef.name),
-        undefined,
-        [this.factory.createHeritageClause(
-          ts.SyntaxKind.ImplementsKeyword,
-          [this.factory.createExpressionWithTypeArguments(
-            this.factory.createIdentifier(classDef.implementation),
-            undefined,
-          )],
-        )],
-        classDef.methods.map((method) =>
-          this.factory.createMethodDeclaration(
-            undefined,
-            [this.factory.createModifier(ts.SyntaxKind.AsyncKeyword)],
-            undefined,
-            this.factory.createIdentifier(method.name),
-            undefined,
-            undefined,
-            method.args.map((arg) =>
-              this.factory.createParameterDeclaration(
-                undefined,
-                undefined,
-                undefined,
-                this.factory.createIdentifier(arg.name),
-                undefined,
-                this.factory.createTypeReferenceNode(
-                  this.factory.createIdentifier(arg.typeName),
-                  undefined,
-                ),
-                undefined,
-              )
-            ),
-            this.factory.createTypeReferenceNode(
-              this.factory.createIdentifier("Promise"),
-              [this._createFieldTypeNode(
-                method.returnType,
-                method.returnType.nullable,
-              )],
-            ),
-            this.factory.createBlock(
-              [],
-              false,
-            ),
-          )
-        ),
-      ),
+      {
+        template: TypeScriptService._template("class-type-def"),
+        data: classDef,
+      },
     ];
   }
 
@@ -669,64 +302,35 @@ export class TypeScriptService {
    */
   public createImportTypeDef(
     module: string,
-    ...namedImports: string[]
-  ): ts.Node {
-    return this.factory.createImportDeclaration(
-      undefined,
-      undefined,
-      this.factory.createImportClause(
-        false,
-        undefined,
-        this.factory.createNamedImports(
-          namedImports.map((namedImport) =>
-            this.factory.createImportSpecifier(
-              undefined,
-              this.factory.createIdentifier(namedImport),
-            )
-          ),
-        ),
-      ),
-      this.factory.createStringLiteral(module),
-    );
+    ...namedImports: ImportTypeDefSpecifier[]
+  ): Node<ImportTypeDefNodeData> {
+    return {
+      template: TypeScriptService._template("import-type-def"),
+      data: {
+        module,
+        namedImports,
+      },
+    };
+  }
+
+  private async _renderNode(node: Node): Promise<string> {
+    const template = await readFile(node.template);
+    const render = await this.printer.compile(template);
+    return render(node.data);
   }
 
   /**
    * Print a list of node definitions.
    */
-  public print(nodes: ts.Node[], filename = "generated.ts"): string {
-    const sourceFile: ts.SourceFile = this.ts.createSourceFile(
-      filename,
-      "",
-      this.ts.ScriptTarget.ES2020,
-      undefined,
-      this.ts.ScriptKind.TS,
-    );
+  public async print(nodes: Node[]): Promise<string> {
+    // TODO: use Deno emit to type check the files
     let result = "/* eslint-disable */";
 
     for (const node of nodes) {
-      result += `${EOL.CRLF}${EOL.CRLF}${
-        this.printer.printNode(this.ts.EmitHint.Unspecified, node, sourceFile)
-      }`;
+      const renderedNode = await this._renderNode(node);
+      result += `${EOL.LF}${EOL.LF}${renderedNode}`;
     }
 
     return result;
   }
-}
-
-export interface ClassDefMethodArg {
-  name: string;
-  typeName: string;
-}
-
-export interface ClassDefMethod {
-  name: string;
-  args: ClassDefMethodArg[];
-  returnType: FieldTypeDef;
-}
-
-export interface ClassDef {
-  name: string;
-  implementation: string;
-  imports: Array<[string, ...string[]]>;
-  methods: ClassDefMethod[];
 }

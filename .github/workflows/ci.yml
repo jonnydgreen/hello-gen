@@ -4,35 +4,38 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os.name }}
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        deno-version: [v1.x]
         # TODO: fix tests in windows
-        # os: [ubuntu-latest, windows-latest, macOS-latest]
-        os: [ubuntu-latest, macOS-latest]
+        os:
+          - name: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - name: macOS-latest
+            target: x86_64-apple-darwin
 
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2.4.0
+      - name: Use Deno ${{ matrix.deno-version }}
+        uses: denoland/setup-deno@v1.0.0
         with:
-          node-version: ${{ matrix.node-version }}
+          deno-version: ${{ matrix.deno-version }}
 
-      - name: Install Dependencies
-        run: npm install --ignore-scripts
+      - name: Check formatting
+        run: deno fmt --check -c deno.json
 
-      - name: Build
-        run: npm run build
+      - name: Analyze code
+        run: deno lint -c deno.json
 
-      - name: Test
-        run: npm run test:ci
+      - name: Run unit and integration tests
+        run: deno test --lock=lock.json --unstable --allow-read --allow-write -A --coverage=cov --doc
 
-  automerge:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: fastify/github-action-merge-dependabot@v2.4.0
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+      - name: Generate coverage report
+        # Only want to generate this once
+        if: ${{ matrix.os.name == 'ubuntu-latest' }}
+        run: deno coverage --lcov cov > cov.lcov
+
+      - name: Compile executable for target ${{ matrix.os.target }}
+        run: deno compile --lock=lock.json --unstable --allow-read --allow-write src/hello-gen.ts --target ${{ matrix.os.target }}

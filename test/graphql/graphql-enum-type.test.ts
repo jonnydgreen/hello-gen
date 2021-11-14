@@ -1,38 +1,31 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+import { assertStrictEquals } from "../dev-deps.ts";
+import { typePrefix } from "./setup.ts";
+import { GraphQLService } from "../../src/services/graphql/index.ts";
 
-import t from "tap";
+Deno.test("GraphQLEnumType::generate: should generate a schema", async () => {
+  // Assert
+  const schema = `
+    enum Language {
+      EN
+    }
 
-import { GraphQLService } from "../../src/graphql";
-import { typePrefix } from "./setup";
+    enum Hello {
+      HI
+      HOWDY
+    }
 
-t.test("GraphQLEnumType", (t) => {
-  t.plan(2);
+    type Query {
+      hello(language: Language): Hello
+    }`;
+  const graphqlService = new GraphQLService();
 
-  t.test("should handle enum types", async (t) => {
-    t.plan(2);
+  // Act
+  const result = await graphqlService.generate(schema);
 
-    const schema = `
-      enum Language {
-        EN
-      }
-
-      enum Hello {
-        HI
-        HOWDY
-      }
-
-      type Query {
-        hello(language: Language): Hello
-      }`;
-    const graphqlService = new GraphQLService();
-    const result = graphqlService.generate(schema);
-
-    t.test("should generate a schema", (t) => {
-      t.plan(1);
-
-      t.same(
-        result.schema,
-        `${typePrefix}
+  // Assert
+  assertStrictEquals(
+    result.schema,
+    `${typePrefix}
 
 export enum Language {
     EN = "EN"
@@ -51,33 +44,58 @@ export interface QueryHelloInput {
 export interface Query {
     hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Hello>>;
 }`,
-      );
-    });
+  );
+});
 
-    t.test("should generate resolvers", (t) => {
-      t.plan(2);
+Deno.test("GraphQLEnumType::generate: should generate a schema", async () => {
+  // Assert
+  const schema = `
+    enum Language {
+      EN
+    }
 
-      const { resolvers } = result;
+    enum Hello {
+      HI
+      HOWDY
+    }
 
-      t.same(Object.keys(resolvers), ["QueryResolver"]);
-      t.same(
-        resolvers["QueryResolver"],
-        `/* eslint-disable */
+    type Query {
+      hello(language: Language): Hello
+    }`;
+  const graphqlService = new GraphQLService();
 
-import { GraphQLResolveInfo } from "graphql";
+  // Act
+  const result = await graphqlService.generateSchema(schema);
 
-import { Maybe, MaybePromise, Query, QueryHelloInput } from "../types";
+  // Assert
+  assertStrictEquals(
+    result,
+    `${typePrefix}
 
-export class QueryResolver implements Query {
-    async hello(_root: any, _args: any, _context: any, _info: GraphQLResolveInfo): Promise<Maybe<Hello>> { }
+export enum Language {
+    EN = "EN"
+}
+
+export enum Hello {
+    HI = "HI",
+    HOWDY = "HOWDY"
+}
+
+/** Argument input type for QueryHelloInput. */
+export interface QueryHelloInput {
+    language?: Language;
+}
+
+export interface Query {
+    hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Hello>>;
 }`,
-      );
-    });
-  });
+  );
+});
 
-  t.test("should handle enum type documentation", async (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLEnumType::generate: should handle enum type documentation",
+  async () => {
+    // Arrange
     const schema = `
       """
       Language enum.
@@ -107,9 +125,13 @@ export class QueryResolver implements Query {
         hello(language: Language): Hello
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generate(schema);
-    t.same(
-      result.schema,
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
+      result,
       `${typePrefix}
 
 /** Language enum. */
@@ -135,5 +157,5 @@ export interface Query {
     hello?(root: {}, args: QueryHelloInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<Hello>>;
 }`,
     );
-  });
-});
+  },
+);

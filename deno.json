@@ -1,0 +1,12 @@
+{
+  "lint": {
+    "files": {
+      "exclude": ["*.generated.ts"]
+    }
+  },
+  "fmt": {
+    "files": {
+      "exclude": ["test/_output"]
+    }
+  }
+}

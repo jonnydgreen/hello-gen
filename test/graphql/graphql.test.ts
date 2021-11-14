@@ -1,69 +1,69 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+import { assert, assertEquals, assertThrows } from "../dev-deps.ts";
+import { GraphQLError, GraphQLObjectType } from "../../src/deps.ts";
+import { GraphQLService } from "../../src/services/graphql/index.ts";
 
-import t from "tap";
-import { GraphQLError, GraphQLObjectType } from "graphql";
+Deno.test("GraphQLService::constructor: should instantiate the class", () => {
+  // Arrange and Act
+  const graphqlService = new GraphQLService();
 
-import { GraphQLService } from "../../src/graphql/";
+  // Assert
+  assert(graphqlService instanceof GraphQLService);
+});
 
-t.test("GraphQLService", (t) => {
-  t.plan(2);
-
-  t.test("constructor", (t) => {
-    t.plan(1);
-
-    t.test("should instantiate the class", (t) => {
-      t.plan(1);
-
-      const graphqlService = new GraphQLService();
-      t.ok(graphqlService instanceof GraphQLService);
-    });
-  });
-
-  t.test("getSchema", (t) => {
-    t.plan(3);
-
-    t.test("should get valid schema with no error", async (t) => {
-      t.plan(2);
-
-      const rawSchema = `type Query {
+Deno.test(
+  "GraphQLService::getSchema: should get valid schema with no error",
+  () => {
+    // Arrange
+    const rawSchema = `
+      type Query {
         add(x: Int y: Int): Int
       }`;
-      const graphqlService = new GraphQLService();
-      const schema = graphqlService.getSchema(rawSchema);
-      const fields = Object.keys(
-        (schema.getType("Query") as GraphQLObjectType).getFields(),
-      );
-      t.same(fields.length, 1);
-      t.same(fields[0], "add");
-    });
+    const graphqlService = new GraphQLService();
 
-    t.test("should error if invalid schema with no error", async (t) => {
-      t.plan(1);
+    // Act
+    const schema = graphqlService.getSchema(rawSchema);
+    const fields = Object.keys(
+      (schema.getType("Query") as GraphQLObjectType).getFields(),
+    );
 
-      const schema = `type Query {
+    // Arrange
+    assertEquals(fields, ["add"]);
+  },
+);
+
+Deno.test(
+  "GraphQLService::getSchema: should error if invalid schema with no error",
+  () => {
+    // Arrange
+    const schema = `
+      type Query {
         wrong!
       }`;
-      const graphqlService = new GraphQLService();
-      try {
-        graphqlService.getSchema(schema);
-      } catch (error) {
-        t.type(error, GraphQLError);
-      }
-    });
+    const graphqlService = new GraphQLService();
 
-    t.test("should support extension types", async (t) => {
-      t.plan(2);
+    // Act and Assert
+    assertThrows(
+      () => graphqlService.getSchema(schema),
+      GraphQLError,
+      "Syntax Error",
+    );
+  },
+);
 
-      const rawSchema = `extend type Query {
-        add(x: Int y: Int): Int
-      }`;
-      const graphqlService = new GraphQLService();
-      const schema = graphqlService.getSchema(rawSchema);
-      const fields = Object.keys(
-        (schema.getType("Query") as GraphQLObjectType).getFields(),
-      );
-      t.same(fields.length, 1);
-      t.same(fields[0], "add");
-    });
-  });
+Deno.test("GraphQLService::getSchema: should support extension types", () => {
+  // Arrange
+  const rawSchema = `
+    extend type Query {
+      add(x: Int y: Int): Int
+    }`;
+  const graphqlService = new GraphQLService();
+
+  // Act
+  const schema = graphqlService.getSchema(rawSchema);
+  const fields = Object.keys(
+    (schema.getType("Query") as GraphQLObjectType).getFields(),
+  );
+
+  // Assert
+  assertEquals(fields, ["add"]);
 });

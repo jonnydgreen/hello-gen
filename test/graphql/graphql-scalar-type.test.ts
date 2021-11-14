@@ -1,25 +1,22 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+import { assertStrictEquals } from "../dev-deps.ts";
+import { typePrefix } from "./setup.ts";
+import { GraphQLService } from "../../src/services/graphql/index.ts";
 
-import t from "tap";
+Deno.test("GraphQLScalarType::generateSchema: should handle Int types", async () => {
+  // Arrange
+  const schema = `
+    type Query {
+      add(x: Int y: Int): Int
+    }`;
+  const graphqlService = new GraphQLService();
 
-import { GraphQLService } from "../../src/graphql/";
-import { typePrefix } from "./setup";
+  // Act
+  const result = await graphqlService.generateSchema(schema);
 
-t.test("GraphQLScalarType", (t) => {
-  t.plan(8);
-
-  t.test("should handle Int types", async (t) => {
-    t.plan(1);
-
-    const schema = `
-      type Query {
-        add(x: Int y: Int): Int
-      }`;
-    const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
-      result,
-      `${typePrefix}
+  // Assert
+  assertStrictEquals(
+    result,
+    `${typePrefix}
 
 /** Argument input type for QueryAddInput. */
 export interface QueryAddInput {
@@ -30,19 +27,24 @@ export interface QueryAddInput {
 export interface Query {
     add?(root: {}, args: QueryAddInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<number>>;
 }`,
-    );
-  });
+  );
+});
 
-  t.test("should handle Float types", async (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLScalarType::generateSchema: should handle Float types",
+  async () => {
+    // Arrange
     const schema = `
       type Query {
         add(x: Float y: Float): Float
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -56,20 +58,24 @@ export interface Query {
     add?(root: {}, args: QueryAddInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<number>>;
 }`,
     );
-  });
+  },
+);
 
-  t.test("should handle ID types", async (t) => {
-    t.plan(1);
+Deno.test("GraphQLScalarType::generateSchema: should handle ID types", async () => {
+  // Arrange
+  const schema = `
+    type Query {
+      me(id: ID): ID
+    }`;
+  const graphqlService = new GraphQLService();
 
-    const schema = `
-      type Query {
-        me(id: ID): ID
-      }`;
-    const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
-      result,
-      `${typePrefix}
+  // Act
+  const result = await graphqlService.generateSchema(schema);
+
+  // Assert
+  assertStrictEquals(
+    result,
+    `${typePrefix}
 
 /** The \`ID\` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as \`"4"\`) or integer (such as \`4\`) input value will be accepted as an ID. */
 export type ID = (string | number) & {
@@ -84,19 +90,24 @@ export interface QueryMeInput {
 export interface Query {
     me?(root: {}, args: QueryMeInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<ID>>;
 }`,
-    );
-  });
+  );
+});
 
-  t.test("should handle String types", async (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLScalarType::generateSchema: should handle String types",
+  async () => {
+    // Arrange
     const schema = `
       type Query {
         message(input: String): String
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -109,18 +120,24 @@ export interface Query {
     message?(root: {}, args: QueryMessageInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<string>>;
 }`,
     );
-  });
+  },
+);
 
-  t.test("should handle Boolean types", async (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLScalarType::generateSchema: should handle Boolean types",
+  async () => {
+    // Arrange
     const schema = `
       type Query {
         isTrue(input: Boolean): Boolean
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -133,11 +150,13 @@ export interface Query {
     isTrue?(root: {}, args: QueryIsTrueInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<boolean>>;
 }`,
     );
-  });
+  },
+);
 
-  t.test("should handle custom scalar types", async (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLScalarType::generateSchema: should handle custom scalar types",
+  async () => {
+    // Arrange
     const schema = `
       scalar CustomInt
 
@@ -145,8 +164,12 @@ export interface Query {
         add(x: Int y: Int): CustomInt
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -164,18 +187,24 @@ export interface Query {
     add?(root: {}, args: QueryAddInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<CustomInt>>;
 }`,
     );
-  });
+  },
+);
 
-  t.test("should handle non-null types", async (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLScalarType::generateSchema: should handle non-null types",
+  async () => {
+    // Arrange
     const schema = `
       type Query {
         add(x: Int! y: Int): Int!
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -189,11 +218,13 @@ export interface Query {
     add(root: {}, args: QueryAddInput, context: Context, info: GraphQLResolveInfo): MaybePromise<number>;
 }`,
     );
-  });
+  },
+);
 
-  t.test("should handle custom scalar type comments", async (t) => {
-    t.plan(1);
-
+Deno.test(
+  "GraphQLScalarType::generateSchema: should handle custom scalar type comments",
+  async () => {
+    // Arrange
     const schema = `
       """
       CustomInt scalar.
@@ -204,8 +235,12 @@ export interface Query {
         add(x: Int y: Int): CustomInt
       }`;
     const graphqlService = new GraphQLService();
-    const result = graphqlService.generateSchema(schema);
-    t.same(
+
+    // Act
+    const result = await graphqlService.generateSchema(schema);
+
+    // Assert
+    assertStrictEquals(
       result,
       `${typePrefix}
 
@@ -224,5 +259,5 @@ export interface Query {
     add?(root: {}, args: QueryAddInput, context: Context, info: GraphQLResolveInfo): MaybePromise<Maybe<CustomInt>>;
 }`,
     );
-  });
-});
+  },
+);

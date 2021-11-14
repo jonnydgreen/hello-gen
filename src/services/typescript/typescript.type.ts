@@ -76,16 +76,63 @@ export interface ScalarTypeDef extends BaseTypeDef {
 
 export type UnionTypeTypeDef = Pick<BaseTypeDef, "name">;
 
-export interface UnionTypeDef extends BaseTypeDef {
+export interface UnionTypeDef extends BaseTypeDef, Record<string, unknown> {
   type: Types.UNION;
   types: UnionTypeTypeDef[];
 }
 
 export type EnumValueTypeDef = BaseTypeDef;
 
-export interface EnumTypeDef extends BaseTypeDef {
+export interface EnumTypeDef extends BaseTypeDef, Record<string, unknown> {
   type: Types.ENUM;
   values: EnumValueTypeDef[];
+}
+
+export interface Node<TData = Record<string, unknown>> {
+  template: string;
+  data: TData;
+}
+
+export interface ImportTypeDefSpecifier {
+  name: string;
+  specifier?: string;
+}
+export interface ImportTypeDefNodeData extends Record<string, unknown> {
+  module: string;
+  namedImports: ImportTypeDefSpecifier[];
+}
+
+export interface FieldTypedefNodeData {
+  value: string;
+  comment?: string;
+}
+
+export interface ObjectTypeDefNodeData
+  extends Omit<ObjectTypeDef, "fields">, Record<string, unknown> {
+  fields: FieldTypedefNodeData[];
+}
+
+export interface OpaqueTypeDef extends Record<string, unknown> {
+  name: string;
+  type: string;
+}
+
+export interface ClassDefMethodArg {
+  name: string;
+  typeName: string;
+}
+
+export interface ClassDefMethod {
+  name: string;
+  args: ClassDefMethodArg[];
+  returnType: FieldTypeDef;
+}
+
+export interface ClassDef extends Record<string, unknown> {
+  name: string;
+  implementation: string;
+  imports: Array<[string, ...ImportTypeDefSpecifier[]]>;
+  methods: ClassDefMethod[];
 }
 
 export type TypeDef =

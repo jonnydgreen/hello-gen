@@ -1,8 +1,0 @@
-{
-  "compilerOptions": {
-    // Deno overrides
-    // "noImplicitReturns": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true
-  }
-}

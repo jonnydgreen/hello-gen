@@ -29,10 +29,9 @@ export class FileWriteError extends CLIError {
   public details: FileWriteErrorDetails[];
 
   constructor(message: string, details: FileWriteErrorDetails[]) {
-    super({ message, code: 'HG0004', exitCode: 1 });
+    super({ message, code: "HG0004", exitCode: 1 });
     Error.captureStackTrace(this, FileWriteError);
     this.name = "FileWriteError";
     this.details = details;
   }
 }
-

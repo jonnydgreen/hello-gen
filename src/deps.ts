@@ -1,10 +1,13 @@
 // Deno.land
 export { Command } from "https://deno.land/x/cliffy@v0.20.1/command/mod.ts";
 export { EOL } from "https://deno.land/std@0.114.0/fs/eol.ts";
+export { join, dirname, fromFileUrl } from "https://deno.land/std@0.114.0/path/mod.ts";
 
 // Skypack CDN
-export { 
+export {
+  extendSchema,
   GraphQLEnumType,
+  GraphQLError,
   GraphQLInputObjectType,
   GraphQLInterfaceType,
   GraphQLList,
@@ -13,14 +16,13 @@ export {
   GraphQLScalarType,
   GraphQLSchema,
   GraphQLUnionType,
+  isOutputType,
   isRequiredArgument,
   isTypeExtensionNode,
-  isOutputType,
   Kind,
-  extendSchema,
   parse,
- } from "https://cdn.skypack.dev/graphql@v16.0.1?dts";
-export type { 
+} from "https://cdn.skypack.dev/graphql@v16.0.1?dts";
+export type {
   DefinitionNode,
   GraphQLArgument,
   GraphQLField,
@@ -28,8 +30,5 @@ export type {
   GraphQLInputType,
   GraphQLNamedType,
   GraphQLOutputType,
- } from "https://cdn.skypack.dev/graphql@v16.0.1?dts";
-
-// ESM CDN
-import ts from "https://esm.sh/typescript@4.4.4"; // We export typescript in this way because it uses 'export =' and cannot be used with 'export *'
-export { ts };
+} from "https://cdn.skypack.dev/graphql@v16.0.1?dts";
+export { default as Handlebars } from "https://cdn.skypack.dev/handlebars@4.7.7?dts"
