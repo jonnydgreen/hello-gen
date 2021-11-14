@@ -8,12 +8,13 @@ jobs:
     strategy:
       matrix:
         deno-version: [v1.x]
-        # TODO: fix tests in windows
         os:
           - name: ubuntu-latest
             target: x86_64-unknown-linux-gnu
           - name: macOS-latest
             target: x86_64-apple-darwin
+          - name: windows-latest
+            target: x86_64-pc-windows-msvc
 
     steps:
       - uses: actions/checkout@v2
