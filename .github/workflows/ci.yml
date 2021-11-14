@@ -39,7 +39,7 @@ jobs:
         run: deno coverage --lcov cov > cov.lcov
 
       - name: Compile executable for target ${{ matrix.os.target }}
-        run: deno compile --lock=lock.json --allow-read --allow-write src/hello-gen.ts --target ${{ matrix.os.target }}
+        run: deno compile --lock=lock.json --allow-read --allow-write --target ${{ matrix.os.target }} src/hello-gen.ts
 
       - name: Smoke test executable for target ${{ matrix.os.target }}
         run: ./hello-gen -h
