@@ -25,11 +25,14 @@
   "standard.enable": false,
   "editor.defaultFormatter": "denoland.vscode-deno",
   "cSpell.words": [
+    "czvf",
     "deno",
     "denoland",
+    "graphqltypes",
     "lcov",
     "msvc",
-    "Skypack"
+    "Skypack",
+    "softprops"
   ],
   "deno.enable": true,
   "deno.lint": true,

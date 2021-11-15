@@ -1,6 +1,6 @@
 name: CI workflow
 
-on: [push, pull_request]
+on: push
 
 jobs:
   test:
@@ -10,10 +10,16 @@ jobs:
         deno-version: [v1.x]
         os:
           - name: ubuntu-latest
+            platform: linux
+            cpu: amd64
             target: x86_64-unknown-linux-gnu
           - name: macOS-latest
+            platform: darwin
+            cpu: amd64
             target: x86_64-apple-darwin
           - name: windows-latest
+            platform: windows
+            cpu: amd64
             target: x86_64-pc-windows-msvc
 
     steps:
@@ -43,3 +49,13 @@ jobs:
 
       - name: Smoke test executable for target ${{ matrix.os.target }}
         run: ./hello-gen -h
+
+      - name: Package executable
+        if: startsWith(github.ref, 'refs/tags/')
+        run: tar -czvf hello-gen-${{ github.ref_name }}-${{ matrix.os.platform }}-${{ matrix.os.cpu }}.tar.gz hello-gen
+
+      - name: Upload package to release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: hello-gen-${{ github.ref_name }}-${{ matrix.os.platform }}-${{ matrix.os.cpu }}.tar.gz
