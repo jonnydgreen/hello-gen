@@ -1,0 +1,26 @@
+scripts:
+  fmt:
+    cmd: deno fmt -c deno.json
+  fmt-check:
+    cmd: deno fmt --check -c deno.json
+    gitHook: pre-commit
+  lint:
+    cmd: deno lint -c deno.json
+    gitHook: pre-commit
+  cache:
+    cmd: deno cache --reload --lock=lock.json deps.ts
+  cache-rw:
+    cmd: deno cache -r --lock=lock.json --lock-write deps.ts
+  test:
+    cmd: deno test --lock=lock.json --allow-read --allow-write -A
+    gitHook: pre-commit
+  test-cov:
+    cmd: deno test --lock=lock.json --allow-read --allow-write -A --coverage=cov --doc
+  cov:
+    cmd: deno coverage cov
+  lcov:
+    cmd: deno coverage --lcov cov > cov.lcov
+  compile:
+    cmd: deno compile --lock=lock.json --allow-read --allow-write src/hello-gen.ts
+  start:
+    cmd: deno run --lock=lock.json --allow-read --allow-write src/hello-gen.ts

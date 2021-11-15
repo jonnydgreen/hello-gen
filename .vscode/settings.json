@@ -27,11 +27,13 @@
     "czvf",
     "deno",
     "denoland",
+    "deps",
     "graphqltypes",
     "lcov",
     "msvc",
     "Skypack",
-    "softprops"
+    "softprops",
+    "velociraptor"
   ],
   "deno.enable": true,
   "deno.lint": true,

@@ -101,7 +101,9 @@ All PRs are welcome! :)
 To get setup, you must install and configure the pre-requisites:
 
 - Install and configure
-  [Deno](https://deno.land/manual/getting_started/installation)
+  [Deno](https://deno.land/manual/getting_started/installation).
+- Install and configure
+  [velociraptor](https://velociraptor.run/docs/installation/).
 
 To run tests:
 
