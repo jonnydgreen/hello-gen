@@ -20,11 +20,15 @@ can "crack on" with the important things.
 
 ### Manual
 
-Retrieve the hello-gen binary by downloading a [pre-compiled binary](https://github.com/jonnydgreen/hello-gen/releases) or compiling it from source.
+Retrieve the hello-gen binary by downloading a
+[pre-compiled binary](https://github.com/jonnydgreen/hello-gen/releases) or
+compiling it from source.
 
 #### MacOS/Linux
 
-This command assumes that the binary is currently in your downloads folder and that your `PATH` includes `/usr/local/bin`, but you can customise it if your locations are different.
+This command assumes that the binary is currently in your downloads folder and
+that your `PATH` includes `/usr/local/bin`, but you can customise it if your
+locations are different.
 
 ```sh
 mv ~/Downloads/hello-gen /usr/local/bin/
@@ -32,7 +36,10 @@ mv ~/Downloads/hello-gen /usr/local/bin/
 
 #### Windows
 
-This [Stack Overflow article](https://stackoverflow.com/questions/1618280/where-can-i-set-path-to-make-exe-on-windows) contains instructions for setting the PATH on Windows through the user interface.
+This
+[Stack Overflow article](https://stackoverflow.com/questions/1618280/where-can-i-set-path-to-make-exe-on-windows)
+contains instructions for setting the PATH on Windows through the user
+interface.
 
 ### With Deno
 
@@ -93,7 +100,8 @@ All PRs are welcome! :)
 
 To get setup, you must install and configure the pre-requisites:
 
-- Install and configure [Deno](https://deno.land/manual/getting_started/installation)
+- Install and configure
+  [Deno](https://deno.land/manual/getting_started/installation)
 
 To run tests:
 

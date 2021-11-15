@@ -23,7 +23,6 @@
   },
   "peacock.color": "#eb5424",
   "standard.enable": false,
-  "editor.defaultFormatter": "denoland.vscode-deno",
   "cSpell.words": [
     "czvf",
     "deno",
@@ -41,6 +40,12 @@
     "https://deno.land": true
   },
   "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "[json]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
   }
 }
