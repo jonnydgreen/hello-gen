@@ -5,7 +5,9 @@ import { readFile, writeFiles } from "../../lib/util/util.fs.ts";
 
 @injectable()
 export class GraphQLTypesCommand implements CLICommand {
-  constructor(@inject(GraphQLService) private readonly graphQLService: GraphQLService) {}
+  constructor(
+    @inject(GraphQLService) private readonly graphQLService: GraphQLService,
+  ) {}
 
   public name = "graphql:types";
 

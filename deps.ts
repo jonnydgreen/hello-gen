@@ -40,7 +40,7 @@ export {
   Container,
   inject,
   injectable,
-} from "https://cdn.skypack.dev/inversify@v6.0.1?dts"
+} from "https://cdn.skypack.dev/inversify@v6.0.1?dts";
 
 // JSPM
 // @deno-types=https://dev.jspm.io/typescript/lib/typescript.d.ts

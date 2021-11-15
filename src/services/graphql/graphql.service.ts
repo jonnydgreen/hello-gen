@@ -60,7 +60,8 @@ import {
 @injectable()
 export class GraphQLService {
   constructor(
-    @inject(TypeScriptService) private readonly typeScriptService: TypeScriptService,
+    @inject(TypeScriptService) private readonly typeScriptService:
+      TypeScriptService,
   ) {}
 
   /**

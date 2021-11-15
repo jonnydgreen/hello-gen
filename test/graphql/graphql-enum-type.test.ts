@@ -1,7 +1,7 @@
 import { assertStrictEquals } from "../../deps.ts";
 import { typePrefix } from "./setup.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
-import { buildContainer } from '../../src/ioc/ioc.config.ts'
+import { buildContainer } from "../../src/ioc/ioc.config.ts";
 
 Deno.test("GraphQLEnumType::generate: should generate a schema", () => {
   // Assert
