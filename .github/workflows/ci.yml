@@ -37,7 +37,7 @@ jobs:
         run: deno lint -c deno.json
 
       - name: Load dependencies into local cache
-        run: deno cache --reload --lock=lock.json
+        run: deno cache --reload --lock=lock.json deps.ts
 
       - name: Run unit and integration tests
         run: deno test --lock=lock.json --allow-read --allow-write -A --coverage=cov --doc
