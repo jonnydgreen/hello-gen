@@ -44,7 +44,7 @@ interface.
 ### With Deno
 
 ```sh
-deno install --allow-net --allow-read https://raw.githubusercontent.com/jonnydgreen/hello-gen/main/src/hello-gen.ts
+deno install --allow-write --allow-read -f https://raw.githubusercontent.com/jonnydgreen/hello-gen/main/src/hello-gen.ts
 ```
 
 ### With asdf (coming soon)
@@ -80,18 +80,20 @@ $ hello-gen -h
 Generates GraphQL Types from an input schema
 
 ```
-USAGE
-  $ hello-gen graphql:types
+$ hello-gen graphql:types -h
 
-OPTIONS
-  -h, --help           show CLI help
-  -i, --input=input    [default: schema.graphql] File path to GraphQL schema.
-  -o, --output=output  [default: types.generated.ts] Output file path to write to.
+  Usage:   hello-gen graphql:types
+  Version: 0.1.0
 
-EXAMPLE
-  $ hello-gen graphql:types
-  Generating types... done
-  Generated GraphQL types at 'types.generated.ts'
+  Description:
+
+    Generates GraphQL Types from an input schema
+
+  Options:
+
+    -h, --help              - Show this help.
+    -i, --input   [input]   - File path to GraphQL schema.   (Default: "schema.graphql")
+    -o, --output  [output]  - Output file path to write to.  (Default: "types.generated.ts")
 ```
 
 # Contributing
