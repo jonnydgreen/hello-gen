@@ -1,4 +1,5 @@
 import { assertStrictEquals } from "../../deps.ts";
+import { buildContainer } from "../../src/ioc/ioc.config.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
 import { typePrefix } from "./setup.ts";
 
@@ -19,7 +20,7 @@ Deno.test("GraphQLUnionType::generateSchema: should handle union types", () => {
     type Query {
       hello(input: String): Message
     }`;
-  const graphqlService = new GraphQLService();
+  const graphqlService = buildContainer().get(GraphQLService);
 
   // Act
   const result = graphqlService.generateSchema(schema);
@@ -73,7 +74,7 @@ Deno.test(
       type Query {
         hello(input: String): Message
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);

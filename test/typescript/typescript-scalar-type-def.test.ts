@@ -1,4 +1,5 @@
 import { assertStrictEquals } from "../../deps.ts";
+import { buildContainer } from "../../src/ioc/ioc.config.ts";
 import {
   Types,
   TypeScriptService,
@@ -6,7 +7,7 @@ import {
 
 Deno.test("TypeScriptService::createScalarTypeDef: should render scalar type def", () => {
   // Arrange
-  const service = new TypeScriptService();
+  const service = buildContainer().get(TypeScriptService);
   const node = service.createTypeDef({
     type: Types.SCALAR,
     name: "Date",
@@ -29,7 +30,7 @@ export type Date = any & {
 
 Deno.test("TypeScriptService::createScalarTypeDef: should render ID scalar type def", () => {
   // Arrange
-  const service = new TypeScriptService();
+  const service = buildContainer().get(TypeScriptService);
   const node = service.createTypeDef({
     type: Types.SCALAR,
     name: "ID",

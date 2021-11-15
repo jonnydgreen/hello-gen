@@ -1,13 +1,11 @@
+import { inject, injectable } from "../../../deps.ts";
 import type { CLICommand, CLIInputFlags } from "../types.ts";
 import { GraphQLService } from "../../services/graphql/index.ts";
 import { readFile, writeFiles } from "../../lib/util/util.fs.ts";
 
+@injectable()
 export class GraphQLTypesCommand implements CLICommand {
-  private graphQLService: GraphQLService;
-
-  constructor() {
-    this.graphQLService = new GraphQLService();
-  }
+  constructor(@inject(GraphQLService) private readonly graphQLService: GraphQLService) {}
 
   public name = "graphql:types";
 

@@ -1,6 +1,7 @@
 import { assertStrictEquals } from "../../deps.ts";
 import { typePrefix } from "./setup.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
+import { buildContainer } from "../../src/ioc/ioc.config.ts";
 
 Deno.test(
   "GraphQLList::generateSchema: should handle nullable list, non-null entry types",
@@ -10,7 +11,7 @@ Deno.test(
       type Query {
         hello(input: String): [String!]
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);
@@ -40,7 +41,7 @@ Deno.test(
       type Query {
         hello(input: String): [String!]!
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);
@@ -70,7 +71,7 @@ Deno.test(
       type Query {
         hello(input: String): [String]!
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);
@@ -100,7 +101,7 @@ Deno.test(
       type Query {
         hello(input: String): [String]
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);
@@ -142,7 +143,7 @@ Deno.test(
         hello(input: String): [Message]
         nonNullElementHello(input: String): [Message!]
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);
@@ -195,7 +196,7 @@ Deno.test(
         hello(input: String): [Hello]
         nonNullElementHello(input: String): [Hello!]
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);
@@ -246,7 +247,7 @@ Deno.test(
         hello(input: String): [Hello]
         nonNullElementHello(input: String!): [Hello!]
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);

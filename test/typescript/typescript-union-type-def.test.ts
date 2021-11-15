@@ -1,4 +1,5 @@
 import { assertStrictEquals } from "../../deps.ts";
+import { buildContainer } from "../../src/ioc/ioc.config.ts";
 import {
   Types,
   TypeScriptService,
@@ -6,7 +7,7 @@ import {
 
 Deno.test("TypeScriptService::createUnionTypeDef: should render union type def", () => {
   // Arrange
-  const service = new TypeScriptService();
+  const service = buildContainer().get(TypeScriptService);
   const node = service.createTypeDef({
     type: Types.UNION,
     name: "TypeUnion",

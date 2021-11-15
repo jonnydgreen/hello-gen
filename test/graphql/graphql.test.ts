@@ -1,10 +1,11 @@
 import { assert, assertEquals, assertThrows } from "../../deps.ts";
 import { GraphQLError, GraphQLObjectType } from "../../src/../deps.ts";
+import { buildContainer } from "../../src/ioc/ioc.config.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
 
 Deno.test("GraphQLService::constructor: should instantiate the class", () => {
   // Arrange and Act
-  const graphqlService = new GraphQLService();
+  const graphqlService = buildContainer().get(GraphQLService);
 
   // Assert
   assert(graphqlService instanceof GraphQLService);
@@ -18,7 +19,7 @@ Deno.test(
       type Query {
         add(x: Int y: Int): Int
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const schema = graphqlService.getSchema(rawSchema);
@@ -39,7 +40,7 @@ Deno.test(
       type Query {
         wrong!
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act and Assert
     assertThrows(
@@ -56,7 +57,7 @@ Deno.test("GraphQLService::getSchema: should support extension types", () => {
     extend type Query {
       add(x: Int y: Int): Int
     }`;
-  const graphqlService = new GraphQLService();
+  const graphqlService = buildContainer().get(GraphQLService);
 
   // Act
   const schema = graphqlService.getSchema(rawSchema);

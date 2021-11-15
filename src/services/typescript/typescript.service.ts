@@ -1,4 +1,4 @@
-import { EOL, ts } from "../../../deps.ts";
+import { EOL, injectable, ts } from "../../../deps.ts";
 import {
   assertNever,
   createMaybePromiseTypeNode,
@@ -30,6 +30,7 @@ import {
 /**
  * TypeScript service.
  */
+@injectable()
 export class TypeScriptService {
   private readonly factory: ts.NodeFactory;
   private readonly printer: ts.Printer;

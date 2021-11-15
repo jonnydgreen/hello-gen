@@ -1,6 +1,7 @@
 import { assertStrictEquals } from "../../deps.ts";
 import { typePrefix } from "./setup.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
+import { buildContainer } from "../../src/ioc/ioc.config.ts";
 
 Deno.test(
   "GraphQLObjectType::generateSchema: should handle object types",
@@ -16,7 +17,7 @@ Deno.test(
       type Query {
         hello(message: String): Hello
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);
@@ -70,7 +71,7 @@ Deno.test(
       type Query {
         hello(message: String): Hello
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);
@@ -147,7 +148,7 @@ Deno.test(
           message: String
         ): Hello
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);

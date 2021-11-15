@@ -15,6 +15,8 @@ import {
   GraphQLScalarType,
   GraphQLSchema,
   GraphQLUnionType,
+  inject,
+  injectable,
   isRequiredArgument,
   isTypeExtensionNode,
   Kind,
@@ -55,12 +57,11 @@ import {
 /**
  * GraphQL Service.
  */
+@injectable()
 export class GraphQLService {
-  private readonly typeScriptService: TypeScriptService;
-
-  constructor() {
-    this.typeScriptService = new TypeScriptService();
-  }
+  constructor(
+    @inject(TypeScriptService) private readonly typeScriptService: TypeScriptService,
+  ) {}
 
   /**
    * Map GraphQL extension kind to GraphQL type definition kind.

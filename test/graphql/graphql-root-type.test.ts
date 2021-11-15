@@ -1,6 +1,7 @@
 import { assertStrictEquals } from "../../deps.ts";
 import { typePrefix } from "./setup.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
+import { buildContainer } from "../../src/ioc/ioc.config.ts";
 
 Deno.test(
   "GraphQLRootType::generateSchema: should handle when there no root type",
@@ -11,7 +12,7 @@ Deno.test(
         hi: String
       }
     `;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);
@@ -41,7 +42,7 @@ Deno.test(
         hello(wave: Boolean): String
       }
     `;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);

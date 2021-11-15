@@ -1,9 +1,10 @@
 import { assertStrictEquals } from "../../deps.ts";
+import { buildContainer } from "../../src/ioc/ioc.config.ts";
 import { TypeScriptService } from "../../src/services/typescript/index.ts";
 
 Deno.test("TypeScriptService::createClassDef: should render class type def", () => {
   // Arrange
-  const service = new TypeScriptService();
+  const service = buildContainer().get(TypeScriptService);
   const nodes = service.createClassDef({
     imports: [["some-module", "hello", "there"]],
     name: "QueryResolver",

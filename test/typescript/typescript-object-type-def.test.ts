@@ -1,4 +1,5 @@
 import { assertStrictEquals } from "../../deps.ts";
+import { buildContainer } from "../../src/ioc/ioc.config.ts";
 import {
   FieldTypes,
   Types,
@@ -7,7 +8,7 @@ import {
 
 Deno.test("TypeScriptService::createObjectTypeDef: should render object type with Object type fields", () => {
   // Arrange
-  const service = new TypeScriptService();
+  const service = buildContainer().get(TypeScriptService);
   const node = service.createTypeDef({
     type: Types.OBJECT,
     name: "Hello",

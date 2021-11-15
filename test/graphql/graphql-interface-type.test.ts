@@ -1,6 +1,7 @@
 import { assertStrictEquals } from "../../deps.ts";
 import { typePrefix } from "./setup.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
+import { buildContainer } from "../../src/ioc/ioc.config.ts";
 
 Deno.test(
   "GraphQLIInterfaceType::generateSchema: should handle interfaces types",
@@ -21,7 +22,7 @@ Deno.test(
       type Query {
         hello(message: String): Hello
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);
@@ -86,7 +87,7 @@ Deno.test(
       type Query {
         hello(message: String): Hello
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);
@@ -143,7 +144,7 @@ Deno.test("GraphQLIInterfaceType::generateSchema: should handle interfaces type 
     type Query {
       hello(message: String): Hello
     }`;
-  const graphqlService = new GraphQLService();
+  const graphqlService = buildContainer().get(GraphQLService);
 
   // Act
   const result = graphqlService.generateSchema(schema);

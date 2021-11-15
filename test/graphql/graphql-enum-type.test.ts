@@ -1,6 +1,7 @@
 import { assertStrictEquals } from "../../deps.ts";
 import { typePrefix } from "./setup.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
+import { buildContainer } from '../../src/ioc/ioc.config.ts'
 
 Deno.test("GraphQLEnumType::generate: should generate a schema", () => {
   // Assert
@@ -17,7 +18,7 @@ Deno.test("GraphQLEnumType::generate: should generate a schema", () => {
     type Query {
       hello(language: Language): Hello
     }`;
-  const graphqlService = new GraphQLService();
+  const graphqlService = buildContainer().get(GraphQLService);
 
   // Act
   const result = graphqlService.generate(schema);
@@ -62,7 +63,7 @@ Deno.test("GraphQLEnumType::generate: should generate a schema", () => {
     type Query {
       hello(language: Language): Hello
     }`;
-  const graphqlService = new GraphQLService();
+  const graphqlService = buildContainer().get(GraphQLService);
 
   // Act
   const result = graphqlService.generateSchema(schema);
@@ -124,7 +125,7 @@ Deno.test(
       type Query {
         hello(language: Language): Hello
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);

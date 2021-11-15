@@ -1,6 +1,7 @@
 import { assertStrictEquals } from "../../deps.ts";
 import { typePrefix } from "./setup.ts";
 import { GraphQLService } from "../../src/services/graphql/index.ts";
+import { buildContainer } from "../../src/ioc/ioc.config.ts";
 
 Deno.test("GraphQLScalarType::generateSchema: should handle Int types", () => {
   // Arrange
@@ -8,7 +9,7 @@ Deno.test("GraphQLScalarType::generateSchema: should handle Int types", () => {
     type Query {
       add(x: Int y: Int): Int
     }`;
-  const graphqlService = new GraphQLService();
+  const graphqlService = buildContainer().get(GraphQLService);
 
   // Act
   const result = graphqlService.generateSchema(schema);
@@ -38,7 +39,7 @@ Deno.test(
       type Query {
         add(x: Float y: Float): Float
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);
@@ -67,7 +68,7 @@ Deno.test("GraphQLScalarType::generateSchema: should handle ID types", () => {
     type Query {
       me(id: ID): ID
     }`;
-  const graphqlService = new GraphQLService();
+  const graphqlService = buildContainer().get(GraphQLService);
 
   // Act
   const result = graphqlService.generateSchema(schema);
@@ -101,7 +102,7 @@ Deno.test(
       type Query {
         message(input: String): String
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);
@@ -131,7 +132,7 @@ Deno.test(
       type Query {
         isTrue(input: Boolean): Boolean
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);
@@ -163,7 +164,7 @@ Deno.test(
       type Query {
         add(x: Int y: Int): CustomInt
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);
@@ -198,7 +199,7 @@ Deno.test(
       type Query {
         add(x: Int! y: Int): Int!
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);
@@ -234,7 +235,7 @@ Deno.test(
       type Query {
         add(x: Int y: Int): CustomInt
       }`;
-    const graphqlService = new GraphQLService();
+    const graphqlService = buildContainer().get(GraphQLService);
 
     // Act
     const result = graphqlService.generateSchema(schema);
