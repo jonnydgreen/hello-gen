@@ -1,106 +1,110 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
+import {
+  assertEquals,
+  assertRejects,
+  assertStrictEquals,
+  assertThrows,
+} from "../../deps.ts";
+import {
+  assertNever,
+  readFile,
+  upperFirst,
+  writeFiles,
+} from "../../src/lib/util/index.ts";
+import { dirname, fromFileUrl, join } from "../../src/../deps.ts";
 
-import { test } from 'tap'
-import { FileWriteError } from '../../src/core'
+const __dirname = dirname(fromFileUrl(import.meta.url));
 
-import { assertNever, readFile, upperFirst, writeFiles } from '../../src/util'
+function createFileToWrite(
+  data: string,
+  dirname = "templates",
+): Record<string, string> {
+  return {
+    [
+      join(
+        __dirname,
+        dirname,
+        `example-${Math.floor(Math.random() * 1000)}.txt`,
+      )
+    ]: data,
+  };
+}
 
-test('Utils', t => {
-  t.plan(4)
+Deno.test("Utils::assertNever: should throw if input is passed", () => {
+  // Arrange
+  const input: never = "" as unknown as never;
 
-  t.test('assertNever', t => {
-    t.plan(1)
+  // Assert
+  assertThrows(() => assertNever(input), Error, "Unhandled input.");
+});
 
-    const input: never = '' as unknown as never
-    t.throws(() => assertNever(input), new Error('Unhandled input.'))
-  })
+Deno.test("Utils::upperFirst: should upper case first letter of string", () => {
+  // Act
+  const result = upperFirst("hello");
 
-  t.test('upperFirst', t => {
-    t.plan(2)
+  // Assert
+  assertStrictEquals(result, "Hello");
+});
 
-    t.test('Should upper case first letter of string', t => {
-      t.plan(1)
+Deno.test("Utils::upperFirst: should handle empty strings", () => {
+  // Act
+  const result = upperFirst("");
 
-      t.same(upperFirst('hello'), 'Hello')
-    })
+  // Assert
+  assertStrictEquals(result, "");
+});
 
-    t.test('Should handle empty strings', t => {
-      t.plan(1)
+Deno.test("Utils::readFile: should read files from input path", async () => {
+  // Arrange
+  const fileToRead = join(__dirname, "templates", "example.txt");
 
-      t.same(upperFirst(''), '')
-    })
-  })
+  // Act
+  const result = await readFile(fileToRead);
 
-  t.test('readFile', t => {
-    t.plan(1)
+  // Assert
+  assertStrictEquals(result, "Hello");
+});
 
-    t.test('Should read files from input path', async t => {
-      t.plan(1)
+Deno.test("Utils::writeFiles: should write files to output path", async () => {
+  const filesToWrite = {
+    ...createFileToWrite("Test data 1"),
+    ...createFileToWrite("Test data 2"),
+  };
 
-      const utilFs: { readFile: typeof readFile } = t.mock('../../src/util/util.fs', {
-        fs: {
-          promises: {
-            readFile: () => Buffer.from('text')
-          }
-        }
-      })
+  try {
+    // Act
+    await writeFiles(filesToWrite);
+    const results = [];
+    for (const fileToWrite of Object.keys(filesToWrite)) {
+      results.push(await readFile(fileToWrite));
+    }
 
-      const input = 'some/path/file.ext'
-      t.resolves(utilFs.readFile(input))
-    })
-  })
+    // Assert
+    assertEquals(results, ["Test data 1", "Test data 2"]);
+  } finally {
+    for (const fileToWrite of Object.keys(filesToWrite)) {
+      await Deno.remove(fileToWrite).catch(() => {});
+    }
+  }
+});
 
-  t.test('writeFiles', t => {
-    t.plan(2)
+Deno.test("Utils::writeFiles: should handle multiple errors", async () => {
+  const filesToWrite = {
+    ...createFileToWrite("Test data 1", "wrong-dir"),
+    ...createFileToWrite("Test data 2"),
+    ...createFileToWrite("Test data 3", "wrong-dir"),
+  };
 
-    t.test('Should write files to output path', t => {
-      t.plan(1)
-
-      const utilFs: { writeFiles: typeof writeFiles } = t.mock('../../src/util/util.fs', {
-        fs: {
-          promises: {
-            writeFile: () => {}
-          }
-        }
-      })
-
-      const input = {
-        path1: 'contents1',
-        path2: 'contents2'
-      }
-      t.resolves(utilFs.writeFiles(input))
-    })
-
-    t.test('Should handle multiple errors', async t => {
-      t.plan(2)
-
-      const utilFs: { writeFiles: typeof writeFiles } = t.mock('../../src/util/util.fs', {
-        fs: {
-          promises: {
-            writeFile: (path: string) => {
-              if (path.includes('error')) {
-                throw new Error(`Error at path: ${path}`)
-              }
-            }
-          }
-        }
-      })
-
-      const input = {
-        errorPath1: 'contents1',
-        path2: 'contents2',
-        errorPath3: 'contents3'
-      }
-      try {
-        await utilFs.writeFiles(input)
-      } catch (error) {
-        const expectedError = new FileWriteError('Got 2 errors while writing file contents:', [
-          { message: new Error('Error at path: errorPath1'), path: 'errorPath1' },
-          { message: new Error('Error at path: errorPath3'), path: 'errorPath3' }
-        ])
-        t.same(error.code, expectedError.code)
-        t.same(error.details, expectedError.details)
-      }
-    })
-  })
-})
+  try {
+    // Act & Assert
+    await assertRejects(
+      () => writeFiles(filesToWrite),
+      // TODO: create FileWriteError
+      Error,
+      "Got 2 errors while writing file contents",
+    );
+  } finally {
+    for (const fileToWrite of Object.keys(filesToWrite)) {
+      await Deno.remove(fileToWrite).catch(() => {});
+    }
+  }
+});
