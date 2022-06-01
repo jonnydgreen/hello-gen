@@ -1,0 +1,48 @@
+{
+  "imports": {
+    "deps": "./deps.ts",
+    "test.deps": "./test.deps.ts",
+    "lib/": "./lib/",
+    "services/": "./services/",
+    "commands/": "./commands/",
+    "cli/": "./cli/",
+    "https://cdn.skypack.dev/": "./vendor/cdn.skypack.dev/",
+    "https://cdn.skypack.dev/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws?dts": "./vendor/cdn.skypack.dev/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws.js",
+    "https://cdn.skypack.dev/inversify@v6.0.1-VoziPE1W6JJ5EHKzdtva?dts": "./vendor/cdn.skypack.dev/inversify@v6.0.1-VoziPE1W6JJ5EHKzdtva.js",
+    "https://cdn.skypack.dev/sinon@v14.0.0-CyrxAF9CJh9hOOnbtvbz": "./vendor/cdn.skypack.dev/sinon@v14.0.0-CyrxAF9CJh9hOOnbtvbz.js",
+    "https://deno.land/": "./vendor/deno.land/"
+  },
+  "scopes": {
+    "./vendor/cdn.skypack.dev/": {
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/error/GraphQLError": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/error/GraphQLError.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/error/index": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/error/index.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/execution/execute": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/execution/execute.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/execution/index": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/execution/index.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/graphql": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/graphql.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/jsutils/Path": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/jsutils/Path.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/language/ast": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/language/ast.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/language/directiveLocation": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/language/directiveLocation.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/language/index": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/language/index.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/language/kinds": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/language/kinds.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/language/location": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/language/location.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/language/parser": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/language/parser.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/language/tokenKind": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/language/tokenKind.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/language/visitor": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/language/visitor.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/subscription/index": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/subscription/index.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/type/definition": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/type/definition.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/type/directives": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/type/directives.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/type/index": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/type/index.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/type/schema": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/type/schema.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/utilities/buildASTSchema": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/utilities/buildASTSchema.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/utilities/findBreakingChanges": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/utilities/findBreakingChanges.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/utilities/getIntrospectionQuery": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/utilities/getIntrospectionQuery.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/utilities/index": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/utilities/index.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/utilities/typedQueryDocumentNode": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/utilities/typedQueryDocumentNode.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/validation/ValidationContext": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/validation/ValidationContext.d.ts",
+      "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/validation/index": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=types/validation/index.d.ts",
+      "/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=imports/optimized/graphql.js": "./vendor/cdn.skypack.dev/-/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws/dist=es2019,mode=imports/optimized/graphql.js",
+      "/-/inversify@v6.0.1-VoziPE1W6JJ5EHKzdtva/dist=es2019,mode=imports/optimized/inversify.js": "./vendor/cdn.skypack.dev/-/inversify@v6.0.1-VoziPE1W6JJ5EHKzdtva/dist=es2019,mode=imports/optimized/inversify.js",
+      "/-/sinon@v14.0.0-CyrxAF9CJh9hOOnbtvbz/dist=es2019,mode=imports/optimized/sinon.js": "./vendor/cdn.skypack.dev/-/sinon@v14.0.0-CyrxAF9CJh9hOOnbtvbz/dist=es2019,mode=imports/optimized/sinon.js"
+    }
+  }
+}

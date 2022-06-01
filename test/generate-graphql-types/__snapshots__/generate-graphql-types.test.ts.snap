@@ -1,0 +1,3 @@
+export const snapshot = {};
+
+snapshot[`Generate GraphQL Types > should Generate GraphQL Types 1`] = `"hello"`;

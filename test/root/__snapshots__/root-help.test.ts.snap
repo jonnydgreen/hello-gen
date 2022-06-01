@@ -1,0 +1,64 @@
+export const snapshot = {};
+
+snapshot[`Root help > should display help text to stderr when passing no arguments or flags 1`] = `
+'
+  Usage:   hello-gen
+  Version: 1.0.0    
+
+  Description:
+
+    A toolkit for all your backend development needs.
+
+  Options:
+
+    -h, --help                - Print help information.                                                                
+    -V, --version             - Print version information.                                                             
+    -l, --log-level  <level>  - Set log level.              (Default: "info", Values: "debug", "info", "warn", "error")
+
+  Environment variables:
+
+    LOG_LEVEL  <level>  - Set log level.
+'
+`;
+
+snapshot[`Root help > should display help text to stderr when passing the '--help' flag 1`] = `
+'
+  Usage:   hello-gen
+  Version: 1.0.0    
+
+  Description:
+
+    A toolkit for all your backend development needs.
+
+  Options:
+
+    -h, --help                - Print help information.                                                                
+    -V, --version             - Print version information.                                                             
+    -l, --log-level  <level>  - Set log level.              (Default: "info", Values: "debug", "info", "warn", "error")
+
+  Environment variables:
+
+    LOG_LEVEL  <level>  - Set log level.
+'
+`;
+
+snapshot[`Root help > should display help text to stderr when passing the '-h' flag 1`] = `
+'
+  Usage:   hello-gen
+  Version: 1.0.0    
+
+  Description:
+
+    A toolkit for all your backend development needs.
+
+  Options:
+
+    -h, --help                - Print help information.                                                                
+    -V, --version             - Print version information.                                                             
+    -l, --log-level  <level>  - Set log level.              (Default: "info", Values: "debug", "info", "warn", "error")
+
+  Environment variables:
+
+    LOG_LEVEL  <level>  - Set log level.
+'
+`;

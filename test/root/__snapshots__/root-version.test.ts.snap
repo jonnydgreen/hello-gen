@@ -1,0 +1,5 @@
+export const snapshot = {};
+
+snapshot[`Root version > should display help text to stderr when passing the '--version' flag 1`] = `"hello-gen 1.0.0"`;
+
+snapshot[`Root version > should display help text to stderr when passing the '-V' flag 1`] = `"hello-gen 1.0.0"`;

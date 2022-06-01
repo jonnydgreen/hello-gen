@@ -14,10 +14,7 @@
     "titleBar.activeForeground": "#e7e7e7",
     "titleBar.inactiveBackground": "#eb542499",
     "titleBar.inactiveForeground": "#e7e7e799",
-    "editorGroup.border": "#ef7853",
-    "panel.border": "#ef7853",
     "sash.hoverBorder": "#ef7853",
-    "sideBar.border": "#ef7853",
     "statusBarItem.remoteBackground": "#eb5424",
     "statusBarItem.remoteForeground": "#e7e7e7"
   },
@@ -49,5 +46,7 @@
   },
   "[json]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
-  }
+  },
+  "deno.internalDebug": true,
+  "deno.cache": "/Users/judge/Library/Caches/deno"
 }
