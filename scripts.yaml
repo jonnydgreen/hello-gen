@@ -1,7 +1,7 @@
 scripts:
   pre-commit:
     cmd:
-      - "vr fmt-check"
-      - "vr lint"
-      - "vr test"
+      - "deno task fmt-check"
+      - "deno task lint"
+      - "deno task test"
     gitHook: pre-commit

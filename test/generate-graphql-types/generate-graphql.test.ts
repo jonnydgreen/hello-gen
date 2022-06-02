@@ -2,19 +2,24 @@ import { assertEquals, assertSnapshot, Mocking, Testing } from "test.deps";
 import { stripColor } from "deps";
 import { cli } from "cli/index.ts";
 
-Testing.describe("Generate GraphQL Types", () => {
+Testing.describe("Generate GraphQL", () => {
   Testing.beforeEach(() => {
     Mocking.restore();
   });
 
   [
     {
+      name:
+        "should display help text to stderr when no arguments or flags are passed",
+      args: ["graphql"],
+    },
+    {
       name: "should display help text to stderr when passing the '--help' flag",
-      args: ["graphql", "types", "--help"],
+      args: ["graphql", "--help"],
     },
     {
       name: "should display help text to stderr when passing the '-h' flag",
-      args: ["graphql", "types", "-h"],
+      args: ["graphql", "-h"],
     },
   ].forEach((definition) => {
     Testing.it(definition.name, async (t) => {

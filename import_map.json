@@ -2,10 +2,11 @@
   "imports": {
     "deps": "./deps.ts",
     "test.deps": "./test.deps.ts",
+    "cli/": "./cli/",
+    "commands/": "./commands/",
+    "ioc/": "./ioc/",
     "lib/": "./lib/",
     "services/": "./services/",
-    "commands/": "./commands/",
-    "cli/": "./cli/",
     "https://cdn.skypack.dev/": "./vendor/cdn.skypack.dev/",
     "https://cdn.skypack.dev/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws?dts": "./vendor/cdn.skypack.dev/graphql@v16.3.0-TH1qDcr0RFoRWZJYz4ws.js",
     "https://cdn.skypack.dev/inversify@v6.0.1-VoziPE1W6JJ5EHKzdtva?dts": "./vendor/cdn.skypack.dev/inversify@v6.0.1-VoziPE1W6JJ5EHKzdtva.js",

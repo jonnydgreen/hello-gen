@@ -1,3 +1,49 @@
 export const snapshot = {};
 
-snapshot[`Generate GraphQL Types > should Generate GraphQL Types 1`] = `"hello"`;
+snapshot[`Generate GraphQL Types > should display help text to stderr when passing the '--help' flag 1`] = `
+'
+  Usage:   hello-gen graphql types
+  Version: 1.0.0                  
+
+  Description:
+
+    Generates GraphQL Types from an input schema
+
+  Options:
+
+    -l, --log-level  <level>   - Set log level.                                         (Default: "info")              
+    -f, --format     <format>  - Set the format for printing command output resources.  (Default: "json")              
+    -h, --help                 - Print help information.                                                               
+    -s, --schema     [schema]  - File path to GraphQL schema.                           (Default: "schema.graphql")    
+    -o, --output     [output]  - Output file path to write to.                          (Default: "types.generated.ts")
+
+  Environment variables:
+
+    HELLO_GEN_LOG_LEVEL  <level>   - Set log level.                                       
+    HELLO_GEN_FORMAT     <format>  - Set the format for printing command output resources.
+'
+`;
+
+snapshot[`Generate GraphQL Types > should display help text to stderr when passing the '-h' flag 1`] = `
+'
+  Usage:   hello-gen graphql types
+  Version: 1.0.0                  
+
+  Description:
+
+    Generates GraphQL Types from an input schema
+
+  Options:
+
+    -l, --log-level  <level>   - Set log level.                                         (Default: "info")              
+    -f, --format     <format>  - Set the format for printing command output resources.  (Default: "json")              
+    -h, --help                 - Print help information.                                                               
+    -s, --schema     [schema]  - File path to GraphQL schema.                           (Default: "schema.graphql")    
+    -o, --output     [output]  - Output file path to write to.                          (Default: "types.generated.ts")
+
+  Environment variables:
+
+    HELLO_GEN_LOG_LEVEL  <level>   - Set log level.                                       
+    HELLO_GEN_FORMAT     <format>  - Set the format for printing command output resources.
+'
+`;

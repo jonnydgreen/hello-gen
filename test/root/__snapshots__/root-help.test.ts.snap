@@ -11,13 +11,19 @@ snapshot[`Root help > should display help text to stderr when passing no argumen
 
   Options:
 
-    -h, --help                - Print help information.                                                                
-    -V, --version             - Print version information.                                                             
-    -l, --log-level  <level>  - Set log level.              (Default: "info", Values: "debug", "info", "warn", "error")
+    -V, --version              - Print version information.                                                                                        
+    -h, --help                 - Print help information.                                                                                           
+    -l, --log-level  <level>   - Set log level.                                         (Default: "info", Values: "debug", "info", "warn", "error")
+    -f, --format     <format>  - Set the format for printing command output resources.  (Default: "json", Values: "json")                          
+
+  Commands:
+
+    graphql  - GraphQL Generation functionality using an input schema
 
   Environment variables:
 
-    LOG_LEVEL  <level>  - Set log level.
+    HELLO_GEN_LOG_LEVEL  <level>   - Set log level.                                       
+    HELLO_GEN_FORMAT     <format>  - Set the format for printing command output resources.
 '
 `;
 
@@ -32,13 +38,19 @@ snapshot[`Root help > should display help text to stderr when passing the '--hel
 
   Options:
 
-    -h, --help                - Print help information.                                                                
-    -V, --version             - Print version information.                                                             
-    -l, --log-level  <level>  - Set log level.              (Default: "info", Values: "debug", "info", "warn", "error")
+    -V, --version              - Print version information.                                                                                        
+    -h, --help                 - Print help information.                                                                                           
+    -l, --log-level  <level>   - Set log level.                                         (Default: "info", Values: "debug", "info", "warn", "error")
+    -f, --format     <format>  - Set the format for printing command output resources.  (Default: "json", Values: "json")                          
+
+  Commands:
+
+    graphql  - GraphQL Generation functionality using an input schema
 
   Environment variables:
 
-    LOG_LEVEL  <level>  - Set log level.
+    HELLO_GEN_LOG_LEVEL  <level>   - Set log level.                                       
+    HELLO_GEN_FORMAT     <format>  - Set the format for printing command output resources.
 '
 `;
 
@@ -53,12 +65,18 @@ snapshot[`Root help > should display help text to stderr when passing the '-h' f
 
   Options:
 
-    -h, --help                - Print help information.                                                                
-    -V, --version             - Print version information.                                                             
-    -l, --log-level  <level>  - Set log level.              (Default: "info", Values: "debug", "info", "warn", "error")
+    -V, --version              - Print version information.                                                                                        
+    -h, --help                 - Print help information.                                                                                           
+    -l, --log-level  <level>   - Set log level.                                         (Default: "info", Values: "debug", "info", "warn", "error")
+    -f, --format     <format>  - Set the format for printing command output resources.  (Default: "json", Values: "json")                          
+
+  Commands:
+
+    graphql  - GraphQL Generation functionality using an input schema
 
   Environment variables:
 
-    LOG_LEVEL  <level>  - Set log level.
+    HELLO_GEN_LOG_LEVEL  <level>   - Set log level.                                       
+    HELLO_GEN_FORMAT     <format>  - Set the format for printing command output resources.
 '
 `;
