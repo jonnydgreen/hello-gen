@@ -17,12 +17,12 @@
     "cache": "deno cache --no-config -r --lock=lock.json --lock-write deps.ts test.deps.ts",
     "merge-import-maps": "deno run --no-config --lock=lock.json --allow-read --allow-write ./scripts/merge-import-maps.ts && deno task fmt",
     "vendor": "rm -rf vendor && deno vendor --no-config --lock=lock.json deps.ts test.deps.ts && deno task merge-import-maps && rm vendor/import_map.json",
-    "test-files": "deno test --no-remote --lock=lock.json --allow-read=. --allow-write=. -A --unstable",
+    "test-files": "deno test --no-remote --lock=lock.json --allow-read --allow-write --unstable",
     "test": "deno task test-files --coverage=cov --doc test",
     "cov": "deno task test && deno coverage --exclude=vendor/ cov",
-    "lcov": "deno task test && deno coverage --exclude=vendor/ --lcov --output=cov.lcov cov",
+    "lcov": "deno coverage --exclude=vendor/ --lcov --output=cov.lcov cov",
     "report": "deno task lcov && genhtml -o html_cov cov.lcov && open html_cov/index.html",
-    "compile": "deno compile --no-remote --lock=lock.json --allow-read=. --allow-write=. hello-gen.ts",
-    "start": "deno run --no-remote --lock=lock.json --allow-read=. --allow-write=. hello-gen.ts"
+    "compile": "deno compile --import-map import_map.json --no-remote --lock=lock.json --allow-read --allow-write --unstable",
+    "start": "deno run --no-remote --lock=lock.json --allow-read --allow-write --unstable hello-gen.ts"
   }
 }

@@ -31,24 +31,24 @@ jobs:
           deno-version: ${{ matrix.deno-version }}
 
       - name: Check formatting
-        run: deno fmt --check -c deno.json
+        run: deno task fmt
 
       - name: Analyze code
-        run: deno lint -c deno.json
+        run: deno task lint
 
       - name: Load dependencies into local cache
-        run: deno cache --reload --lock=lock.json deps.ts
+        run: deno task cache
 
       - name: Run unit and integration tests
-        run: deno test --lock=lock.json --allow-read --allow-write -A --coverage=cov --doc
+        run: deno task test
 
       - name: Generate coverage report
         # Only want to generate this once
         if: ${{ matrix.os.name == 'ubuntu-latest' }}
-        run: deno coverage --lcov cov > cov.lcov
+        run: deno task lcov
 
       - name: Compile executable for target ${{ matrix.os.target }}
-        run: deno compile --lock=lock.json --allow-read --allow-write --target ${{ matrix.os.target }} src/hello-gen.ts
+        run: deno task compile --target ${{ matrix.os.target }} hello-gen.ts
 
       - name: Smoke test executable for target ${{ matrix.os.target }}
         run: ./hello-gen -h
