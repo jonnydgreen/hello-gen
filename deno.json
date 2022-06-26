@@ -1,7 +1,7 @@
 {
   "lint": {
     "files": {
-      "exclude": ["*.generated.ts", "vendor/", "test.bak/"]
+      "exclude": ["*.generated.ts", "vendor/", "test.bak/", "src/"]
     }
   },
   "fmt": {
@@ -15,11 +15,13 @@
     "fmt-check": "deno fmt --check",
     "lint": "deno lint",
     "cache": "deno cache --no-config -r --lock=lock.json --lock-write deps.ts test.deps.ts",
-    "vendor": "rm -rf vendor && deno vendor --no-config --lock=lock.json deps.ts test.deps.ts",
-    "test": "deno test --no-remote --lock=lock.json --allow-read=. --allow-write=. -A",
-    "test-cov": "deno test --no-remote --lock=lock.json --allow-read=. --allow-write=. -A --coverage=cov --doc",
-    "cov": "deno coverage --no-remote cov",
-    "lcov": "deno coverage --no-remote --lcov cov > cov.lcov",
+    "merge-import-maps": "deno run --no-config --lock=lock.json --allow-read --allow-write ./scripts/merge-import-maps.ts && deno task fmt",
+    "vendor": "rm -rf vendor && deno vendor --no-config --lock=lock.json deps.ts test.deps.ts && deno task merge-import-maps && rm vendor/import_map.json",
+    "test-files": "deno test --no-remote --lock=lock.json --allow-read=. --allow-write=. -A --unstable",
+    "test": "deno task test-files --coverage=cov --doc test",
+    "cov": "deno task test && deno coverage --exclude=vendor/ cov",
+    "lcov": "deno task test && deno coverage --exclude=vendor/ --lcov --output=cov.lcov cov",
+    "report": "deno task lcov && genhtml -o html_cov cov.lcov && open html_cov/index.html",
     "compile": "deno compile --no-remote --lock=lock.json --allow-read=. --allow-write=. hello-gen.ts",
     "start": "deno run --no-remote --lock=lock.json --allow-read=. --allow-write=. hello-gen.ts"
   }

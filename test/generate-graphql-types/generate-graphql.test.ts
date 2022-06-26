@@ -1,5 +1,5 @@
 import { assertEquals, assertSnapshot, Mocking, Testing } from "test.deps";
-import { stripColor } from "deps";
+import { Colours } from "deps";
 import { cli } from "cli/index.ts";
 
 Testing.describe("Generate GraphQL", () => {
@@ -32,10 +32,27 @@ Testing.describe("Generate GraphQL", () => {
       await cli(args);
 
       // Assert
-      assertEquals(consoleLogSpy.callCount, 0, `console.log should not be called. Called ${consoleLogSpy.callCount} times`);
-      assertEquals(consoleErrorSpy.callCount, 1, `console.error should be called once. Called ${consoleErrorSpy.callCount} times`);
-      assertEquals(consoleErrorSpy.getCall(0).args.length, 1, `console.error should be called with a single argument. Called with ${consoleErrorSpy.getCall(0).args.length} arguments`);
-      await assertSnapshot(t, stripColor(consoleErrorSpy.getCall(0).args[0]));
+      assertEquals(
+        consoleLogSpy.callCount,
+        0,
+        `console.log should not be called. Called ${consoleLogSpy.callCount} times`,
+      );
+      assertEquals(
+        consoleErrorSpy.callCount,
+        1,
+        `console.error should be called once. Called ${consoleErrorSpy.callCount} times`,
+      );
+      assertEquals(
+        consoleErrorSpy.getCall(0).args.length,
+        1,
+        `console.error should be called with a single argument. Called with ${
+          consoleErrorSpy.getCall(0).args.length
+        } arguments`,
+      );
+      await assertSnapshot(
+        t,
+        Colours.stripColor(consoleErrorSpy.getCall(0).args[0]),
+      );
     });
   });
 });

@@ -1,8 +1,13 @@
 import { IoC } from "deps";
+import { GenerateGraphQLTypesService } from "../../services/graphql/index.ts";
 import { CommandContract, CommandInput } from "../commands.type.ts";
 
 @IoC.injectable()
 export class GenerateGraphQLTypesCommand implements CommandContract {
+  // TODO: see if we can use the constructor
+  @IoC.inject(GenerateGraphQLTypesService)
+  private readonly _generateGraphQLTypesService!: GenerateGraphQLTypesService;
+
   public name = "types";
 
   public description = "Generates GraphQL Types from an input schema";
@@ -30,12 +35,7 @@ Generated GraphQL types at 'types.generated.ts'
   public subCommands = [];
 
   // TODO: proper type
-  public async run(input: CommandInput): Promise<void> {
-    console.log("Generating GraphQL types");
-
-    await Promise.resolve(input);
-
-    console.log(`Generated GraphQL types at '${input.output}'`);
-    // TODO: errors
+  public run(input: CommandInput): Promise<void> {
+    return this._generateGraphQLTypesService.generate(input);
   }
 }

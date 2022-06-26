@@ -7,7 +7,7 @@ export interface CommandFlag {
 }
 
 // TODO: make this generic
-export type CommandInput = Record<string, string>
+export type CommandInput = Record<string, string>;
 
 export interface CommandContract {
   name: string;

@@ -26,7 +26,7 @@ export class CLI extends Cliffy.Command {
     const { name, description, flags, run, subCommands } = commandInstance;
     const command = new Cliffy.Command();
     const showHelp = this.#showHelp.bind(command);
-    const action = run?.bind(commandInstance) as Cliffy.IAction ?? showHelp
+    const action = run?.bind(commandInstance) as Cliffy.IAction ?? showHelp;
 
     // Setup sub-commands
     if (subCommands.length > 0) {

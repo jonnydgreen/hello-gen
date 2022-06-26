@@ -17,5 +17,5 @@ Generated GraphQL types at 'types.generated.ts'
 
   public flags = {};
 
-  public subCommands = [GenerateGraphQLTypesCommand]
+  public subCommands = [GenerateGraphQLTypesCommand];
 }
