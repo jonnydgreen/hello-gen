@@ -1,0 +1,79 @@
+export const snapshot = {};
+
+snapshot[`Generate GraphQL > should display help text to stderr when no arguments or flags are passed 1`] = `
+'
+  Usage:   hello-gen graphql
+  Version: 1.0.0            
+
+  Description:
+
+    GraphQL Generation functionality using an input schema
+
+  Options:
+
+    -l, --log-level  <level>   - Set log level.                                         (Default: "info")
+    -f, --format     <format>  - Set the format for printing command output resources.  (Default: "json")
+    -h, --help                 - Print help information.                                                 
+
+  Commands:
+
+    types  - Generates GraphQL Types from an input schema
+
+  Environment variables:
+
+    HELLO_GEN_LOG_LEVEL  <level>   - Set log level.                                       
+    HELLO_GEN_FORMAT     <format>  - Set the format for printing command output resources.
+'
+`;
+
+snapshot[`Generate GraphQL > should display help text to stderr when passing the '--help' flag 1`] = `
+'
+  Usage:   hello-gen graphql
+  Version: 1.0.0            
+
+  Description:
+
+    GraphQL Generation functionality using an input schema
+
+  Options:
+
+    -l, --log-level  <level>   - Set log level.                                         (Default: "info")
+    -f, --format     <format>  - Set the format for printing command output resources.  (Default: "json")
+    -h, --help                 - Print help information.                                                 
+
+  Commands:
+
+    types  - Generates GraphQL Types from an input schema
+
+  Environment variables:
+
+    HELLO_GEN_LOG_LEVEL  <level>   - Set log level.                                       
+    HELLO_GEN_FORMAT     <format>  - Set the format for printing command output resources.
+'
+`;
+
+snapshot[`Generate GraphQL > should display help text to stderr when passing the '-h' flag 1`] = `
+'
+  Usage:   hello-gen graphql
+  Version: 1.0.0            
+
+  Description:
+
+    GraphQL Generation functionality using an input schema
+
+  Options:
+
+    -l, --log-level  <level>   - Set log level.                                         (Default: "info")
+    -f, --format     <format>  - Set the format for printing command output resources.  (Default: "json")
+    -h, --help                 - Print help information.                                                 
+
+  Commands:
+
+    types  - Generates GraphQL Types from an input schema
+
+  Environment variables:
+
+    HELLO_GEN_LOG_LEVEL  <level>   - Set log level.                                       
+    HELLO_GEN_FORMAT     <format>  - Set the format for printing command output resources.
+'
+`;

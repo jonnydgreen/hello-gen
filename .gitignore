@@ -21,6 +21,7 @@ lib-cov
 # Test coverage directory
 cov
 *.lcov
+html_cov
 
 # Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
@@ -106,3 +107,6 @@ package-lock.json
 # Repo
 test/_input
 test/_output
+
+# Binaries
+hello-gen

@@ -1,0 +1,17 @@
+{
+  "imports": {
+    "deps": "./deps.ts",
+    "test.deps": "./test.deps.ts",
+    "cli/": "./cli/",
+    "commands/": "./commands/",
+    "ioc/": "./ioc/",
+    "lib/": "./lib/",
+    "services/": "./services/",
+    "https://esm.sh/graphql@17.0.0-alpha.1?deno&pin=v86": "./vendor/esm.sh/graphql@17.0.0-alpha.1.js",
+    "https://esm.sh/inversify@6.0.1?deno&pin=v86": "./vendor/esm.sh/inversify@6.0.1.js",
+    "https://esm.sh/sinon@14.0.0?deno&pin=v86": "./vendor/esm.sh/sinon@14.0.0.js",
+    "https://deno.land/": "./vendor/deno.land/",
+    "https://esm.sh/": "./vendor/esm.sh/",
+    "https://esm.sh/v86/@types/sinon@latest/index.d.ts": "./vendor/esm.sh/v86/@types/sinon@10.0.11/index.d.ts"
+  }
+}

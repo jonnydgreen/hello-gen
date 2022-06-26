@@ -1,0 +1,84 @@
+import { ts } from "../../../../deps.ts";
+import { withComment } from "../../../lib/index.ts";
+
+/**
+ * Create parent type definition.
+ */
+export function createParentTypeDef(factory: ts.NodeFactory): ts.Node {
+  return withComment(
+    "Constructs a ParentType from an input type.",
+    factory.createTypeAliasDeclaration(
+      undefined,
+      [factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+      factory.createIdentifier("ParentType"),
+      [factory.createTypeParameterDeclaration(
+        factory.createIdentifier("T"),
+        undefined,
+        undefined,
+      )],
+      factory.createMappedTypeNode(
+        undefined,
+        factory.createTypeParameterDeclaration(
+          factory.createIdentifier("TKey"),
+          factory.createTypeOperatorNode(
+            ts.SyntaxKind.KeyOfKeyword,
+            factory.createTypeReferenceNode(
+              factory.createIdentifier("T"),
+              undefined,
+            ),
+          ),
+          undefined,
+        ),
+        undefined,
+        undefined,
+        factory.createConditionalTypeNode(
+          factory.createIndexedAccessTypeNode(
+            factory.createTypeReferenceNode(
+              factory.createIdentifier("T"),
+              undefined,
+            ),
+            factory.createTypeReferenceNode(
+              factory.createIdentifier("TKey"),
+              undefined,
+            ),
+          ),
+          factory.createFunctionTypeNode(
+            undefined,
+            [factory.createParameterDeclaration(
+              undefined,
+              undefined,
+              factory.createToken(ts.SyntaxKind.DotDotDotToken),
+              factory.createIdentifier("args"),
+              undefined,
+              factory.createKeywordTypeNode(
+                ts.SyntaxKind.AnyKeyword,
+              ),
+              undefined,
+            )],
+            factory.createInferTypeNode(
+              factory.createTypeParameterDeclaration(
+                factory.createIdentifier("TReturn"),
+                undefined,
+                undefined,
+              ),
+            ),
+          ),
+          factory.createTypeReferenceNode(
+            factory.createIdentifier("TReturn"),
+            undefined,
+          ),
+          factory.createIndexedAccessTypeNode(
+            factory.createTypeReferenceNode(
+              factory.createIdentifier("T"),
+              undefined,
+            ),
+            factory.createTypeReferenceNode(
+              factory.createIdentifier("TKey"),
+              undefined,
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}

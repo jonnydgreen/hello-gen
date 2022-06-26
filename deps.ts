@@ -1,56 +1,13 @@
-// Deno.land
-export { EOL } from "https://deno.land/std@0.114.0/fs/eol.ts";
-export {
-  dirname,
-  fromFileUrl,
-  join,
-} from "https://deno.land/std@0.114.0/path/mod.ts";
+// Deno.land std
+export { EOL } from "https://deno.land/std@0.145.0/fs/eol.ts";
+export * as Colours from "https://deno.land/std@0.145.0/fmt/colors.ts";
+export * as Path from "https://deno.land/std@0.145.0/path/mod.ts";
+
+// Deno.land x
 import "https://deno.land/x/reflection@0.0.2/mod.ts";
-export { Command } from "https://deno.land/x/cliffy@v0.20.1/command/mod.ts";
+export * as Cliffy from "https://deno.land/x/cliffy@v0.24.2/command/mod.ts";
+export * as TSMorph from "https://deno.land/x/ts_morph@15.1.0/mod.ts";
 
-// Skypack CDN
-export {
-  extendSchema,
-  GraphQLEnumType,
-  GraphQLError,
-  GraphQLInputObjectType,
-  GraphQLInterfaceType,
-  GraphQLList,
-  GraphQLNonNull,
-  GraphQLObjectType,
-  GraphQLScalarType,
-  GraphQLSchema,
-  GraphQLUnionType,
-  isOutputType,
-  isRequiredArgument,
-  isTypeExtensionNode,
-  Kind,
-  parse,
-} from "https://cdn.skypack.dev/graphql@v16.0.1?dts";
-export type {
-  DefinitionNode,
-  GraphQLArgument,
-  GraphQLField,
-  GraphQLInputField,
-  GraphQLInputType,
-  GraphQLNamedType,
-  GraphQLOutputType,
-} from "https://cdn.skypack.dev/graphql@v16.0.1?dts";
-export {
-  Container,
-  inject,
-  injectable,
-} from "https://cdn.skypack.dev/inversify@v6.0.1?dts";
-
-// JSPM
-// @deno-types=https://dev.jspm.io/typescript/lib/typescript.d.ts
-export { default as ts } from "https://dev.jspm.io/typescript";
-
-// Dev Deps
-export {
-  assert,
-  assertEquals,
-  assertRejects,
-  assertStrictEquals,
-  assertThrows,
-} from "https://deno.land/std@0.114.0/testing/asserts.ts";
+// CDNs
+export * as GraphQL from "https://esm.sh/graphql@17.0.0-alpha.1?deno&pin=v86";
+export * as IoC from "https://esm.sh/inversify@6.0.1?deno&pin=v86";
